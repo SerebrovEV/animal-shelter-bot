@@ -7,6 +7,7 @@ import com.pengrad.telegrambot.model.Update;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @Service
@@ -22,7 +23,21 @@ public class TelegramBotUpdateListener implements UpdatesListener {
 
     @Override
     public int process(List<Update> updates) {
-        updates.forEach(update -> messageHandler.handle(update.message()));
+
+        updates.forEach(update -> {
+            try {
+                if(update.message() != null) {
+                    messageHandler.handleMessage(update.message());
+                }
+
+                if(update.callbackQuery() != null) {
+                    messageHandler.handleCallback(update.callbackQuery());
+                }
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        });
+
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 }
