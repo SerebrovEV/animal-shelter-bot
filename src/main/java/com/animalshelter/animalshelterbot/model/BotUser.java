@@ -14,6 +14,16 @@ public class BotUser {
     private String userName;
     private Long phoneNumber;
 
+    public BotUser() {
+
+    }
+
+    public BotUser(String userName, long phoneNumber, long userId) {
+        this.userName = userName;
+        this.phoneNumber = phoneNumber;
+        this.userId = userId;
+    }
+
     public Long getId() {
         return id;
     }
@@ -44,5 +54,10 @@ public class BotUser {
 
     public void setPhoneNumber(Long phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Пользователь " + userName + ". Телефон для связи " + phoneNumber;
     }
 }
