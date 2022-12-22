@@ -32,7 +32,7 @@ public class GeneralSafetyController implements CommandController {
     public static final String GENERAL_SAFETY_CALLBACK = "/safetyInfo";
 
     @Command(name = GENERAL_SAFETY_COMMAND)
-    public SendMessage handleStartMessage(Message message) {
+    public SendMessage handleSafetyMessage(Message message) {
 
         return new SendMessage(message.from().id(), generalSafetyInfoText);
     }
