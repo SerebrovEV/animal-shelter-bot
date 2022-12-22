@@ -28,8 +28,8 @@ public class GeneralSafetyController implements CommandController {
                     + "    - животных с рук не кормить;\n"
                     + "    - в вальеры c животными руки не сувать.";
 
-    public static final String GENERAL_SAFETY_COMMAND = "Техника безопасности";
-    public static final String GENERAL_SAFETY_CALLBACK = "generalSafetyInfo";
+    public static final String GENERAL_SAFETY_COMMAND = "/safetyInfo";
+    public static final String GENERAL_SAFETY_CALLBACK = "/safetyInfo";
 
     @Command(name = GENERAL_SAFETY_COMMAND)
     public SendMessage handleStartMessage(Message message) {
