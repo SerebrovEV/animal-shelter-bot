@@ -5,6 +5,10 @@ import com.animalshelter.animalshelterbot.repository.BotUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * <i>Сервис для сохранения или получания контактных данных пользователя</i>
+ */
+
 @Service
 @RequiredArgsConstructor
 public class BotUserService {
@@ -14,11 +18,7 @@ public class BotUserService {
         botUserRepository.save(botUser);
     }
 
-    public String getBotUser(Long id) {
-        BotUser botUser = botUserRepository.findBotUserByUserId(id);
-        if (botUser != null) {
-            return botUser.toString();
-        }
-        return "Клиент не найден! Пожалуйста добавте контакты для обратной связи или запросите вызов волентера. Спасибо!";
+    public BotUser getBotUser(Long id) {
+        return botUserRepository.findBotUserByUserId(id);
     }
 }

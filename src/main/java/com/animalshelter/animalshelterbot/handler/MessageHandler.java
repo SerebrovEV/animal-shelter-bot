@@ -1,6 +1,6 @@
 package com.animalshelter.animalshelterbot.handler;
 
-import com.animalshelter.animalshelterbot.controllers.UserController;
+import com.animalshelter.animalshelterbot.controllers.BotUserController;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
@@ -20,7 +20,7 @@ public class MessageHandler {
     private final List<CommandController> controllers;
     private final TelegramBot bot;
     private final Pattern pattern = Pattern.compile("([\\d]{11})(\\s)([\\W]+)");
-    private final UserController userController;
+    private final BotUserController botUserController;
 
     public void handleMessage(Message message) throws InvocationTargetException, IllegalAccessException {
         if(message.text() == null) {
@@ -28,7 +28,7 @@ public class MessageHandler {
         }
         Matcher matcher = pattern.matcher(message.text());
         if (matcher.matches()){
-            SendMessage sendMessage = userController.addBotUser(message);
+            SendMessage sendMessage = botUserController.addBotUser(message);
             bot.execute(sendMessage);
             return;
         }
