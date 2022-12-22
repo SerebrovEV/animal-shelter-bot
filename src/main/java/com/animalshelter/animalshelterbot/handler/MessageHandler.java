@@ -19,17 +19,10 @@ import java.util.regex.Pattern;
 public class MessageHandler {
     private final List<CommandController> controllers;
     private final TelegramBot bot;
-    private final Pattern pattern = Pattern.compile("([\\d]{11})(\\s)([\\W]+)");
     private final BotUserController botUserController;
 
     public void handleMessage(Message message) {
         if(message.text() == null) {
-            return;
-        }
-        Matcher matcher = pattern.matcher(message.text());
-        if (matcher.matches()){
-            SendMessage sendMessage = botUserController.addBotUser(message);
-            bot.execute(sendMessage);
             return;
         }
         for(CommandController commandController: controllers) {

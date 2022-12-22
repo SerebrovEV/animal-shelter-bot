@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.regex.Pattern;
+
 /**
  * <i> Контроллер для получения или сохранения контактных данных пользователя в базу данных.</i>
  * <br>
@@ -29,6 +31,7 @@ public class BotUserController implements CommandController {
     private final ValidatorBotUserService validatorBotUserService;
     private final String ADD_CONTACT = "/addContact";
     private final String GET_CONTACT = "/getContact";
+    private static final String addContactPattern = "([\\d]{11})(\\s)([\\W]+)";
 
     private final String ADD_MESSAGE = "Для того, чтобы оставить контактные данные для обратной " +
             "связи введите информацию в форме:\n 89871234567 Иван \n и мы вам перезвоним.";
@@ -52,8 +55,10 @@ public class BotUserController implements CommandController {
      * <br>
      * Используется метод {@link ValidatorBotUserService#validateUser(Message)}</i>
      *
-     * @param message * @return sendMessage
+     * @param message
+     * @return sendMessage
      */
+    @Command(pattern = addContactPattern)
     public SendMessage addBotUser(Message message) {
         long idUser = message.from().id();
         logger.info("Пользователь {} производит запись контактных данных в БД", idUser);
