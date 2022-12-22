@@ -22,7 +22,7 @@ public class MessageHandler {
     private final Pattern pattern = Pattern.compile("([\\d]{11})(\\s)([\\W]+)");
     private final BotUserController botUserController;
 
-    public void handleMessage(Message message) throws InvocationTargetException, IllegalAccessException {
+    public void handleMessage(Message message) {
         if(message.text() == null) {
             return;
         }
@@ -33,23 +33,33 @@ public class MessageHandler {
             return;
         }
         for(CommandController commandController: controllers) {
-            for(Method method: commandController.getClass().getDeclaredMethods()){
-                if(!method.isAnnotationPresent(Command.class)) {
-                    continue;
-                }
-
-                Command annotation = method.getAnnotation(Command.class);
-
-                if(!annotation.name().equals(message.text())) {
-                    continue;
-                }
-
-                SendMessage sendMessage = (SendMessage) method.invoke(commandController, message);
-
-                SendResponse sendResponse = bot.execute(sendMessage);
-
-                return;
+            try {
+                this.processController(commandController, message);
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                e.printStackTrace();
             }
+        }
+    }
+
+    public void processController(CommandController commandController, Message message) throws InvocationTargetException, IllegalAccessException {
+        for(Method method: commandController.getClass().getDeclaredMethods()){
+            if(!method.isAnnotationPresent(Command.class)) {
+                continue;
+            }
+
+            Command annotation = method.getAnnotation(Command.class);
+
+            Pattern pattern = Pattern.compile(annotation.pattern());
+            Matcher matcher = pattern.matcher(message.text());
+
+            if(!(annotation.name().equals(message.text()) || matcher.matches())) {
+                continue;
+            }
+
+            SendMessage sendMessage = (SendMessage) method.invoke(commandController, message);
+            SendResponse sendResponse = bot.execute(sendMessage);
+
+            return;
         }
     }
 
@@ -59,23 +69,27 @@ public class MessageHandler {
         }
 
         for(CommandController commandController: controllers) {
-            for(Method method: commandController.getClass().getDeclaredMethods()){
-                if(!method.isAnnotationPresent(Callback.class)) {
-                    continue;
-                }
+            this.processController(commandController, callbackQuery);
+        }
+    }
 
-                Callback annotation = method.getAnnotation(Callback.class);
-
-                if(!annotation.name().equals(callbackQuery.data())) {
-                    continue;
-                }
-
-                SendMessage sendMessage = (SendMessage) method.invoke(commandController, callbackQuery);
-
-                SendResponse sendResponse = bot.execute(sendMessage);
-
-                return;
+    public void processController(CommandController commandController, CallbackQuery callbackQuery) throws InvocationTargetException, IllegalAccessException {
+        for(Method method: commandController.getClass().getDeclaredMethods()){
+            if(!method.isAnnotationPresent(Callback.class)) {
+                continue;
             }
+
+            Callback annotation = method.getAnnotation(Callback.class);
+
+            if(!annotation.name().equals(callbackQuery.data())) {
+                continue;
+            }
+
+            SendMessage sendMessage = (SendMessage) method.invoke(commandController, callbackQuery);
+
+            SendResponse sendResponse = bot.execute(sendMessage);
+
+            return;
         }
     }
 }
