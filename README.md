@@ -7,7 +7,7 @@
 
 ## Technology
 
-- Java 11
+- Java 11 и выше
 - Spring Boot; 
 - DataBase: PostgreSQL 15.
 - Telegram API 
