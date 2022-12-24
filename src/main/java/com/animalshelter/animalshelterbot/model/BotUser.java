@@ -10,7 +10,7 @@ public class BotUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long userId;
+    private Long chatId;
     private String userName;
     private Long phoneNumber;
 
@@ -18,10 +18,10 @@ public class BotUser {
 
     }
 
-    public BotUser(String userName, long phoneNumber, long userId) {
+    public BotUser(String userName, long phoneNumber, long chatId) {
         this.userName = userName;
         this.phoneNumber = phoneNumber;
-        this.userId = userId;
+        this.chatId = chatId;
     }
 
     public Long getId() {
@@ -33,11 +33,11 @@ public class BotUser {
     }
 
     public Long getUserId() {
-        return userId;
+        return chatId;
     }
 
     public void setUserId(Long userId) {
-        this.userId = userId;
+        this.chatId = userId;
     }
 
     public String getUserName() {

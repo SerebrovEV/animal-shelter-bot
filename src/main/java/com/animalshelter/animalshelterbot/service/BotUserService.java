@@ -19,6 +19,6 @@ public class BotUserService {
     }
 
     public BotUser getBotUser(Long id) {
-        return botUserRepository.findBotUserByUserId(id);
+        return botUserRepository.findBotUserByChatId(id);
     }
 }
