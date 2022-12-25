@@ -33,13 +33,12 @@ public class ValidatorBotUserService {
         if(botUserService.getBotUser(idUser) != null){
             return "Данный пользователь уже есть";
         }
-        BotUser botUser = new BotUser(name, phone, idUser);
-        botUserService.addBotUser(botUser);
-        return "Добавлена запись контакта: " + botUser.toString();
+        BotUser botUser = botUserService.addBotUser(new BotUser(name, phone, idUser));
+        return "Добавлена запись контакта: " + botUser;
     }
 
     public String validateGetUser(Message message){
-        BotUser botUser = botUserService.getBotUser(message.from().id());
+        BotUser botUser = botUserService.getBotUserByChatId(message.from().id());
         if (botUser != null) {
             return botUser.toString();
         }

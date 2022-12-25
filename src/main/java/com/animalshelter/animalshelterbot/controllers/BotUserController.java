@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.regex.Pattern;
 
@@ -54,7 +55,6 @@ public class BotUserController implements CommandController {
      * <i>Запись контактных данных пользователя
      * <br>
      * Используется метод {@link ValidatorBotUserService#validateUser(Message)}</i>
-     *
      * @param message
      * @return sendMessage
      */
