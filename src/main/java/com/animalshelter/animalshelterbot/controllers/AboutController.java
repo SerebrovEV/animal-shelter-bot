@@ -41,22 +41,18 @@ public class AboutController implements CommandController {
     public static final String ABOUT_ADRESSANDHOUTS_CALLBACK = "addressAndOpenHours";
 
     @Command(name = ABOUT_DESCRIPTION_COMMAND)
+    @Callback(name = ABOUT_DESCRIPTION_CALLBACK)
     public SendMessage handleDescriptionMessage(Message message) {
-
         return new SendMessage(message.from().id(), aboutDescriptionText);
     }
-
-    @Callback(name = ABOUT_DESCRIPTION_CALLBACK)
-    public SendMessage handleCallbackDescriptionMessage(CallbackQuery callbackQuery) {
+   public SendMessage handleCallbackDescriptionMessage(CallbackQuery callbackQuery) {
         return new SendMessage(callbackQuery.from().id(), aboutDescriptionText);
     }
     @Command(name = ABOUT_ADRESSANDHOUTS_COMMAND)
+    @Callback(name = ABOUT_ADRESSANDHOUTS_CALLBACK)
     public SendMessage handleAddressAndHoursMessage(Message message) {
-
         return new SendMessage(message.from().id(), addressAndOpenHours);
     }
-
-    @Callback(name = ABOUT_ADRESSANDHOUTS_CALLBACK)
     public SendMessage handleCallbackAddressAndHoursMessage(CallbackQuery callbackQuery) {
         return new SendMessage(callbackQuery.from().id(), addressAndOpenHours);
     }
