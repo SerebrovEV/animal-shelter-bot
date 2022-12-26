@@ -32,11 +32,11 @@ public class BotUser {
         this.id = id;
     }
 
-    public Long getUserId() {
+    public Long getChatId() {
         return chatId;
     }
 
-    public void setUserId(Long userId) {
+    public void setChatId(Long userId) {
         this.chatId = userId;
     }
 

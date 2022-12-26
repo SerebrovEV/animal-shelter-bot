@@ -6,6 +6,7 @@ import com.animalshelter.animalshelterbot.repository.BotUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -34,10 +35,19 @@ public class BotUserService {
     }
 
     public void deleteBotUser(Long id) {
-        botUserRepository.deleteById(id);
+        BotUser botUserForDelete = getBotUser(id);
+        botUserRepository.deleteById(botUserForDelete.getId());
     }
 
     public BotUser editBotUser(BotUser botUser) {
-        return botUserRepository.save(botUser);
+        BotUser getBotUser = getBotUser(botUser.getId());
+        getBotUser.setUserName(botUser.getUserName());
+        getBotUser.setPhoneNumber(botUser.getPhoneNumber());
+        return botUserRepository.save(getBotUser);
     }
+
+    public List<BotUser> getAll() {
+        return List.copyOf(botUserRepository.findAll());
+    }
+
 }
