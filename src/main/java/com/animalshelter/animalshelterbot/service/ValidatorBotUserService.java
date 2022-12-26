@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 /**
  * <i> Сервис для обработки входящих сообщений с контроллера
- * {@link com.animalshelter.animalshelterbot.controllers.BotUserController}
+ * {@link com.animalshelter.animalshelterbot.controllers.BotUserController} из телеграма
  * и подготовки ответного сообщения пользователю</i>
  */
 
@@ -21,6 +21,13 @@ public class ValidatorBotUserService {
     private final BotUserService botUserService;
     private final Pattern pattern = Pattern.compile("([\\d]{11})(\\s)([\\W]+)");
 
+    /**
+     *<i> Метод для проверки и обработки входящего сообщения от пользователя.
+     * <br>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.BotUserController#addBotUser(Message)}. </i>
+      * @param message
+     * @return String в зависимости от результата обработки
+     */
     public String validateUser(Message message){
         Matcher matcher = pattern.matcher(message.text());
         matcher.find();
@@ -37,6 +44,13 @@ public class ValidatorBotUserService {
         return "Добавлена запись контакта: " + botUser;
     }
 
+    /**
+     * <i>Метод для проверки входящего сообщения от пользователя для проверки контакта.
+     * <br>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.BotUserController#getContactMessage(Message)}.</i>
+     * @param message
+     * @return String в зависимости от проверки сообщения
+     */
     public String validateGetUser(Message message){
         BotUser botUser = botUserService.getBotUserByChatId(message.from().id());
         if (botUser != null) {
