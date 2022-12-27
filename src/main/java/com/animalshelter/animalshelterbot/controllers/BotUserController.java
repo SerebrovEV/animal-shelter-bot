@@ -28,7 +28,6 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class BotUserController implements CommandController {
     private final Logger logger = LoggerFactory.getLogger(BotUserController.class);
-    private final BotUserService botUserService;
     private final ValidatorBotUserService validatorBotUserService;
     private final String ADD_CONTACT = "/addContact";
     private final String GET_CONTACT = "/getContact";
@@ -44,6 +43,13 @@ public class BotUserController implements CommandController {
         return new SendMessage(idUser, ADD_MESSAGE);
     }
 
+    /**
+     * <i>Метод для получения пользователем контактных данных, которые он записал в базу данных
+     * <br>
+     * Используется метод {@link ValidatorBotUserService#validateGetUser(Message)}</i>
+     * @param message
+     * @return {@link SendMessage}
+     */
     @Command(name = GET_CONTACT)
     public SendMessage getContactMessage(Message message) {
         long idUser = message.from().id();
@@ -55,8 +61,8 @@ public class BotUserController implements CommandController {
      * <i>Запись контактных данных пользователя
      * <br>
      * Используется метод {@link ValidatorBotUserService#validateUser(Message)}</i>
-     * @param message
-     * @return sendMessage
+     * @param {@link Message}
+     * @return {@link SendMessage}
      */
     @Command(pattern = addContactPattern)
     public SendMessage addBotUser(Message message) {
