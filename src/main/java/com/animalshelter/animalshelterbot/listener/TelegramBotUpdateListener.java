@@ -10,6 +10,9 @@ import javax.annotation.PostConstruct;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+/**
+ * Класс, отвечающий за получение {@link Update} от {@link TelegramBot} и их обработку и дальнейшее распределение
+ * */
 @Service
 @RequiredArgsConstructor
 public class TelegramBotUpdateListener implements UpdatesListener {

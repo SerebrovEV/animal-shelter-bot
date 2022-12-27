@@ -1,5 +1,6 @@
 package com.animalshelter.animalshelterbot.handler;
 
+import com.animalshelter.animalshelterbot.listener.TelegramBotUpdateListener;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
@@ -13,6 +14,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Класс, распределяющий события, поступающие от {@link TelegramBotUpdateListener}, между классами, имплементирующими интерфейс {@link CommandController}
+ * */
 @Component
 @RequiredArgsConstructor
 public class MessageHandler {
