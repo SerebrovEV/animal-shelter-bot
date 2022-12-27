@@ -37,7 +37,7 @@ public class ValidatorBotUserService {
         }
         long phone = Long.parseLong(matcher.group(1));
         long idUser = message.from().id();
-        if(botUserService.getBotUser(idUser) != null){
+        if(botUserService.getBotUserByChatId(idUser) != null){
             return "Данный пользователь уже есть";
         }
         BotUser botUser = botUserService.addBotUser(new BotUser(name, phone, idUser));
