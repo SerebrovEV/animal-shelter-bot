@@ -1,6 +1,6 @@
 package com.animalshelter.animalshelterbot.service;
 
-import com.animalshelter.animalshelterbot.exception.BotNotFoundException;
+import com.animalshelter.animalshelterbot.exception.BotUserNotFoundException;
 import com.animalshelter.animalshelterbot.model.BotUser;
 import com.animalshelter.animalshelterbot.repository.BotUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +23,14 @@ public class BotUserService {
         return botUserRepository.save(botUser);
     }
 
-    public BotUser getBotUserByChatId(Long id) {
-        return botUserRepository.findBotUserByChatId(id);
+    public BotUser getBotUserByChatId(Long chatId) {
+        return botUserRepository.findBotUserByChatId(chatId);
     }
 
     public BotUser getBotUser(Long id) {
         Optional<BotUser> getBotUser = botUserRepository.findById(id);
         if (getBotUser.isEmpty()) {
-            throw new BotNotFoundException();
+            throw new BotUserNotFoundException();
         }
         return getBotUser.get();
     }

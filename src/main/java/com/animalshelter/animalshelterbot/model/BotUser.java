@@ -1,9 +1,12 @@
 package com.animalshelter.animalshelterbot.model;
 
+import liquibase.repackaged.net.sf.jsqlparser.expression.operators.relational.EqualsTo;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 public class BotUser {
@@ -59,5 +62,20 @@ public class BotUser {
     @Override
     public String toString() {
         return "Пользователь " + userName + ". Телефон для связи " + phoneNumber;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BotUser botUser = (BotUser) o;
+        return Objects.equals(chatId, botUser.chatId) &&
+                Objects.equals(userName, botUser.userName) &&
+                Objects.equals(phoneNumber, botUser.phoneNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(chatId, userName, phoneNumber);
     }
 }

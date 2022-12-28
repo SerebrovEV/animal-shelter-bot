@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * в базе данных</i>
  */
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class BotNotFoundException extends RuntimeException{
+public class BotUserNotFoundException extends RuntimeException{
 
 }
