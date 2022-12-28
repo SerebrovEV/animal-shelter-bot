@@ -61,14 +61,14 @@ public class AboutController implements CommandController {
         return new SendMessage(message.from().id(), "");
         //return new SendMessage(message.from().id(), addressAndOpenHours);
     }
-   /* @Callback(name = ABOUT_ADDRESSANDHOURS_CALLBACK)
+   @Callback(name = ABOUT_ADDRESSANDHOURS_CALLBACK)
     public SendMessage handleCallbackAddressAndHoursMessage(CallbackQuery callbackQuery) {
-        File imageScheme = new File("images/scheme.PNG");
+        File imageScheme = new File("src/main/resources/images/scheme.PNG");
         String addressAndOpenHours = "Мы работаем ежедневно с 11:00 до 18:00 по адресу: улица Аккорган, 5в, Сарыарка район, Астана";
         SendPhoto scheme = new SendPhoto(callbackQuery.from().id(), imageScheme).caption(addressAndOpenHours);
         telegramBotSender.telegramSendPhoto(scheme);
         return new SendMessage(callbackQuery.from().id(), "");
         //return new SendMessage(callbackQuery.from().id(), addressAndOpenHours);
-    }*/
+    }
 
 }
