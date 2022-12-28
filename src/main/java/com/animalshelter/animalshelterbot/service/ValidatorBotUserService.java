@@ -35,13 +35,13 @@ public class ValidatorBotUserService {
         if(!matcher.group(1).startsWith("8")){
           return "Некорректный номер телефона";
         }
-        long phone = Long.parseLong(matcher.group(1));
-        long idUser = message.from().id();
-        if(botUserService.getBotUserByChatId(idUser) != null){
-            return "Данный пользователь уже есть";
+        Long phone = Long.valueOf(matcher.group(1));
+        Long chatId = message.from().id();
+        if(botUserService.getBotUserByChatId(chatId) == null){
+            BotUser botUser = botUserService.addBotUser(new BotUser(name, phone, chatId));
+            return "Добавлена запись контакта: " + botUser;
         }
-        BotUser botUser = botUserService.addBotUser(new BotUser(name, phone, idUser));
-        return "Добавлена запись контакта: " + botUser;
+        return "Данный пользователь уже есть";
     }
 
     /**

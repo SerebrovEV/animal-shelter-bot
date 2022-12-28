@@ -6,19 +6,23 @@ import com.animalshelter.animalshelterbot.repository.BotUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Тесты для проверки работоспособности {@link BotUserService}
+ */
 @ExtendWith(MockitoExtension.class)
 class BotUserServiceTest {
 
@@ -105,7 +109,7 @@ class BotUserServiceTest {
         when(botUserRepository.findById(botId1)).thenReturn(Optional.ofNullable(BOT_USER1));
         when(botUserRepository.findById(botId2)).thenReturn(Optional.ofNullable(BOT_USER2));
         when(botUserRepository.findById(botId3)).thenReturn(Optional.ofNullable(BOT_USER3));
-        when(botUserRepository.findById(4L)).thenReturn(null);
+        when(botUserRepository.findById(4L)).thenReturn(Optional.empty());
 
         BotUser expected = new BotUser("Test", 89871234567L, 123456789L);
         BotUser expected2 = new BotUser("Test2", 89871234568L, 123456781L);
@@ -134,15 +138,39 @@ class BotUserServiceTest {
 
     @Test
     void deleteBotUser() {
+        Long botId1 = 1L;
 
-
+        when(botUserRepository.findById(botId1)).thenReturn(Optional.ofNullable(BOT_USER1));
+        out.deleteBotUser(botId1);
+        verify(botUserRepository, times(1)).findById(botId1);
+        assertThrows(BotUserNotFoundException.class, () -> out.deleteBotUser(2L));
     }
 
     @Test
     void editBotUser() {
+        when(botUserRepository.findById(BOT_USER1.getId())).thenReturn(Optional.ofNullable(BOT_USER1));
+        when(botUserRepository.save(BOT_USER1)).thenReturn(BOT_USER1);
+
+        BotUser expected = new BotUser("Test", 89871234567L, 123456789L);
+        BotUser actual = out.editBotUser(BOT_USER1);
+        assertThat(actual.toString()).isEqualTo(expected.toString());
+
+        when(botUserRepository.findById(BOT_USER2.getId())).thenReturn(Optional.empty());
+        assertThrows(BotUserNotFoundException.class, () -> out.editBotUser(BOT_USER2));
     }
 
     @Test
     void getAll() {
+        when(botUserRepository.findAll()).thenReturn(new ArrayList<>(List.of(
+                BOT_USER1,
+                BOT_USER2,
+                BOT_USER3)));
+        List<BotUser> expected = new ArrayList<>(List.of(
+                new BotUser("Test", 89871234567L, 123456789L),
+                new BotUser("Test2", 89871234568L, 123456781L),
+                new BotUser("Test3", 89871234569L, 123456782L)));
+        List<BotUser> actual = out.getAll();
+
+        assertThat(actual).isEqualTo(expected);
     }
 }

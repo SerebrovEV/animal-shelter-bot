@@ -54,7 +54,7 @@ class BotUserControllerTest {
 
     @Test
     void getContactMessage() {
-        BotUser botUser = new BotUser("Test", 89871234567L, 123456789L);
+        BotUser botUser = new BotUser("Test", 89871234567L, 1L);
         when(validatorBotUserService.validateGetUser(any())).thenReturn(botUser.toString());
         SendMessage expected = new SendMessage(1L,botUser.toString());
 
@@ -65,7 +65,7 @@ class BotUserControllerTest {
 
     @Test
     void addBotUser() {
-        BotUser botUser = new BotUser("Test", 89871234567L, 123456789L);
+        BotUser botUser = new BotUser("Test", 89871234567L, 1L);
         SendMessage expected = new SendMessage(1L,botUser.toString());
         when(validatorBotUserService.validateUser(any())).thenReturn(botUser.toString());
 

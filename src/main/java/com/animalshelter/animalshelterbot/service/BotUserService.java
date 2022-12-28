@@ -41,10 +41,11 @@ public class BotUserService {
     }
 
     public BotUser editBotUser(BotUser botUser) {
-        BotUser getBotUser = getBotUser(botUser.getId());
-        getBotUser.setUserName(botUser.getUserName());
-        getBotUser.setPhoneNumber(botUser.getPhoneNumber());
-        return botUserRepository.save(getBotUser);
+        BotUser editBotUser = getBotUser(botUser.getId());
+        editBotUser.setUserName(botUser.getUserName());
+        editBotUser.setChatId(botUser.getChatId());
+        editBotUser.setPhoneNumber(botUser.getPhoneNumber());
+        return botUserRepository.save(editBotUser);
     }
 
     public List<BotUser> getAll() {
