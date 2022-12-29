@@ -45,7 +45,7 @@ class AboutControllerTest {
             " с радостью познакомим со всеми нашими собаками и кошками. Все наши питомцы привиты и стерилизованы.";
 
     @Test
-    void handleDescriptionMessage() {
+    public void handleDescriptionMessage() {
         SendMessage expected = new SendMessage(1L, aboutDescriptionText);
         when(message.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
@@ -54,7 +54,7 @@ class AboutControllerTest {
         assertThat(actual.getParameters().get("text")).isEqualTo(aboutDescriptionText);
     }
     @Test
-    void handleCallbackDescriptionMessage() {
+    public void handleCallbackDescriptionMessage() {
         SendMessage expected = new SendMessage(1L, aboutDescriptionText);
         when(callbackQuery.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
@@ -65,7 +65,7 @@ class AboutControllerTest {
     }
 
     @Test
-    void handleAddressAndHoursMessage() {
+    public void handleAddressAndHoursMessage() {
         SendMessage expected = new SendMessage(1L, "");
         when(message.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
@@ -75,7 +75,7 @@ class AboutControllerTest {
     }
 
     @Test
-    void handleCallbackAddressAndHoursMessage() {
+    public void handleCallbackAddressAndHoursMessage() {
         SendMessage expected = new SendMessage(1L, "");
         when(callbackQuery.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
