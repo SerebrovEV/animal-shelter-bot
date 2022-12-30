@@ -39,7 +39,7 @@ public class ValidatorBotUserService {
         Long chatId = message.from().id();
         if(botUserService.getBotUserByChatId(chatId) == null){
             BotUser botUser = botUserService.addBotUser(new BotUser(name, phone, chatId));
-            return "Добавлена запись контакта: " + botUser;
+            return "Добавлена запись контакта: " + botUser.toStringUser();
         }
         return "Данный пользователь уже есть";
     }
@@ -54,7 +54,7 @@ public class ValidatorBotUserService {
     public String validateGetUser(Message message){
         BotUser botUser = botUserService.getBotUserByChatId(message.from().id());
         if (botUser != null) {
-            return botUser.toString();
+            return botUser.toStringUser();
         }
         return "Клиент не найден! Пожалуйста добавьте контакты для обратной связи или" +
                 " запросите вызов волонтера. Спасибо!";

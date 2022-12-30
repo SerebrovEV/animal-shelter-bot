@@ -1,5 +1,6 @@
 package com.animalshelter.animalshelterbot.model;
 
+import liquibase.pro.packaged.S;
 import liquibase.repackaged.net.sf.jsqlparser.expression.operators.relational.EqualsTo;
 
 import javax.persistence.Entity;
@@ -61,6 +62,13 @@ public class BotUser {
 
     @Override
     public String toString() {
+        return "Усыновитель: " +
+                "id =" + id +
+                ", Имя ='" + userName + '\'' +
+                ", Номер телефона =" + phoneNumber + "\n";
+    }
+
+    public String toStringUser(){
         return "Пользователь " + userName + ". Телефон для связи " + phoneNumber;
     }
 

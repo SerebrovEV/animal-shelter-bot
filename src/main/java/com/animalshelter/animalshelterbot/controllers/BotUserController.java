@@ -31,7 +31,7 @@ public class BotUserController implements CommandController {
     private final ValidatorBotUserService validatorBotUserService;
     private final String ADD_CONTACT = "/addContact";
     private final String GET_CONTACT = "/getContact";
-    private static final String addContactPattern = "([\\d]{11})(\\s)([\\W]+)";
+    private static final String ADD_CONTACT_PATTERN = "([\\d]{11})(\\s)([\\W]+)";
 
     private final String ADD_MESSAGE = "Для того, чтобы оставить контактные данные для обратной " +
             "связи введите информацию в форме:\n 89871234567 Иван \n и мы вам перезвоним.";
@@ -64,7 +64,7 @@ public class BotUserController implements CommandController {
      * @param {@link Message}
      * @return {@link SendMessage}
      */
-    @Command(pattern = addContactPattern)
+    @Command(pattern = ADD_CONTACT_PATTERN)
     public SendMessage addBotUser(Message message) {
         long idUser = message.from().id();
         logger.info("Пользователь {} производит запись контактных данных в БД", idUser);
