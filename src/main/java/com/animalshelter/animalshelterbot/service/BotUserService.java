@@ -27,25 +27,21 @@ public class BotUserService {
         return botUserRepository.findBotUserByChatId(chatId);
     }
 
-    public BotUser getBotUser(Long id) {
-        Optional<BotUser> getBotUser = botUserRepository.findById(id);
-        if (getBotUser.isEmpty()) {
-            throw new BotUserNotFoundException();
-        }
-        return getBotUser.get();
+    public Optional<BotUser> getBotUser(Long id) throws BotUserNotFoundException{
+        Optional<BotUser> findBotUser = botUserRepository.findById(id);
+        return findBotUser;
     }
 
     public void deleteBotUser(Long id) {
-        BotUser botUserForDelete = getBotUser(id);
-        botUserRepository.deleteById(botUserForDelete.getId());
+        botUserRepository.deleteById(id);
+    }
+
+    public BotUser getByPhoneNumber(Long phoneNumber){
+        return botUserRepository.findByPhoneNumber(phoneNumber);
     }
 
     public BotUser editBotUser(BotUser botUser) {
-        BotUser editBotUser = getBotUser(botUser.getId());
-        editBotUser.setUserName(botUser.getUserName());
-        editBotUser.setChatId(botUser.getChatId());
-        editBotUser.setPhoneNumber(botUser.getPhoneNumber());
-        return botUserRepository.save(editBotUser);
+        return botUserRepository.save(botUser);
     }
 
     public List<BotUser> getAll() {

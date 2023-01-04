@@ -3,6 +3,7 @@ package com.animalshelter.animalshelterbot.service;
 import com.animalshelter.animalshelterbot.exception.BotUserNotFoundException;
 import com.animalshelter.animalshelterbot.model.BotUser;
 import com.animalshelter.animalshelterbot.repository.BotUserRepository;
+import liquibase.pro.packaged.B;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -109,15 +110,15 @@ class BotUserServiceTest {
         when(botUserRepository.findById(botId1)).thenReturn(Optional.ofNullable(BOT_USER1));
         when(botUserRepository.findById(botId2)).thenReturn(Optional.ofNullable(BOT_USER2));
         when(botUserRepository.findById(botId3)).thenReturn(Optional.ofNullable(BOT_USER3));
-        when(botUserRepository.findById(4L)).thenReturn(Optional.empty());
+
 
         BotUser expected = new BotUser("Test", 89871234567L, 123456789L);
         BotUser expected2 = new BotUser("Test2", 89871234568L, 123456781L);
         BotUser expected3 = new BotUser("Test3", 89871234569L, 123456782L);
 
-        BotUser actual = out.getBotUser(botId1);
-        BotUser actual2 = out.getBotUser(botId2);
-        BotUser actual3 = out.getBotUser(botId3);
+        BotUser actual = out.getBotUser(botId1).get();
+        BotUser actual2 = out.getBotUser(botId2).get();
+        BotUser actual3 = out.getBotUser(botId3).get();
 
         verify(botUserRepository, times(1)).findById(botId1);
         verify(botUserRepository, times(1)).findById(botId2);
@@ -131,32 +132,33 @@ class BotUserServiceTest {
         assertThat(actual2).isEqualTo(expected2);
         assertThat(actual3).isEqualTo(expected3);
 
-        assertThrows(BotUserNotFoundException.class, () -> out.getBotUser(4L));
-
-
     }
 
     @Test
     void deleteBotUser() {
         Long botId1 = 1L;
-
-        when(botUserRepository.findById(botId1)).thenReturn(Optional.ofNullable(BOT_USER1));
         out.deleteBotUser(botId1);
-        verify(botUserRepository, times(1)).findById(botId1);
-        assertThrows(BotUserNotFoundException.class, () -> out.deleteBotUser(2L));
+        verify(botUserRepository, times(1)).deleteById(botId1);
+
+    }
+
+    @Test
+    void getByPhoneNumber() {
+        when(botUserRepository.findByPhoneNumber(anyLong())).thenReturn(BOT_USER1);
+        BotUser expected = new BotUser("Test", 89871234567L, 123456789L);
+        BotUser actual = out.getByPhoneNumber(BOT_USER1.getPhoneNumber());
+        assertThat(actual).isEqualTo(expected);
+        assertThat(actual.toString()).isEqualTo(expected.toString());
     }
 
     @Test
     void editBotUser() {
-        when(botUserRepository.findById(BOT_USER1.getId())).thenReturn(Optional.ofNullable(BOT_USER1));
-        when(botUserRepository.save(BOT_USER1)).thenReturn(BOT_USER1);
 
+        when(botUserRepository.save(BOT_USER1)).thenReturn(BOT_USER1);
         BotUser expected = new BotUser("Test", 89871234567L, 123456789L);
         BotUser actual = out.editBotUser(BOT_USER1);
         assertThat(actual.toString()).isEqualTo(expected.toString());
-
-        when(botUserRepository.findById(BOT_USER2.getId())).thenReturn(Optional.empty());
-        assertThrows(BotUserNotFoundException.class, () -> out.editBotUser(BOT_USER2));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test

@@ -1,7 +1,7 @@
 package com.animalshelter.animalshelterbot.controllers;
 
 import com.animalshelter.animalshelterbot.model.BotUser;
-import com.animalshelter.animalshelterbot.service.ValidatorBotUserService;
+import com.animalshelter.animalshelterbot.service.ValidatorUserService;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -32,7 +32,7 @@ class BotUserControllerTest {
     User user;
 
     @Mock
-    private ValidatorBotUserService validatorBotUserService;
+    private ValidatorUserService validatorUserService;
 
     private final String ADD_MESSAGE = "Для того, чтобы оставить контактные данные для обратной " +
             "связи введите информацию в форме:\n 89871234567 Иван \n и мы вам перезвоним.";
@@ -55,8 +55,8 @@ class BotUserControllerTest {
     @Test
     void getContactMessage() {
         BotUser botUser = new BotUser("Test", 89871234567L, 1L);
-        when(validatorBotUserService.validateGetUser(any())).thenReturn(botUser.toString());
-        SendMessage expected = new SendMessage(1L,botUser.toString());
+        when(validatorUserService.validateGetUser(any())).thenReturn(botUser.toStringUser());
+        SendMessage expected = new SendMessage(1L,botUser.toStringUser());
 
         SendMessage actual = out.getContactMessage(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
@@ -66,8 +66,8 @@ class BotUserControllerTest {
     @Test
     void addBotUser() {
         BotUser botUser = new BotUser("Test", 89871234567L, 1L);
-        SendMessage expected = new SendMessage(1L,botUser.toString());
-        when(validatorBotUserService.validateUser(any())).thenReturn(botUser.toString());
+        SendMessage expected = new SendMessage(1L,botUser.toStringUser());
+        when(validatorUserService.validateUser(any())).thenReturn(botUser.toStringUser());
 
         SendMessage actual = out.addBotUser(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));

@@ -19,13 +19,17 @@ public class BotUser {
     private Long phoneNumber;
 
     public BotUser() {
-
     }
 
     public BotUser(String userName, long phoneNumber, long chatId) {
         this.userName = userName;
         this.phoneNumber = phoneNumber;
         this.chatId = chatId;
+    }
+
+    public BotUser(String userName, long phoneNumber) {
+        this.userName = userName;
+        this.phoneNumber = phoneNumber;
     }
 
     public Long getId() {
