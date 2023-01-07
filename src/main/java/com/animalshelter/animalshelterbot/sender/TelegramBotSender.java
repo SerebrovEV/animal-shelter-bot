@@ -1,6 +1,7 @@
 package com.animalshelter.animalshelterbot.sender;
 
 import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,5 +16,9 @@ public class TelegramBotSender {
 
     public void telegramSendPhoto (SendPhoto image){
         telegramBot.execute(image);
+    }
+
+    public void sendMessage(SendMessage message) {
+        telegramBot.execute(message);
     }
 }

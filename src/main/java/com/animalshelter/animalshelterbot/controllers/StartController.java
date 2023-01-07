@@ -31,6 +31,7 @@ public class StartController implements CommandController {
     private static final String button1Text = "Опция 1";
     private static final String button2Text = "Опция 2";
     private static final String button3Text = "Опция 3";
+    private static final String buttonCallVolunteer = "Позвать волонтера";
 
     private static final String callback1Text = "Вы выбрали опцию 1";
     private static final String callback2Text = "Вы выбрали опцию 2";
@@ -51,7 +52,9 @@ public class StartController implements CommandController {
                         new InlineKeyboardButton(button1Text).callbackData(OPTION1_CALLBACK),
                         new InlineKeyboardButton(button2Text).callbackData(OPTION2_CALLBACK),
                         new InlineKeyboardButton(button3Text).callbackData(OPTION3_CALLBACK)
-                ));
+                ).addRow(new InlineKeyboardButton(buttonCallVolunteer)
+                        .callbackData(CallVolunteerController.CALL_VOLUNTEER_CALLBACK))
+                );
     }
 
     @Command(pattern = ADD_PATTERN)
