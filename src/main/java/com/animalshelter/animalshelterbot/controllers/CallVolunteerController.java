@@ -6,9 +6,7 @@ import com.animalshelter.animalshelterbot.handler.CommandController;
 import com.animalshelter.animalshelterbot.sender.TelegramBotSender;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
-import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
-import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
-import com.pengrad.telegrambot.request.ForwardMessage;
+import com.pengrad.telegrambot.model.MessageEntity;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +17,21 @@ import java.util.Map;
 
 /**
  * <i>Контроллер ля вызова волонтера.</i>
+ * <br>
+ * <ul>
+ * Для работы контроллера необходимо: <br>
+ * <li>Создать группу волонтеров в telegram и подключить бота.</li>
+ * <li>Создать канал волонтеров, добавить созданную группу в список обсуждений подключить бота.</li>
+ * <li>Получить значения id групп с помощтю бота Get My ID, затем можно его удалить.</li>
+ * </ul>
+ * <p>
+ * Методы:
+ *  <ul>
+ *   <li>Команда с именем {@link #STOP_CHAT}, отключает пользователя от волонтеров</li>
+ *   <li>Команда с именем {@link #NEW_REQUEST}, Вызывается автоматически, когда канал добавляет обсуждение в группу</li>
+ *   <li>Команда с паттерном {@link #PATTERN}, Принимает все сообщения, кроме тех, которые начинаются с "/"</li>
+ *   <li>Коллбэк {@link #CALL_VOLUNTEER_CALLBACK}, подключает пользователя к чату волонтеров</li>
+ *  </ul>
  */
 @Component
 @RequiredArgsConstructor
@@ -26,80 +39,113 @@ public class CallVolunteerController implements CommandController {
 
     @Value("${telegram.volunteer.chat.id}")
     private Long VOLUNTEER_CHAT_ID;
-    public static final String CALL_VOLUNTEER_COMMAND = "/callVolunteer";
-    public static final String CALL_VOLUNTEER_CALLBACK = "/callVolunteer";
 
-    public static final String START_CHAT = "/startChat";
+    @Value("${telegram.volunteer.chanel.id}")
+    private Long VOLUNTEER_CHANEL_ID;
+
+    public static final String CALL_VOLUNTEER_CALLBACK = "/callVolunteer";
 
     public static final String STOP_CHAT = "/stopChat";
 
+    public static final String NEW_REQUEST = "/*Новый вопрос от пользователя*/";
+
     /**
-     * PATTER for all symbols
+     * PATTER для всех сообщений, кроме тех, которые начинаются с "/".
      */
-    private static final String PATTERN = ".+"; // for all symbols
+    private static final String PATTERN = "[^/].*"; // for all symbols
 
     private final TelegramBotSender telegramBotSender;
 
-    // Для хранения чатов, которые могут персылать сообщения волонтерам
-    private Map<Long, Boolean> volunteerChatEnable = new HashMap<>();
+    /**
+     * <i>Харнит структуру (id_user, id_thread_message)</i>
+     * <br>
+     * id_user - id чата, с котроым общаемся
+     * <br>
+     * id_thread_message - id сообщения, которое является основным в канале
+     */
+    private final Map<Long, Integer> volunteerChatEnable = new HashMap<>();
 
-    public boolean isChatWithVolunteerEnable(Long id) {
-        return volunteerChatEnable.getOrDefault(id, false);
-    }
 
-    public void removeFromChatVolunteer(Long id) {
-        volunteerChatEnable.remove(id);
-    }
-
-    @Command(name = CALL_VOLUNTEER_COMMAND)
-    public SendMessage handleCallVolunteer(Message message) {
-        volunteerChatEnable.put(message.from().id(), true);
-
-        // send request to volunteer
-        telegramBotSender.sendMessage(VOLUNTEER_CHAT_ID, "У пользователя есть вопрос. Нажмите ответить на сообщении.");
-        SendMessage msg = new SendMessage(VOLUNTEER_CHAT_ID, "Вопрос есть")
-                .replyMarkup(new InlineKeyboardMarkup(
-                        new InlineKeyboardButton("Ответить").callbackData("answer")));
-        telegramBotSender.sendMsg(msg);
-        ForwardMessage forwardMessage = new ForwardMessage(VOLUNTEER_CHAT_ID, message.from().id(), message.messageId());
-        telegramBotSender.sendForwardMessage(forwardMessage);
-
-        return new SendMessage(message.from().id(), "Запрос к волонтеру уже отправлен. Ждем, когда он подключится к чату");
-    }
-
-    @Command(name = START_CHAT)
-    public SendMessage handleStartChat(Message message) {
-        volunteerChatEnable.put(message.chat().id(), true);
-        return new SendMessage(message.chat().id(), "Вы начали чат с волонтером. Отправьте Ваш вопрос. Чтобы закончить чат, отправьте /stopChat");
-    }
-
+    /**
+     * Комманда на прекращение общения с сервисной службой. Может быть выполнена только на стороне сервиса.
+     */
     @Command(name = STOP_CHAT)
     public SendMessage handleStopChat(Message message) {
-        volunteerChatEnable.remove(message.chat().id());
-        return new SendMessage(message.chat().id(), "Ваши сообщения больше не отправляются волонтерам");
+        // Знаем threadId и можем отключить пользователя.
+        long id = -1L;
+        for (Map.Entry<Long, Integer> entry : volunteerChatEnable.entrySet()) {
+            if (entry.getValue().equals(message.messageThreadId())) {
+                id = entry.getKey();
+                break;
+            }
+        }
+        if (id != -1) {
+            volunteerChatEnable.remove(id);
+            return new SendMessage(VOLUNTEER_CHAT_ID, "Вопрос закрыт")
+                    .replyToMessageId(message.messageThreadId());
+        }
+
+        return new SendMessage(message.chat().id(), "");
     }
 
-//    @Command(pattern = PATTERN)
-//    public SendMessage handleSafetyMessage(Message message) {
-//        // Сообщение приходит от user и он в списке на чат
-//        if (volunteerChatEnable.getOrDefault(message.chat().id(), false)) {
-//            ForwardMessage forwardMessage = new ForwardMessage(VOLUNTEER_CHAT_ID, message.from().id(), message.messageId());
-//            telegramBotSender.sendForwardMessage(forwardMessage);
-//        }
-//        //Если сообщение от чата волонтеров
-//        if (message.chat().id().equals(VOLUNTEER_CHAT_ID)) {
-//            if (message.text().equals("/stop")) {
-//                volunteerChatEnable.remove(message.replyToMessage().forwardFrom().id());
-//                return new SendMessage(message.replyToMessage().forwardFrom().id(), "Ваш сенанс связи с волонтерами закончился.");
-//            } else {
-//                return new SendMessage(message.replyToMessage().forwardFrom().id(), message.text());
-//            }
-//        }
-//        return new SendMessage(message.from().id(), "");
-//    }
+    @Command(name = NEW_REQUEST)
+    public SendMessage handleMessageWhenUpdateToGroup(Message message) {
+
+        volunteerChatEnable.put(message.entities()[0].user().id(), message.messageId());
+        String name = message.entities()[0].user().firstName();
+        MessageEntity entity = new MessageEntity(MessageEntity.Type.text_mention, 36, name.length())
+                .user(message.entities()[0].user());
+
+        return new SendMessage(message.chat().id(), "Для отправки сообщения пользователю " + name + " отвечайте на любые сообщения бота!!!")
+                .replyToMessageId(message.messageId())
+                .entities(entity);
+    }
+
+    @Command(pattern = PATTERN)
+    public SendMessage handleAllMessages(Message message) {
+
+        if (message.replyToMessage() != null) {
+            // Если сообщения внутри канала, то либо между собой, либо ответ пользователю
+            if (!message.replyToMessage().from().isBot()) {
+                // если внутри канала общаемся
+                return new SendMessage(message.from().id(), "");
+            } else {
+                // По threadId ищем комк переслать
+                int thread = message.replyToMessage().messageThreadId();
+                for (Map.Entry<Long, Integer> entry : volunteerChatEnable.entrySet()) {
+                    if (entry.getValue() == thread) {
+                        return new SendMessage(entry.getKey(), message.text());
+                    }
+                }
+            }
+        } else {
+            // Передаем сообщение от пользователя в канал
+            // Проверяем запрашивал ли пользователь запос в чат
+            if (volunteerChatEnable.containsKey(message.chat().id())) {
+                return new SendMessage(VOLUNTEER_CHAT_ID, message.text())
+                        .replyToMessageId(volunteerChatEnable.get(message.chat().id()));
+            } else {
+                return new SendMessage(message.chat().id(), "");
+            }
+        }
+        return new SendMessage(message.chat().id(), "");
+    }
 
     @Callback(name = CALL_VOLUNTEER_CALLBACK)
     public SendMessage handleCallbackMessage(CallbackQuery callbackQuery) {
-        return new SendMessage(callbackQuery.from().id(), "");
+        // Проверяем, был ли запрос ранее, чтобы не создавать новую тему, пока старый не закрыт
+        if (volunteerChatEnable.containsKey(callbackQuery.from().id())) {
+            return new SendMessage(callbackQuery.from().id(), "Ваш запрос уже отправлен, ожидайте ответа");
+        }
+        String requestString = NEW_REQUEST;
+
+        MessageEntity messageEntity = new MessageEntity(MessageEntity.Type.text_mention, 0, requestString.length())
+                .user(callbackQuery.from());
+        SendMessage sendMessage = new SendMessage(VOLUNTEER_CHANEL_ID, requestString)
+                .entities(messageEntity);
+        telegramBotSender.sendMessage(sendMessage);
+
+        return new SendMessage(callbackQuery.from().id(), "Ваш запрос волонтерам отправлен.");
     }
+
 }
