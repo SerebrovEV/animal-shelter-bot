@@ -7,4 +7,12 @@ create table bot_user(
     chat_id       bigint,
     user_name text,
     phone_number  bigint
-)
+);
+
+--changeset sev:2
+create table report
+(
+    id          bigserial primary key,
+    photo       oid,
+    text        text
+);
