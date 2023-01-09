@@ -58,7 +58,7 @@ public class StartController implements CommandController {
 
     @Command(name = START_COMMAND)
     public SendMessage startMenu(Message message) {
-        return new SendMessage(message.chat().id(), startMenuText)
+        return new SendMessage(message.from().id(), startMenuText)
                 .replyMarkup(new InlineKeyboardMarkup(
                         new InlineKeyboardButton(dogButtonText).callbackData(Callbacks.DOG_MENU.name()),
                         new InlineKeyboardButton(catButtonText).callbackData(Callbacks.CAT_MENU.name())
