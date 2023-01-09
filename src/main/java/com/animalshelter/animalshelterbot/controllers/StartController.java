@@ -5,83 +5,97 @@ import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
-import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * <i>Контроллер обработки стартового сообщения.</i> <br>
  * Отвечает на:
  * <ul>
  *  <li>Команду с именем {@link #START_COMMAND}, возвращая приветственное сообщение</li>
- *  <li>Команду с паттерном {@link #ADD_PATTERN}, возвращая сообщение c суммой чисел</li>
- *  <li>Коллбэк {@link #OPTION1_CALLBACK}, возвращая сообщение c суммой чисел</li>
  * </ul>
  */
 @Component
 @RequiredArgsConstructor
 public class StartController implements CommandController {
-    private static final String startText = "Привет! Данный бот может помочь вам взять и содержать животное из приюта. Для продолжения выберете команду:";
+    private static final String startText = "Привет! Данный бот может помочь вам взять и содержать животное из приюта. Для продолжения выберете опцию:";
+    private static final String shelterInfoText = "В данном разделе можно получить информацию о приюте. Выберите, какую информацию вы хотите получить:";
+    private static final String adoptionInfoText = "В данном разделе можно получить информацию об усыновлении собаки. Выберите, какую информацию вы хотите получить:";
 
-    private static final String button1Text = "Опция 1";
-    private static final String button2Text = "Опция 2";
-    private static final String button3Text = "Опция 3";
-    private static final String buttonCallVolunteer = "Позвать волонтера";
+    private static final String shelterCommonInfoButtonText = "Узнать информацию о приюте";
+    private static final String adoptionInfoButtonText = "Как взять собаку из приюта";
+    private static final String keepingPetButtonText = "Ведение питомца";
+    private static final String callVolunteerButtonText = "Позвать волонтёра";
 
-    private static final String callback1Text = "Вы выбрали опцию 1";
-    private static final String callback2Text = "Вы выбрали опцию 2";
-    private static final String callback3Text = "Вы выбрали опцию 3";
+    private static final String shelterInfoButtonText = "Узнать информацию о приюте";
+    private static final String scheduleButtonText = "Контактные данные";
+    private static final String safetyInfoButtonText = "Рекоминдации о технике безопасности на территории приюта";
+    private static final String getContactsButtonText = "Записать контактные данные";
+
+    private static final String firstMeetingRulesButtonText = "Правила знакомства с собакой";
+    private static final String documentListButtonText = "Список необходимых документов";
+    private static final String transportationRecommendationsButtonText = "Рекоммендации по транспортировке";
+    private static final String arrangementRecommendationsButtonText = "Рекомендаций по обустройству дома";
+    private static final String cynologistAdvicesButtonText = "Советы кинолога";
+    private static final String cynologistRecommendationsButtonText = "Проверенные кинологи";
+    private static final String rejectionCausesButtonText = "Список причин отказа";
 
     private static final String START_COMMAND = "/start";
-    private static final String ADD_PATTERN = "(\\d+) \\+ (\\d+)";
 
-    private static final String OPTION1_CALLBACK = "start_option_1";
-    private static final String OPTION2_CALLBACK = "start_option_2";
-    private static final String OPTION3_CALLBACK = "start_option_3";
+    private static final String SHELTER_COMMON_INFO_CALLBACK = "get_shelter_info";
+    private static final String ADOPTION_INFO_CALLBACK = "get_adoption_info";
+    private static final String SEND_REPORT_CALLBACK = "send_report";
+    private static final String CALL_VOLUNTEER_CALLBACK = "call_volunteer";
+
+    public static final String ABOUT_DESCRIPTION_CALLBACK = "aboutDescriptionText";
+    public static final String ABOUT_ADRESSANDHOUTS_CALLBACK = "addressAndOpenHours";
+
+    public static final String GENERAL_SAFETY_CALLBACK = "/safetyInfo";
+
+    private static final String DUMMY_CALLBACK = "0";
 
     @Command(name = START_COMMAND)
     public SendMessage handleStartMessage(Message message) {
-
         return new SendMessage(message.from().id(), startText)
                 .replyMarkup(new InlineKeyboardMarkup(
-                        new InlineKeyboardButton(button1Text).callbackData(OPTION1_CALLBACK),
-                        new InlineKeyboardButton(button2Text).callbackData(OPTION2_CALLBACK),
-                        new InlineKeyboardButton(button3Text).callbackData(OPTION3_CALLBACK)
-                ).addRow(new InlineKeyboardButton(buttonCallVolunteer)
-                        .callbackData(CallVolunteerController.CALL_VOLUNTEER_CALLBACK))
-                );
+                        new InlineKeyboardButton(shelterCommonInfoButtonText).callbackData(SHELTER_COMMON_INFO_CALLBACK),
+                        new InlineKeyboardButton(adoptionInfoButtonText).callbackData(ADOPTION_INFO_CALLBACK),
+                        new InlineKeyboardButton(keepingPetButtonText).callbackData(SEND_REPORT_CALLBACK),
+
+                        new InlineKeyboardButton(callVolunteerButtonText).callbackData(CALL_VOLUNTEER_CALLBACK)
+                ));
     }
 
-    @Command(pattern = ADD_PATTERN)
-    public SendMessage handlePatternMessage(Message message) {
+    @Callback(name = SHELTER_COMMON_INFO_CALLBACK)
+    public SendMessage handleShelterInfo(CallbackQuery callbackQuery) {
+        return new SendMessage(callbackQuery.from().id(), shelterInfoText)
+                .replyMarkup(new InlineKeyboardMarkup(
+                        new InlineKeyboardButton(shelterInfoButtonText).callbackData(ABOUT_DESCRIPTION_CALLBACK),
+                        new InlineKeyboardButton(scheduleButtonText).callbackData(ABOUT_ADRESSANDHOUTS_CALLBACK),
+                        new InlineKeyboardButton(safetyInfoButtonText).callbackData(GENERAL_SAFETY_CALLBACK),
 
-        Pattern pattern = Pattern.compile(ADD_PATTERN);
-        Matcher matcher = pattern.matcher(message.text());
-
-        matcher.matches();
-
-        return new SendMessage(message.from().id(),
-                Integer.parseInt(matcher.group(1)) + Integer.parseInt(matcher.group(2)) + ""
-        );
+                        new InlineKeyboardButton(getContactsButtonText).callbackData(DUMMY_CALLBACK),
+                        new InlineKeyboardButton(callVolunteerButtonText).callbackData(CALL_VOLUNTEER_CALLBACK)
+                ));
     }
 
-    @Callback(name = OPTION1_CALLBACK)
-    public SendMessage handleStartOption1(CallbackQuery callbackQuery) {
-        return new SendMessage(callbackQuery.from().id(), callback1Text);
-    }
+    @Callback(name = ADOPTION_INFO_CALLBACK)
+    public SendMessage handleAdoptionInfo(CallbackQuery callbackQuery) {
+        return new SendMessage(callbackQuery.from().id(), adoptionInfoText)
+                .replyMarkup(new InlineKeyboardMarkup(
+                        new InlineKeyboardButton(firstMeetingRulesButtonText).callbackData(DUMMY_CALLBACK),
+                        new InlineKeyboardButton(documentListButtonText).callbackData(DUMMY_CALLBACK),
+                        new InlineKeyboardButton(transportationRecommendationsButtonText).callbackData(DUMMY_CALLBACK),
+                        new InlineKeyboardButton(arrangementRecommendationsButtonText).callbackData(DUMMY_CALLBACK),
+                        new InlineKeyboardButton(cynologistAdvicesButtonText).callbackData(DUMMY_CALLBACK),
+                        new InlineKeyboardButton(cynologistRecommendationsButtonText).callbackData(DUMMY_CALLBACK),
+                        new InlineKeyboardButton(rejectionCausesButtonText).callbackData(DUMMY_CALLBACK),
 
-    @Callback(name = OPTION2_CALLBACK)
-    public SendMessage handleStartOption2(CallbackQuery callbackQuery) {
-        return new SendMessage(callbackQuery.from().id(), callback2Text);
-    }
-
-    @Callback(name = OPTION3_CALLBACK)
-    public SendMessage handleStartOption3(CallbackQuery callbackQuery) {
-        return new SendMessage(callbackQuery.from().id(), callback3Text);
+                        new InlineKeyboardButton(getContactsButtonText).callbackData(DUMMY_CALLBACK),
+                        new InlineKeyboardButton(callVolunteerButtonText).callbackData(CALL_VOLUNTEER_CALLBACK)
+                ));
     }
 }
