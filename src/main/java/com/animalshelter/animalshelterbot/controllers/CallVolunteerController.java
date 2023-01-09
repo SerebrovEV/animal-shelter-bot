@@ -45,7 +45,7 @@ public class CallVolunteerController implements CommandController {
     @Value("${telegram.volunteer.chanel.id}")
     private Long VOLUNTEER_CHANEL_ID;
 
-    public static final String CALL_VOLUNTEER_CALLBACK = "/callVolunteer";
+    public static final String CALL_VOLUNTEER_CALLBACK = "call_volunteer";
 
     public static final String STOP_CHAT = "/stopChat";
 
