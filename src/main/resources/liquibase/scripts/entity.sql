@@ -7,4 +7,4 @@ create table bot_user(
     chat_id       bigint,
     user_name text,
     phone_number  bigint
-)
+);

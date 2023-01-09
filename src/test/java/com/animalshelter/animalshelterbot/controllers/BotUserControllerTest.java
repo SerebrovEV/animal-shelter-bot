@@ -1,7 +1,7 @@
 package com.animalshelter.animalshelterbot.controllers;
 
-import com.animalshelter.animalshelterbot.service.BotUserService;
-import com.animalshelter.animalshelterbot.service.ValidatorBotUserService;
+import com.animalshelter.animalshelterbot.model.BotUser;
+import com.animalshelter.animalshelterbot.service.ValidatorUserService;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -31,17 +30,17 @@ class BotUserControllerTest {
 
     @Mock
     User user;
+
     @Mock
-    private ValidatorBotUserService validatorBotUserService;
+    private ValidatorUserService validatorUserService;
 
     private final String ADD_MESSAGE = "Для того, чтобы оставить контактные данные для обратной " +
             "связи введите информацию в форме:\n 89871234567 Иван \n и мы вам перезвоним.";
 
     @BeforeEach
-    private void setOut() {
+    public void setOut() {
         when(message.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
-  //      when(validatorBotUserService.validateGetUser(any())).thenReturn()
     }
 
     @Test
@@ -51,14 +50,27 @@ class BotUserControllerTest {
 
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
-
     }
 
     @Test
     void getContactMessage() {
+        BotUser botUser = new BotUser("Test", 89871234567L, 1L);
+        when(validatorUserService.validateGetUser(any())).thenReturn(botUser.toStringUser());
+        SendMessage expected = new SendMessage(1L,botUser.toStringUser());
+
+        SendMessage actual = out.getContactMessage(message);
+        assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
+        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
     }
 
     @Test
     void addBotUser() {
+        BotUser botUser = new BotUser("Test", 89871234567L, 1L);
+        SendMessage expected = new SendMessage(1L,botUser.toStringUser());
+        when(validatorUserService.validateUser(any())).thenReturn(botUser.toStringUser());
+
+        SendMessage actual = out.addBotUser(message);
+        assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
+        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
     }
 }
