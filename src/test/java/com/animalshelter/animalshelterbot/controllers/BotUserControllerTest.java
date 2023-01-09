@@ -55,7 +55,7 @@ class BotUserControllerTest {
     @Test
     void getContactMessage() {
         BotUser botUser = new BotUser("Test", 89871234567L, 1L);
-        when(validatorUserService.validateGetUser(any())).thenReturn(botUser.toStringUser());
+        when(validatorUserService.validateGetUser(message)).thenReturn(botUser.toStringUser());
         SendMessage expected = new SendMessage(1L,botUser.toStringUser());
 
         SendMessage actual = out.getContactMessage(message);

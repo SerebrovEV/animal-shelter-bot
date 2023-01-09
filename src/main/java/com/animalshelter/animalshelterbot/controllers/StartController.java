@@ -55,6 +55,7 @@ public class StartController implements CommandController {
 
     public static final String GENERAL_SAFETY_CALLBACK = "/safetyInfo";
 
+    public static final String ADD_CONTACT_CALLBACK = "/addContact";
     private static final String DUMMY_CALLBACK = "0";
 
     @Command(name = START_COMMAND)
@@ -77,7 +78,7 @@ public class StartController implements CommandController {
                         new InlineKeyboardButton(scheduleButtonText).callbackData(ABOUT_ADRESSANDHOUTS_CALLBACK),
                         new InlineKeyboardButton(safetyInfoButtonText).callbackData(GENERAL_SAFETY_CALLBACK),
 
-                        new InlineKeyboardButton(getContactsButtonText).callbackData(DUMMY_CALLBACK),
+                        new InlineKeyboardButton(getContactsButtonText).callbackData(ADD_CONTACT_CALLBACK),
                         new InlineKeyboardButton(callVolunteerButtonText).callbackData(CALL_VOLUNTEER_CALLBACK)
                 ));
     }
@@ -94,7 +95,7 @@ public class StartController implements CommandController {
                         new InlineKeyboardButton(cynologistRecommendationsButtonText).callbackData(DUMMY_CALLBACK),
                         new InlineKeyboardButton(rejectionCausesButtonText).callbackData(DUMMY_CALLBACK),
 
-                        new InlineKeyboardButton(getContactsButtonText).callbackData(DUMMY_CALLBACK),
+                        new InlineKeyboardButton(getContactsButtonText).callbackData(ADD_CONTACT_CALLBACK),
                         new InlineKeyboardButton(callVolunteerButtonText).callbackData(CALL_VOLUNTEER_CALLBACK)
                 ));
     }

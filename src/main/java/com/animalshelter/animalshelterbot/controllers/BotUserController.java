@@ -1,9 +1,13 @@
 package com.animalshelter.animalshelterbot.controllers;
 
+import com.animalshelter.animalshelterbot.handler.Callback;
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
 import com.animalshelter.animalshelterbot.service.ValidatorUserService;
+import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
+import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -39,6 +43,11 @@ public class BotUserController implements CommandController {
         return new SendMessage(idUser, ADD_MESSAGE);
     }
 
+    @Callback(name = ADD_CONTACT)
+    public SendMessage addMessage(CallbackQuery callbackQuery) {
+        return new SendMessage(callbackQuery.from().id(), ADD_MESSAGE);
+    }
+
     /**
      * <i>Метод для получения пользователем контактных данных, которые он записал в базу данных
      * <br>
@@ -52,6 +61,11 @@ public class BotUserController implements CommandController {
         logger.info("Пользователь {} запросил проверку своего контакта в БД", idUser);
         return new SendMessage(idUser, validatorUserService.validateGetUser(message));
     }
+    @Callback(name = GET_CONTACT)
+    public SendMessage getContactMessage(CallbackQuery callbackQuery) {
+        return new SendMessage(callbackQuery.from().id(), validatorUserService.validateGetUser(callbackQuery));
+    }
+
 
     /**
      * <i>Запись контактных данных пользователя
