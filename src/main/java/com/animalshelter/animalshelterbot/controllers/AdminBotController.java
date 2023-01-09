@@ -35,10 +35,13 @@ public class AdminBotController implements CommandController {
             "/badUser - получить список усыновителей, которые не прислали отчеты;\n" +
             "Отчет 10 - получить последний отчет от усыновителя id = 10.";
 
-    private static final String SAVE_CONTACT_PATTERN = "([\\W]{9})(\\s)([\\d]{11})(\\s)([\\W]+)";
-    private static final String EDIT_CONTACT_PATTERN = "([\\W]{8})(\\s)([\\d]+)(\\s)([\\d]{11})(\\s)([\\W]+)";
-    private static final String DELETE_CONTACT_PATTERN = "([\\W]{7})(\\s)([\\d]+)";
-    private static final String FIND_CONTACT_PATTERN = "([\\W]{5})(\\s)([\\d]+)";
+
+    private static final String SAVE_CONTACT_PATTERN = "Сохранить(\\s)([\\d]{11})(\\s)([\\W]+)";
+
+    private static final String EDIT_CONTACT_PATTERN = "Изменить(\\s)([\\d]+)(\\s)([\\d]{11})(\\s)([\\W]+)";
+    private static final String DELETE_CONTACT_PATTERN = "Удалить(\\s)([\\d]+)";
+
+    private static final String FIND_CONTACT_PATTERN = "Найти(\\s)([\\d]+)";
     private final String REPORT_PATTERN = "[Отчет]";
 
     private final List<Long> ADMIN_ID_CHAT = List.of();
