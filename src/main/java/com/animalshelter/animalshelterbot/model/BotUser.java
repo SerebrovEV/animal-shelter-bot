@@ -2,6 +2,8 @@ package com.animalshelter.animalshelterbot.model;
 
 import liquibase.pro.packaged.S;
 import liquibase.repackaged.net.sf.jsqlparser.expression.operators.relational.EqualsTo;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,8 @@ import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
+@Setter
+@Getter
 public class BotUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,37 +36,6 @@ public class BotUser {
         this.phoneNumber = phoneNumber;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getChatId() {
-        return chatId;
-    }
-
-    public void setChatId(Long userId) {
-        this.chatId = userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public Long getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(Long phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
 
     @Override
     public String toString() {
@@ -88,6 +61,6 @@ public class BotUser {
 
     @Override
     public int hashCode() {
-        return Objects.hash(chatId, userName, phoneNumber);
+        return Objects.hash(id, userName, phoneNumber);
     }
 }
