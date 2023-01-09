@@ -3,6 +3,7 @@ package com.animalshelter.animalshelterbot.controllers;
 import com.animalshelter.animalshelterbot.handler.Callback;
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
+import com.animalshelter.animalshelterbot.organisation.Callbacks;
 import com.animalshelter.animalshelterbot.sender.TelegramBotSender;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
@@ -48,7 +49,7 @@ public class AboutController implements CommandController {
     public SendMessage handleDescriptionMessage(Message message) {
         return new SendMessage(message.from().id(), aboutDescriptionText);
     }
-    @Callback(name = ABOUT_DESCRIPTION_CALLBACK)
+    @Callback(name = Callbacks.DOG_SHELTER_INFO)
    public SendMessage handleCallbackDescriptionMessage(CallbackQuery callbackQuery) {
         return new SendMessage(callbackQuery.from().id(), aboutDescriptionText);
     }
@@ -61,7 +62,7 @@ public class AboutController implements CommandController {
         return new SendMessage(message.from().id(), "");
         //return new SendMessage(message.from().id(), addressAndOpenHours);
     }
-   @Callback(name = ABOUT_ADDRESSANDHOURS_CALLBACK)
+   @Callback(name = Callbacks.DOG_SCHEDULE_INFO)
     public SendMessage handleCallbackAddressAndHoursMessage(CallbackQuery callbackQuery) {
         File imageScheme = new File("src/main/resources/images/scheme.PNG");
         String addressAndOpenHours = "Мы работаем ежедневно с 11:00 до 18:00 по адресу: улица Аккорган, 5в, Сарыарка район, Астана";
