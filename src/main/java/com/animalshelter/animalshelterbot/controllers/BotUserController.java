@@ -57,7 +57,7 @@ public class BotUserController implements CommandController {
      * <i>Запись контактных данных пользователя
      * <br>
      * Используется метод {@link ValidatorUserService#validateUser(Message)}</i>
-     * @param {@link Message}
+     * @param message
      * @return {@link SendMessage}
      */
     @Command(pattern = ADD_CONTACT_PATTERN)

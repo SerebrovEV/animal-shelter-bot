@@ -10,8 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * <i> Сервис для обработки входящих сообщений с контроллера
- * {@link com.animalshelter.animalshelterbot.controllers.BotUserController} из телеграма
+ * <i> Сервис для обработки входящих сообщений с контроллеров
+ * {@link com.animalshelter.animalshelterbot.controllers.BotUserController} и {@link com.animalshelter.animalshelterbot.controllers.AdminBotController} из телеграма
  * и подготовки ответного сообщения пользователю</i>
  */
 
@@ -67,6 +67,14 @@ public class ValidatorUserService {
                 " запросите вызов волонтера. Спасибо!";
     }
 
+    /**
+     * <i> Метод для проверки и обработки входящего сообщения на сохранение контактных данных от администратора.
+     * <br>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminBotController#createBotUser(Message)}. </i>
+     *
+     * @param message
+     * @return String в зависимости от результата обработки
+     */
     public String validateUserFromAdmin(Message message) {
         Matcher matcher = ADD_PATTERN_FROM_ADMIN.matcher(message.text());
         matcher.find();
@@ -82,6 +90,14 @@ public class ValidatorUserService {
         return "Данный усыновитель уже есть";
     }
 
+    /**
+     * <i> Метод для проверки и обработки входящего сообщения на получение контактных данных от администратора.
+     * <br>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminBotController#getBotUser(Message)}. </i>
+     *
+     * @param message
+     * @return String в зависимости от результата обработки
+     */
     public String validateGetUserFromAdmin(Message message) {
         Matcher matcher = FIND_PATTERN.matcher(message.text());
         if (matcher.find()) {
@@ -96,6 +112,14 @@ public class ValidatorUserService {
 
     }
 
+    /**
+     * <i> Метод для проверки и обработки входящего сообщения на удаление контактных данных от администратора.
+     * <br>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminBotController#deleteBotUser(Message)}. </i>
+     *
+     * @param message
+     * @return String в зависимости от результата обработки
+     */
     public String validateDeleteUser(Message message) {
         Matcher matcher = DELETE_PATTERN.matcher(message.text());
         if (matcher.find()) {
@@ -110,6 +134,14 @@ public class ValidatorUserService {
         return "Некорректный запрос";
     }
 
+    /**
+     * <i> Метод для проверки и обработки входящего сообщения на изменение контактных данных от администратора.
+     * <br>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminBotController#editBotUser(Message)}. </i>
+     *
+     * @param message
+     * @return String в зависимости от результата обработки
+     */
     public String validateEditUser(Message message) {
         Matcher matcher = EDIT_PATTERN.matcher(message.text());
         if (matcher.find()) {

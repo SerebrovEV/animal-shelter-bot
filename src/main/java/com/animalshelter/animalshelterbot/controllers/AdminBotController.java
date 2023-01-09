@@ -39,10 +39,16 @@ public class AdminBotController implements CommandController {
     private static final String EDIT_CONTACT_PATTERN = "([\\W]{8})(\\s)([\\d]+)(\\s)([\\d]{11})(\\s)([\\W]+)";
     private static final String DELETE_CONTACT_PATTERN = "([\\W]{7})(\\s)([\\d]+)";
     private static final String FIND_CONTACT_PATTERN = "([\\W]{5})(\\s)([\\d]+)";
-    private static final String REPORT_PATTERN = "[Отчет]";
+    private final String REPORT_PATTERN = "[Отчет]";
 
     private final List<Long> ADMIN_ID_CHAT = List.of();
 
+    /**
+     * <i>Метод для получения инструкции по использованию команд администратора.
+     * <br>
+     * @param {@link Message}
+     * @return {@link SendMessage}
+     */
     @Command(name = "/infoForUse")
     public SendMessage infoAboutUseBot(Message message) {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
@@ -52,6 +58,13 @@ public class AdminBotController implements CommandController {
 
     }
 
+    /**
+     * <i>Метод для записи контактных данных усыновителя администратором
+     * <br>
+     * Используется метод {@link ValidatorUserService#validateUserFromAdmin(Message)}</i>
+     * @param message
+     * @return {@link SendMessage}
+     */
     @Command(pattern = SAVE_CONTACT_PATTERN)
     public SendMessage createBotUser(Message message) {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
@@ -61,6 +74,13 @@ public class AdminBotController implements CommandController {
         return new SendMessage(message.from().id(), answer);
     }
 
+    /**
+     * <i>Метод для получения контактных данных усыновителя администратором
+     * <br>
+     * Используется метод {@link ValidatorUserService#validateGetUserFromAdmin(Message)} </i>
+     * @param message
+     * @return {@link SendMessage}
+     */
     @Command(pattern = FIND_CONTACT_PATTERN)
     public SendMessage getBotUser(Message message) {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
@@ -70,6 +90,13 @@ public class AdminBotController implements CommandController {
         return new SendMessage(idAdmin, answer);
     }
 
+    /**
+     * <i>Метод для удаления контактных данных усыновителя администратором
+     * <br>
+     * Используется метод {@link ValidatorUserService#validateDeleteUser(Message)} </i>
+     * @param message
+     * @return {@link SendMessage}
+     */
     @Command(pattern = DELETE_CONTACT_PATTERN)
     public SendMessage deleteBotUser(Message message) {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
@@ -79,35 +106,65 @@ public class AdminBotController implements CommandController {
         return new SendMessage(message.from().id(), answer);
     }
 
+    /**
+     * <i>Метод для редактирования контактных данных усыновителя администратором
+     * <br>
+     * Используется метод {@link ValidatorUserService#validateEditUser(Message)} </i>
+     * @param message
+     * @return {@link SendMessage}
+     */
     @Command(pattern = EDIT_CONTACT_PATTERN)
     public SendMessage editBotUser(Message message) {
+        //  if(ADMIN_ID_CHAT.contains(message.from().id()))
         Long idAdmin = message.from().id();
         LOG.warn("Администратор {} изменяет контакт усыновителя в базе данных", idAdmin);
         String answer = validatorUserService.validateEditUser(message);
         return new SendMessage(message.from().id(), answer);
     }
 
-
+    /**
+     * <i>Метод для получения контактных данных всех усыновителей администратором
+     * <br>
+     * Используется метод {@link BotUserService#getAll()} </i>
+     * @param message
+     * @return {@link SendMessage}
+     */
     @Command(name = "/getAll")
     public SendMessage getAllBotUser(Message message) {
+        //  if(ADMIN_ID_CHAT.contains(message.from().id()))
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запросил всех пользователей из базы данных", idAdmin);
         List<BotUser> allUsers = botUserService.getAll();
         return new SendMessage(idAdmin, allUsers.toString());
     }
 
-
+    /**
+     * <i>Метод для получения контактных данных недобросовестных усыновителей администратором
+     * <br>
+     * Используется метод  </i>
+     * @param message
+     * @return {@link SendMessage}
+     */
     @Command(name = "/badUser")
     public SendMessage getBadUser(Message message) {
+        //  if(ADMIN_ID_CHAT.contains(message.from().id()))
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} запросил всех пользователей из базы данных", idAdmin);
-        return new SendMessage(idAdmin, "badUSer");
+        LOG.info("Администратор {} запросил данные недобросовестных усыновителей из базы данных", idAdmin);
+        return new SendMessage(idAdmin, "badUser");
     }
 
-    @Command(pattern = REPORT_PATTERN)
+    /**
+     * <i>Метод для получения последнего отчета усыновителя администратором
+     * <br>
+     * Используется метод </i>
+     * @param message
+     * @return {@link SendMessage}
+     */
+    @Command(name = REPORT_PATTERN)
     public SendMessage getLastReport(Message message) {
+        //  if(ADMIN_ID_CHAT.contains(message.from().id()))
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} запросил всех пользователей из базы данных", idAdmin);
+        LOG.info("Администратор {} запросил отчет усыновителя из базы данных", idAdmin);
         return new SendMessage(idAdmin, "getLastReport");
     }
 
