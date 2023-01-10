@@ -20,17 +20,19 @@ import java.nio.file.Paths;
 /**
  * <i>Контроллер получения информации и рекомендаций для работы с собакой.</i>
  * <br>
- */
+  */
 @Component
 @RequiredArgsConstructor
 public class DogRecommendationController implements CommandController {
 
     private final String pathToFileRecommendation = "src/main/resources/textinfo/dog_dating_rules_recommendation.txt";
 
+    private final String pathToFileRejectionsReason = "src/main/resources/textinfo/rejection_reason.txt";
+
     private final String pathToFileCynologistTeam = "src/main/resources/textinfo/dog_cynologists_team.txt";
 
     /**
-     * Для проверки. TODO удалить
+     *Для проверки. TODO удалить
      */
     @Command(name = "/rules")
     public SendMessage handleDescriptionMessage(Message message) throws IOException {
@@ -42,7 +44,6 @@ public class DogRecommendationController implements CommandController {
     /**
      * Получение информации о знакомстве с собакой <br>
      * Запрос осуществляется по значению  {@link Callbacks#DOG_MEETING_RULES_INFO}
-     *
      * @return Рекомендации для знакомства с собакой
      * @throws IOException
      */
@@ -59,7 +60,7 @@ public class DogRecommendationController implements CommandController {
      * Получение информации о проверенных кинологах <br>
      * Запрос осуществляется по значению  {@link Callbacks#DOG_CYNOLOGIST_RECOMMENDATION}
      *
-     * @return Рекомендации для знакомства с собакой
+     * @return Рекомендации о проверенных кинологах
      * @throws IOException
      */
     @Callback(name = Callbacks.DOG_CYNOLOGIST_RECOMMENDATION)
@@ -68,6 +69,22 @@ public class DogRecommendationController implements CommandController {
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
                 .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(("Назад"))
+                        .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
+    }
+
+    /**
+     * Получение информации о причинах отказа <br>
+     * Запрос осуществляется по значению  {@link Callbacks#DOG_DECLINE_CAUSES}
+     * @return Спсок причин для отказа.
+     * @throws IOException
+     * TODO Можно использовать и для кошек. Но с Callbacks.CAT_DECLINE_CAUSES и "Назад" в соотв-ее меню
+     */
+    @Callback(name = Callbacks.DOG_DECLINE_CAUSES)
+    public SendMessage handleDogDeclineCausesCallbackMessage(CallbackQuery callbackQuery) throws IOException {
+        String text = Files.readString(Paths.get(pathToFileRejectionsReason));
+        return new SendMessage(callbackQuery.from().id(), text)
+                .parseMode(ParseMode.Markdown)
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton("Назад")
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
 }
