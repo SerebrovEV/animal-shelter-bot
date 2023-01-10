@@ -3,6 +3,7 @@ package com.animalshelter.animalshelterbot.controllers;
 import com.animalshelter.animalshelterbot.handler.Callback;
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
+import com.animalshelter.animalshelterbot.organisation.Callbacks;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
@@ -37,7 +38,7 @@ public class GeneralSafetyController implements CommandController {
         return new SendMessage(message.from().id(), generalSafetyInfoText);
     }
 
-    @Callback(name = GENERAL_SAFETY_CALLBACK)
+    @Callback(name = Callbacks.DOG_SHELTER_SAFETY_INFO)
     public SendMessage handleCallbackMessage(CallbackQuery callbackQuery) {
         return new SendMessage(callbackQuery.from().id(), generalSafetyInfoText);
     }

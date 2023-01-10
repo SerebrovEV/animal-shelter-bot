@@ -1,6 +1,6 @@
 package com.animalshelter.animalshelterbot.service;
 
-import com.animalshelter.animalshelterbot.exception.BotNotFoundException;
+
 import com.animalshelter.animalshelterbot.model.BotUser;
 import com.animalshelter.animalshelterbot.repository.BotUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * <i>Сервис для добавления, получения, редактирования и удаления контактных данных пользователя
+ * <i>Сервис для добавления, получения, редактирования и удаления контактных данных усыновителей
  * {@link BotUser} в/из базы данных</i>
  */
 
@@ -23,28 +23,25 @@ public class BotUserService {
         return botUserRepository.save(botUser);
     }
 
-    public BotUser getBotUserByChatId(Long id) {
-        return botUserRepository.findBotUserByChatId(id);
+    public BotUser getBotUserByChatId(Long chatId) {
+        return botUserRepository.findBotUserByChatId(chatId);
     }
 
-    public BotUser getBotUser(Long id) {
-        Optional<BotUser> getBotUser = botUserRepository.findById(id);
-        if (getBotUser.isEmpty()) {
-            throw new BotNotFoundException();
-        }
-        return getBotUser.get();
+    public Optional<BotUser> getBotUser(Long id) {
+        Optional<BotUser> findBotUser = botUserRepository.findById(id);
+        return findBotUser;
     }
 
     public void deleteBotUser(Long id) {
-        BotUser botUserForDelete = getBotUser(id);
-        botUserRepository.deleteById(botUserForDelete.getId());
+        botUserRepository.deleteById(id);
+    }
+
+    public BotUser getByPhoneNumber(Long phoneNumber){
+        return botUserRepository.findByPhoneNumber(phoneNumber);
     }
 
     public BotUser editBotUser(BotUser botUser) {
-        BotUser getBotUser = getBotUser(botUser.getId());
-        getBotUser.setUserName(botUser.getUserName());
-        getBotUser.setPhoneNumber(botUser.getPhoneNumber());
-        return botUserRepository.save(getBotUser);
+        return botUserRepository.save(botUser);
     }
 
     public List<BotUser> getAll() {

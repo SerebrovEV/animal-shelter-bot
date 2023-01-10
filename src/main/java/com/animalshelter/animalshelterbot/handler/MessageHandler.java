@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -83,7 +84,7 @@ public class MessageHandler {
                 continue;
             }
 
-            if(!annotation.name().equals(callbackQuery.data())) {
+            if(!annotation.name().name().equals(callbackQuery.data())) {
                 continue;
             }
 
