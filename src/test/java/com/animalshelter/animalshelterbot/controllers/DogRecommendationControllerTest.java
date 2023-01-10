@@ -16,17 +16,17 @@ import java.nio.file.Paths;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-class DogDatingRulesControllerTest {
+class DogRecommendationControllerTest {
 
     @InjectMocks
-    DogDatingRulesController dogDatingRulesController;
+    DogRecommendationController dogRecommendationController;
 
     @Test
-    public void handleCallbackMessage() throws URISyntaxException, IOException {
-        String json = Files.readString(Paths.get(DogDatingRulesControllerTest.class.getResource("dog_dating_rules.json").toURI()));
+    public void handleMeetingRulesCallbackMessage() throws URISyntaxException, IOException {
+        String json = Files.readString(Paths.get(DogRecommendationControllerTest.class.getResource("dog_dating_rules.json").toURI()));
         CallbackQuery callback = getCallback(json);
 
-        SendMessage message = dogDatingRulesController.handleCallbackMessage(callback);
+        SendMessage message = dogRecommendationController.handleMeetingRulesCallbackMessage(callback);
         assertThat(message.getParameters().get("chat_id")).isEqualTo(callback.from().id());
         assertThat(message.getParameters().get("text")).isNotNull();
     }
