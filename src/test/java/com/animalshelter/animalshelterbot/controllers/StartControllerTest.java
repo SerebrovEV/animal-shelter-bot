@@ -31,13 +31,13 @@ class StartControllerTest {
     @Mock
     TelegramBotSender telegramBotSender;
 
-    private static final String startMenuText = "Привет! Данный бот может помочь вам взять и содержать животное из приюта. Для продолжения выберете животное:";
+    private static final String startMenuText = "Привет! Данный бот может помочь вам взять и содержать животное из приюта. Для продолжения выберите животное:";
 
-    private static final String dogMenuText = "Вы выбрали приют для собак. Для продолжения выберете раздел:";
+    private static final String dogMenuText = "Вы выбрали приют для собак. Для продолжения выберите раздел:";
     private static final String dogShelterInfoText = "В данном разделе можно получить информацию о приюте. Выберите, какую информацию вы хотите получить:";
     private static final String dogAdoptionInfoText = "В данном разделе можно получить информацию об усыновлении собаки. Выберите, какую информацию вы хотите получить:";
 
-    private static final String catMenuText = "Вы выбрали приют для кошек. Для продолжения выберете раздел:";
+    private static final String catMenuText = "Вы выбрали приют для кошек. Для продолжения выберите раздел:";
     private static final String catShelterInfoText = "В данном разделе можно получить информацию о приюте. Выберите, какую информацию вы хотите получить:";
     private static final String catAdoptionInfoText = "В данном разделе можно получить информацию об усыновлении кошки. Выберите, какую информацию вы хотите получить:";
 
