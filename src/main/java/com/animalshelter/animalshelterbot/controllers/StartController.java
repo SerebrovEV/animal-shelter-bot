@@ -18,13 +18,13 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class StartController implements CommandController {
-    private static final String startMenuText = "Привет! Данный бот может помочь вам взять и содержать животное из приюта. Для продолжения выберете животное:";
+    private static final String startMenuText = "Привет! Данный бот может помочь вам взять и содержать животное из приюта. Для продолжения выберите животное:";
 
-    private static final String dogMenuText = "Вы выбрали приют для собак. Для продолжения выберете раздел:";
+    private static final String dogMenuText = "Вы выбрали приют для собак. Для продолжения выберите раздел:";
     private static final String dogShelterInfoText = "В данном разделе можно получить информацию о приюте. Выберите, какую информацию вы хотите получить:";
     private static final String dogAdoptionInfoText = "В данном разделе можно получить информацию об усыновлении собаки. Выберите, какую информацию вы хотите получить:";
 
-    private static final String catMenuText = "Вы выбрали приют для кошек. Для продолжения выберете раздел:";
+    private static final String catMenuText = "Вы выбрали приют для кошек. Для продолжения выберите раздел:";
     private static final String catShelterInfoText = "В данном разделе можно получить информацию о приюте. Выберите, какую информацию вы хотите получить:";
     private static final String catAdoptionInfoText = "В данном разделе можно получить информацию об усыновлении кошки. Выберите, какую информацию вы хотите получить:";
 
@@ -41,15 +41,15 @@ public class StartController implements CommandController {
     private static final String shelterInfoButtonText = "Узнать информацию о приюте";
     private static final String scheduleButtonText = "Контактные данные";
     private static final String carButtonText = "Данные для оформления пропуска";
-    private static final String safetyInfoButtonText = "Рекоминдации о ТБ на территории приюта";
+    private static final String safetyInfoButtonText = "Рекомендации о ТБ на территории приюта";
     private static final String getContactsButtonText = "Записать контактные данные";
 
     private static final String firstMeetingRulesButtonText = "Правила знакомства с собакой";
     private static final String documentListButtonText = "Список необходимых документов";
-    private static final String transportationRecommendationsButtonText = "Рекоммендации по транспортировке";
-    private static final String youngHousingRecommendationsButtonText = "Рекомендаций по обустройству дома для детёныша";
-    private static final String housingRecommendationsButtonText = "Рекомендаций по обустройству дома";
-    private static final String disabledHousingRecommendationsButtonText = "Рекомендаций по обустройству дома для животного с огр. возможностями";
+    private static final String transportationRecommendationsButtonText = "Рекомендации по транспортировке";
+    private static final String youngHousingRecommendationsButtonText = "Рекомендации по обустройству дома для детёныша";
+    private static final String housingRecommendationsButtonText = "Рекомендации по обустройству дома";
+    private static final String disabledHousingRecommendationsButtonText = "Рекомендации по обустройству дома для животного с огр. возможностями";
     private static final String declineCausesButtonText = "Список причин отказа";
     private static final String cynologistAdvicesButtonText = "Советы кинолога";
     private static final String cynologistRecommendationsButtonText = "Проверенные кинологи";
