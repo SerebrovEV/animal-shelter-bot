@@ -29,6 +29,8 @@ public class DogRecommendationController implements CommandController {
 
     private final String pathToFileRejectionsReason = "src/main/resources/textinfo/rejection_reason.txt";
 
+    private final String pathToFileCynologistTeam = "src/main/resources/textinfo/dog_cynologists_team.txt";
+
     /**
      *Для проверки. TODO удалить
      */
@@ -49,7 +51,25 @@ public class DogRecommendationController implements CommandController {
     public SendMessage handleMeetingRulesCallbackMessage(CallbackQuery callbackQuery) throws IOException {
         String text = Files.readString(Paths.get(pathToFileRecommendation));
         return new SendMessage(callbackQuery.from().id(), text)
-                .parseMode(ParseMode.Markdown);
+                .parseMode(ParseMode.Markdown)
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(("Назад"))
+                        .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
+    }
+
+    /**
+     * Получение информации о проверенных кинологах <br>
+     * Запрос осуществляется по значению  {@link Callbacks#DOG_CYNOLOGIST_RECOMMENDATION}
+     *
+     * @return Рекомендации о проверенных кинологах
+     * @throws IOException
+     */
+    @Callback(name = Callbacks.DOG_CYNOLOGIST_RECOMMENDATION)
+    public SendMessage handleCynologistsRecommendationCallbackMessage(CallbackQuery callbackQuery) throws IOException {
+        String text = Files.readString(Paths.get(pathToFileCynologistTeam));
+        return new SendMessage(callbackQuery.from().id(), text)
+                .parseMode(ParseMode.Markdown)
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(("Назад"))
+                        .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
 
     /**
