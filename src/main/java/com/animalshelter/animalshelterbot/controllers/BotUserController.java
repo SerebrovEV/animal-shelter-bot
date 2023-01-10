@@ -3,6 +3,7 @@ package com.animalshelter.animalshelterbot.controllers;
 import com.animalshelter.animalshelterbot.handler.Callback;
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
+import com.animalshelter.animalshelterbot.organisation.Callbacks;
 import com.animalshelter.animalshelterbot.service.ValidatorUserService;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
@@ -32,6 +33,7 @@ public class BotUserController implements CommandController {
     private final String ADD_CONTACT = "/addContact";
     private final String GET_CONTACT = "/getContact";
     private static final String ADD_CONTACT_PATTERN = "([\\d]{11})(\\s)([\\W]+)";
+    private static final String backButtonText = "Назад";
 
     private final String ADD_MESSAGE = "Для того, чтобы оставить контактные данные для обратной " +
             "связи введите информацию в форме:\n 89871234567 Иван \n и мы вам перезвоним.";
@@ -43,28 +45,39 @@ public class BotUserController implements CommandController {
         return new SendMessage(idUser, ADD_MESSAGE);
     }
 
-    @Callback(name = ADD_CONTACT)
-    public SendMessage addMessage(CallbackQuery callbackQuery) {
-        return new SendMessage(callbackQuery.from().id(), ADD_MESSAGE);
+    @Callback(name = Callbacks.DOG_CONTACT_INFO)
+    public SendMessage addMessageDog(CallbackQuery callbackQuery) {
+        return new SendMessage(callbackQuery.from().id(), ADD_MESSAGE)
+                .replyMarkup(new InlineKeyboardMarkup().addRow(
+                                new InlineKeyboardButton(backButtonText).callbackData(Callbacks.DOG_MENU.name())
+                        ));
     }
 
-    /**
-     * <i>Метод для получения пользователем контактных данных, которые он записал в базу данных
-     * <br>
-     * Используется метод {@link ValidatorUserService#validateGetUser(Message)}</i>
-     * @param message
-     * @return {@link SendMessage}
-     */
-    @Command(name = GET_CONTACT)
-    public SendMessage getContactMessage(Message message) {
-        long idUser = message.from().id();
-        logger.info("Пользователь {} запросил проверку своего контакта в БД", idUser);
-        return new SendMessage(idUser, validatorUserService.validateGetUser(message));
+    @Callback(name = Callbacks.CAT_CONTACT_INFO)
+    public SendMessage addMessageCat(CallbackQuery callbackQuery) {
+        return new SendMessage(callbackQuery.from().id(), ADD_MESSAGE)
+                .replyMarkup(new InlineKeyboardMarkup().addRow(
+                        new InlineKeyboardButton(backButtonText).callbackData(Callbacks.CAT_MENU.name())
+                ));
     }
-    @Callback(name = GET_CONTACT)
-    public SendMessage getContactMessage(CallbackQuery callbackQuery) {
-        return new SendMessage(callbackQuery.from().id(), validatorUserService.validateGetUser(callbackQuery));
-    }
+
+//    /**
+//     * <i>Метод для получения пользователем контактных данных, которые он записал в базу данных
+//     * <br>
+//     * Используется метод {@link ValidatorUserService#validateGetUser(Message)}</i>
+//     * @param message
+//     * @return {@link SendMessage}
+//     */
+//    @Command(name = GET_CONTACT)
+//    public SendMessage getContactMessage(Message message) {
+//        long idUser = message.from().id();
+//        logger.info("Пользователь {} запросил проверку своего контакта в БД", idUser);
+//        return new SendMessage(idUser, validatorUserService.validateGetUser(message));
+//    }
+//    @Callback(name = GET_CONTACT)
+//    public SendMessage getContactMessage(CallbackQuery callbackQuery) {
+//        return new SendMessage(callbackQuery.from().id(), validatorUserService.validateGetUser(callbackQuery));
+//    }
 
 
     /**
