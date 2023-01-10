@@ -36,7 +36,7 @@ public class BotUserController implements CommandController {
     private static final String backButtonText = "Назад";
 
     private final String ADD_MESSAGE = "Для того, чтобы оставить контактные данные для обратной " +
-            "связи введите информацию в форме:\n 89871234567 Иван \n и мы вам перезвоним.";
+            "связи отправьте сообщение в форме:\n 89871234567 Иван \n и мы вам перезвоним.";
 
     @Command(name = ADD_CONTACT)
     public SendMessage addMessage(Message message) {
