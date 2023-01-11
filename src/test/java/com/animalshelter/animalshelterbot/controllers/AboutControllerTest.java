@@ -53,6 +53,7 @@ class AboutControllerTest {
         assertThat(actual.getParameters().get("chatId")).isEqualTo(expected.getParameters().get("chatId"));
         assertThat(actual.getParameters().get("text")).isEqualTo(aboutDescriptionText);
     }
+
     @Test
     public void handleCallbackDescriptionMessage() {
         SendMessage expected = new SendMessage(1L, aboutDescriptionText);
@@ -82,5 +83,29 @@ class AboutControllerTest {
         SendMessage actual = aboutController.handleCallbackAddressAndHoursMessage(callbackQuery);
         assertThat(actual.getParameters().get("chatId")).isEqualTo(expected.getParameters().get("chatId"));
         assertThat(actual.getParameters().get("text")).isEqualTo("");
+    }
+
+    @Test
+    public void handleDogCarInfoCallbackMessage() {
+        SendMessage expected = new SendMessage(1L, "Для оформления пропуска свяжитесь с начальником отдела" +
+                " охраны Ивановым Иваном Ивановичем 89871234567 или службой охраны 88125461234");
+        when(callbackQuery.from()).thenReturn(user);
+        when(user.id()).thenReturn(1L);
+        SendMessage actual = aboutController.handleDogCarInfoCallbackMessage(callbackQuery);
+        assertThat(actual.getParameters().get("chatId")).isEqualTo(expected.getParameters().get("chatId"));
+        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
+
+    }
+
+    @Test
+    public void handleCatCarInfoCallbackMessage() {
+        SendMessage expected = new SendMessage(1L, "Для оформления пропуска свяжитесь с начальником отдела охраны Семеновым Семеном Семеновичем 89861234567 " +
+                "или службой охраны 88145461234");
+        when(callbackQuery.from()).thenReturn(user);
+        when(user.id()).thenReturn(1L);
+        SendMessage actual = aboutController.handleCatCarInfoCallbackMessage(callbackQuery);
+        assertThat(actual.getParameters().get("chatId")).isEqualTo(expected.getParameters().get("chatId"));
+        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
+
     }
 }
