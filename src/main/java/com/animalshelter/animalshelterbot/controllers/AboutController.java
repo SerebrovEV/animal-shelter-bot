@@ -7,6 +7,8 @@ import com.animalshelter.animalshelterbot.organisation.Callbacks;
 import com.animalshelter.animalshelterbot.sender.TelegramBotSender;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
+import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +18,14 @@ import java.io.File;
 
 
 /**
- * Контроллер для получения информации о приюте, его адресе и часах работы.
+ * Контроллер для получения информации о приюте, его адресе и часах работы, контактов для оформления пропуска.
  * Дополнительно изображение схему проезда.
  * Запрос на информацию о приюте через  message по команде {@link #ABOUT_DESCRIPTION_COMMAND}
  * Запрос на информацию о приюте через кнопку (callbackQuery) по значению {@link #ABOUT_DESCRIPTION_CALLBACK}
  * Запрос на информацию об адресе и часах работы через message по команде {@link #ABOUT_ADDRESSANDHOURS_COMMAND}
  * Запрос на информацию об адресе и часах работы через кнопку (callbackQuery) по значению {@link #ABOUT_ADDRESSANDHOURS_CALLBACK}
+ * Запрос на контактные данные для оформления пропуска приюта собак (callbackQuery) по значению {@link Callbacks#DOG_CAR_INFO}
+ * Запрос на контактные данные для оформления пропуска приюта кошек (callbackQuery) по значению {@link Callbacks#CAT_CAR_INFO}
  */
 @Component
 @RequiredArgsConstructor
@@ -44,6 +48,8 @@ public class AboutController implements CommandController {
     public static final String ABOUT_DESCRIPTION_CALLBACK = "aboutDescriptionText";
     public static final String ABOUT_ADDRESSANDHOURS_COMMAND = "/addressAndOpenHours";
     public static final String ABOUT_ADDRESSANDHOURS_CALLBACK = "addressAndOpenHours";
+    private static final String backButtonText = "Назад";
+
 
     @Command(name = ABOUT_DESCRIPTION_COMMAND)
     public SendMessage handleDescriptionMessage(Message message) {
@@ -72,4 +78,24 @@ public class AboutController implements CommandController {
         //return new SendMessage(callbackQuery.from().id(), addressAndOpenHours);
     }
 
+
+    @Callback(name = Callbacks.DOG_CAR_INFO)
+    public SendMessage handleDogCarInfoCallbackMessage(CallbackQuery callbackQuery) {
+        String contactSecurity = "Для оформления пропуска свяжитесь с начальником отдела охраны Ивановым Иваном Ивановичем 89871234567 " +
+                "или службой охраны 88125461234";
+        return new SendMessage(callbackQuery.from().id(), contactSecurity)
+                .replyMarkup(new InlineKeyboardMarkup()
+                        .addRow(new InlineKeyboardButton(backButtonText).callbackData(Callbacks.DOG_INFO_MENU.name())));
+
+    }
+
+    @Callback(name = Callbacks.CAT_CAR_INFO)
+    public SendMessage handleCatCarInfoCallbackMessage(CallbackQuery callbackQuery) {
+        String contactSecurity = "Для оформления пропуска свяжитесь с начальником отдела охраны Семеновым Семеном Семеновичем 89861234567 " +
+                "или службой охраны 88145461234";
+        return new SendMessage(callbackQuery.from().id(), contactSecurity)
+                .replyMarkup(new InlineKeyboardMarkup()
+                        .addRow(new InlineKeyboardButton(backButtonText).callbackData(Callbacks.CAT_INFO_MENU.name())));
+
+    }
 }
