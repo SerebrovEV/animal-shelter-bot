@@ -1,6 +1,7 @@
 package com.animalshelter.animalshelterbot.service;
 
 import com.animalshelter.animalshelterbot.model.DogUser;
+import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

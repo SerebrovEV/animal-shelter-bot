@@ -1,6 +1,6 @@
 package com.animalshelter.animalshelterbot.model;
 
-import liquibase.pro.packaged.S;
+
 import lombok.Getter;
 import lombok.Setter;
 
