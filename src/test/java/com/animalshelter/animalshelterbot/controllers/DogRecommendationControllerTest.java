@@ -58,6 +58,34 @@ class DogRecommendationControllerTest {
         assertThat(message.getParameters().get("chat_id")).isEqualTo(callback.from().id());
         assertThat(message.getParameters().get("text")).isNotNull();
     }
+    @Test
+    public void handleDogHousingRecommendationCallbackMessage() throws URISyntaxException, IOException {
+        String json = Files.readString(Paths.get(DogRecommendationControllerTest.class.getResource("dog_dating_rules.json").toURI()));
+        CallbackQuery callback = getCallback(json);
+
+        SendMessage message = dogRecommendationController.handleDogHousingRecommendationCallbackMessage(callback);
+        assertThat(message.getParameters().get("chat_id")).isEqualTo(callback.from().id());
+        assertThat(message.getParameters().get("text")).isNotNull();
+    }
+    @Test
+    public void handlePuppyHousingRecommendationCallbackMessage() throws URISyntaxException, IOException {
+        String json = Files.readString(Paths.get(DogRecommendationControllerTest.class.getResource("dog_dating_rules.json").toURI()));
+        CallbackQuery callback = getCallback(json);
+
+        SendMessage message = dogRecommendationController.handlePuppyHousingRecommendationCallbackMessage(callback);
+        assertThat(message.getParameters().get("chat_id")).isEqualTo(callback.from().id());
+        assertThat(message.getParameters().get("text")).isNotNull();
+    }
+    @Test
+    public void handleDogTransportationRecommendationCallbackMessage() throws URISyntaxException, IOException {
+        String json = Files.readString(Paths.get(DogRecommendationControllerTest.class.getResource("dog_dating_rules.json").toURI()));
+        CallbackQuery callback = getCallback(json);
+
+        SendMessage message = dogRecommendationController.handleDogTransportationRecommendationCallbackMessage(callback);
+        assertThat(message.getParameters().get("chat_id")).isEqualTo(callback.from().id());
+        assertThat(message.getParameters().get("text")).isNotNull();
+    }
+
 
     @Test
     public void handleDogDocListCallbackMessage() throws URISyntaxException, IOException {
