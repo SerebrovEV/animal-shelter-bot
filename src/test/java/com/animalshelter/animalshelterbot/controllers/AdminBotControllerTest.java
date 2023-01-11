@@ -1,6 +1,6 @@
 package com.animalshelter.animalshelterbot.controllers;
 
-import com.animalshelter.animalshelterbot.model.BotUser;
+import com.animalshelter.animalshelterbot.model.DogUser;
 import com.animalshelter.animalshelterbot.service.BotUserService;
 import com.animalshelter.animalshelterbot.service.ValidatorUserService;
 import com.pengrad.telegrambot.model.Message;
@@ -17,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -62,9 +61,9 @@ class AdminBotControllerTest {
 
     @Test
     void createBotUser() {
-        BotUser botUser = new BotUser("Test", 89871234567L);
-        SendMessage expected = new SendMessage(1L, botUser.toString());
-        when(validatorUserService.validateUserFromAdmin(message)).thenReturn(botUser.toString());
+        DogUser dogUser = new DogUser("Test", 89871234567L);
+        SendMessage expected = new SendMessage(1L, dogUser.toString());
+        when(validatorUserService.validateUserFromAdmin(message)).thenReturn(dogUser.toString());
         SendMessage actual = out.createBotUser(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
@@ -72,10 +71,10 @@ class AdminBotControllerTest {
 
     @Test
     void getBotUser() {
-        BotUser botUser = new BotUser("Test", 89871234567L);
-        when(validatorUserService.validateGetUserFromAdmin(any())).thenReturn(botUser.toString());
+        DogUser dogUser = new DogUser("Test", 89871234567L);
+        when(validatorUserService.validateGetUserFromAdmin(any())).thenReturn(dogUser.toString());
 
-        SendMessage expected = new SendMessage(1L, botUser.toString());
+        SendMessage expected = new SendMessage(1L, dogUser.toString());
 
         SendMessage actual = out.getBotUser(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
@@ -84,9 +83,9 @@ class AdminBotControllerTest {
 
     @Test
     void deleteBotUser() {
-        BotUser botUser = new BotUser("Test", 89871234567L);
-        SendMessage expected = new SendMessage(1L, botUser.toString());
-        when(validatorUserService.validateDeleteUser(any())).thenReturn(botUser.toString());
+        DogUser dogUser = new DogUser("Test", 89871234567L);
+        SendMessage expected = new SendMessage(1L, dogUser.toString());
+        when(validatorUserService.validateDeleteUser(any())).thenReturn(dogUser.toString());
 
         SendMessage actual = out.deleteBotUser(message);
 
@@ -96,9 +95,9 @@ class AdminBotControllerTest {
 
     @Test
     void editBotUser() {
-        BotUser botUser = new BotUser("Test", 89871234567L);
-        SendMessage expected = new SendMessage(1L, botUser.toString());
-        when(validatorUserService.validateEditUser(message)).thenReturn(botUser.toString());
+        DogUser dogUser = new DogUser("Test", 89871234567L);
+        SendMessage expected = new SendMessage(1L, dogUser.toString());
+        when(validatorUserService.validateEditUser(message)).thenReturn(dogUser.toString());
 
         SendMessage actual = out.editBotUser(message);
 
@@ -108,14 +107,14 @@ class AdminBotControllerTest {
 
     @Test
     void getAllBotUser() {
-        BotUser botUser = new BotUser("Test", 89871234567L);
-        BotUser botUser2 = new BotUser("Test2", 89871234568L);
-        BotUser botUser3 = new BotUser("Test3", 89871234569L);
-        BotUser botUser4 = new BotUser("Test4", 89871234561L);
-        List<BotUser> botUsers = List.of(botUser, botUser2, botUser3, botUser4);
-        when(botUserService.getAll()).thenReturn(botUsers);
+        DogUser dogUser = new DogUser("Test", 89871234567L);
+        DogUser dogUser2 = new DogUser("Test2", 89871234568L);
+        DogUser dogUser3 = new DogUser("Test3", 89871234569L);
+        DogUser dogUser4 = new DogUser("Test4", 89871234561L);
+        List<DogUser> dogUsers = List.of(dogUser, dogUser2, dogUser3, dogUser4);
+        when(botUserService.getAll()).thenReturn(dogUsers);
 
-        SendMessage expected = new SendMessage(1L, List.of(botUser, botUser2, botUser3, botUser4).toString());
+        SendMessage expected = new SendMessage(1L, List.of(dogUser, dogUser2, dogUser3, dogUser4).toString());
         SendMessage actual = out.getAllBotUser(message);
 
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));

@@ -2,7 +2,7 @@ package com.animalshelter.animalshelterbot.controllers;
 
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
-import com.animalshelter.animalshelterbot.model.BotUser;
+import com.animalshelter.animalshelterbot.model.DogUser;
 import com.animalshelter.animalshelterbot.service.BotUserService;
 import com.animalshelter.animalshelterbot.service.ValidatorUserService;
 import com.pengrad.telegrambot.model.Message;
@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * <i>Контроллер для добавления, редактирования, проверки наличия и получения
- * всех {@link BotUser} в/из базы данных администратором. Обычный пользователь не имеет доступа к данным командам.
+ * всех {@link DogUser} в/из базы данных администратором. Обычный пользователь не имеет доступа к данным командам.
  * </i>
  */
 @Component
@@ -137,7 +137,7 @@ public class AdminBotController implements CommandController {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запросил всех пользователей из базы данных", idAdmin);
-        List<BotUser> allUsers = botUserService.getAll();
+        List<DogUser> allUsers = botUserService.getAll();
         return new SendMessage(idAdmin, allUsers.toString());
     }
 

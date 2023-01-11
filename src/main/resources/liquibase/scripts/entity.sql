@@ -1,7 +1,7 @@
 -- liquibase formatted sql
 
 --changeset sev:1
-create table bot_user(
+create table dog_user(
 
     id            bigserial,
     chat_id       bigint,

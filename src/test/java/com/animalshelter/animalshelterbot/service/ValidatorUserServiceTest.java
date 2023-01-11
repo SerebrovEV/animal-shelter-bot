@@ -1,6 +1,6 @@
 package com.animalshelter.animalshelterbot.service;
 
-import com.animalshelter.animalshelterbot.model.BotUser;
+import com.animalshelter.animalshelterbot.model.DogUser;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import org.junit.jupiter.api.Test;
@@ -32,14 +32,14 @@ class ValidatorUserServiceTest {
 
     @Test
     void validateUser() {
-        BotUser botUser = new BotUser("Тест", 89871234567L, 1L);
+        DogUser dogUser = new DogUser("Тест", 89871234567L, 1L);
         when(message.text()).thenReturn("89871234567 Тест");
         when(message.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
         when(botUserService.getBotUserByChatId(1L)).thenReturn(null);
-        when(botUserService.addBotUser(botUser)).thenReturn(botUser);
+        when(botUserService.addBotUser(dogUser)).thenReturn(dogUser);
 
-        String expected = "Добавлена запись контакта: " + botUser.toStringUser();
+        String expected = "Добавлена запись контакта: " + dogUser.toStringUser();
         String actual = out.validateUser(message);
         assertThat(actual).isEqualTo(expected);
     }
@@ -54,11 +54,11 @@ class ValidatorUserServiceTest {
 
     @Test
     void validateExistingUser(){
-        BotUser botUser = new BotUser("Тест", 89871234567L, 1L);
+        DogUser dogUser = new DogUser("Тест", 89871234567L, 1L);
         when(message.text()).thenReturn("89871234567 Тест");
         when(message.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
-        when(botUserService.getBotUserByChatId(1L)).thenReturn(botUser);
+        when(botUserService.getBotUserByChatId(1L)).thenReturn(dogUser);
         String expected = "Данный пользователь уже есть";
         String actual = out.validateUser(message);
         assertThat(actual).isEqualTo(expected);
@@ -66,11 +66,11 @@ class ValidatorUserServiceTest {
 
     @Test
     void validateGetUser() {
-        BotUser botUser = new BotUser("Тест", 89871234567L, 1L);
-        String expected = botUser.toStringUser();
+        DogUser dogUser = new DogUser("Тест", 89871234567L, 1L);
+        String expected = dogUser.toStringUser();
         when(message.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
-        when(botUserService.getBotUserByChatId(1L)).thenReturn(botUser);
+        when(botUserService.getBotUserByChatId(1L)).thenReturn(dogUser);
         String actual = out.validateGetUser(message);
 
         assertThat(actual).isEqualTo(expected);
@@ -90,23 +90,23 @@ class ValidatorUserServiceTest {
     }
     @Test
     void validateUserFromAdmin(){
-        BotUser botUser = new BotUser("Иван", 89871234567L);
+        DogUser dogUser = new DogUser("Иван", 89871234567L);
 
         when(message.text()).thenReturn("Сохранить 89871234567 Иван");
         when(botUserService.getByPhoneNumber(89871234567L)).thenReturn(null);
-        when(botUserService.addBotUser(botUser)).thenReturn(botUser);
+        when(botUserService.addBotUser(dogUser)).thenReturn(dogUser);
 
-        String expected = "Добавлена запись контакта: " + botUser;
+        String expected = "Добавлена запись контакта: " + dogUser;
         String actual = out.validateUserFromAdmin(message);
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void validateUserFromAdminExistingUser(){
-        BotUser botUser = new BotUser("Иван", 89871234567L);
+        DogUser dogUser = new DogUser("Иван", 89871234567L);
 
         when(message.text()).thenReturn("Сохранить 89871234567 Иван");
-        when(botUserService.getByPhoneNumber(89871234567L)).thenReturn(botUser);
+        when(botUserService.getByPhoneNumber(89871234567L)).thenReturn(dogUser);
 
         String expected = "Данный усыновитель уже есть";
         String actual = out.validateUserFromAdmin(message);
@@ -123,10 +123,10 @@ class ValidatorUserServiceTest {
 
     @Test
     void validateGetUserFromAdmin(){
-        BotUser botUser = new BotUser("Тест", 89871234567L);
-        String expected = botUser.toString();
+        DogUser dogUser = new DogUser("Тест", 89871234567L);
+        String expected = dogUser.toString();
         when(message.text()).thenReturn("Найти 10");
-        when(botUserService.getBotUser(10L)).thenReturn(Optional.of(botUser));
+        when(botUserService.getBotUser(10L)).thenReturn(Optional.of(dogUser));
         String actual = out.validateGetUserFromAdmin(message);
 
         assertThat(actual).isEqualTo(expected);
@@ -150,10 +150,10 @@ class ValidatorUserServiceTest {
     }
     @Test
     void validateDeleteUser(){
-        BotUser botUser = new BotUser("Тест", 89871234567L);
-        String expected = botUser + "удален";
+        DogUser dogUser = new DogUser("Тест", 89871234567L);
+        String expected = dogUser + "удален";
         when(message.text()).thenReturn("Удалить 10");
-        when(botUserService.getBotUser(10L)).thenReturn(Optional.of(botUser));
+        when(botUserService.getBotUser(10L)).thenReturn(Optional.of(dogUser));
         String actual = out.validateDeleteUser(message);
         assertThat(actual).isEqualTo(expected);
     }
@@ -177,11 +177,11 @@ class ValidatorUserServiceTest {
 
     @Test
     void validateEditUser(){
-        BotUser botUser = new BotUser("Тест", 89871234567L);
-        BotUser botUser2 = new BotUser("Миша", 89871234562L);
-        String expected = botUser2 + " изменен";
+        DogUser dogUser = new DogUser("Тест", 89871234567L);
+        DogUser dogUser2 = new DogUser("Миша", 89871234562L);
+        String expected = dogUser2 + " изменен";
         when(message.text()).thenReturn("Изменить 10 89871234562 Миша");
-        when(botUserService.getBotUser(10L)).thenReturn(Optional.of(botUser));
+        when(botUserService.getBotUser(10L)).thenReturn(Optional.of(dogUser));
         String actual = out.validateEditUser(message);
         assertThat(actual).isEqualTo(expected);
     }

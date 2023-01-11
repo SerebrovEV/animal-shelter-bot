@@ -1,6 +1,6 @@
 package com.animalshelter.animalshelterbot.controllers;
 
-import com.animalshelter.animalshelterbot.model.BotUser;
+import com.animalshelter.animalshelterbot.model.DogUser;
 import com.animalshelter.animalshelterbot.service.ValidatorUserService;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
@@ -54,9 +54,9 @@ class BotUserControllerTest {
 
     @Test
     void getContactMessage() {
-        BotUser botUser = new BotUser("Test", 89871234567L, 1L);
-        when(validatorUserService.validateGetUser(any())).thenReturn(botUser.toStringUser());
-        SendMessage expected = new SendMessage(1L,botUser.toStringUser());
+        DogUser dogUser = new DogUser("Test", 89871234567L, 1L);
+        when(validatorUserService.validateGetUser(any())).thenReturn(dogUser.toStringUser());
+        SendMessage expected = new SendMessage(1L, dogUser.toStringUser());
 
         SendMessage actual = out.getContactMessage(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
@@ -65,9 +65,9 @@ class BotUserControllerTest {
 
     @Test
     void addBotUser() {
-        BotUser botUser = new BotUser("Test", 89871234567L, 1L);
-        SendMessage expected = new SendMessage(1L,botUser.toStringUser());
-        when(validatorUserService.validateUser(any())).thenReturn(botUser.toStringUser());
+        DogUser dogUser = new DogUser("Test", 89871234567L, 1L);
+        SendMessage expected = new SendMessage(1L, dogUser.toStringUser());
+        when(validatorUserService.validateUser(any())).thenReturn(dogUser.toStringUser());
 
         SendMessage actual = out.addBotUser(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));

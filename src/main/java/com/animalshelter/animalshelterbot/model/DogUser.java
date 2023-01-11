@@ -1,7 +1,6 @@
 package com.animalshelter.animalshelterbot.model;
 
 import liquibase.pro.packaged.S;
-import liquibase.repackaged.net.sf.jsqlparser.expression.operators.relational.EqualsTo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +13,7 @@ import java.util.Objects;
 @Entity
 @Setter
 @Getter
-public class BotUser {
+public class DogUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,16 +21,16 @@ public class BotUser {
     private String userName;
     private Long phoneNumber;
 
-    public BotUser() {
+    public DogUser() {
     }
 
-    public BotUser(String userName, long phoneNumber, long chatId) {
+    public DogUser(String userName, long phoneNumber, long chatId) {
         this.userName = userName;
         this.phoneNumber = phoneNumber;
         this.chatId = chatId;
     }
 
-    public BotUser(String userName, long phoneNumber) {
+    public DogUser(String userName, long phoneNumber) {
         this.userName = userName;
         this.phoneNumber = phoneNumber;
     }
@@ -53,10 +52,10 @@ public class BotUser {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BotUser botUser = (BotUser) o;
-        return Objects.equals(chatId, botUser.chatId) &&
-                Objects.equals(userName, botUser.userName) &&
-                Objects.equals(phoneNumber, botUser.phoneNumber);
+        DogUser dogUser = (DogUser) o;
+        return Objects.equals(chatId, dogUser.chatId) &&
+                Objects.equals(userName, dogUser.userName) &&
+                Objects.equals(phoneNumber, dogUser.phoneNumber);
     }
 
     @Override

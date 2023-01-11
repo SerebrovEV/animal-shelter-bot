@@ -1,8 +1,8 @@
 package com.animalshelter.animalshelterbot.service;
 
 
-import com.animalshelter.animalshelterbot.model.BotUser;
-import com.animalshelter.animalshelterbot.repository.BotUserRepository;
+import com.animalshelter.animalshelterbot.model.DogUser;
+import com.animalshelter.animalshelterbot.repository.DogUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,41 +11,41 @@ import java.util.Optional;
 
 /**
  * <i>Сервис для добавления, получения, редактирования и удаления контактных данных усыновителей
- * {@link BotUser} в/из базы данных</i>
+ * {@link DogUser} в/из базы данных</i>
  */
 
 @Service
 @RequiredArgsConstructor
 public class BotUserService {
-    private final BotUserRepository botUserRepository;
+    private final DogUserRepository dogUserRepository;
 
-    public BotUser addBotUser(BotUser botUser) {
-        return botUserRepository.save(botUser);
+    public DogUser addBotUser(DogUser dogUser) {
+        return dogUserRepository.save(dogUser);
     }
 
-    public BotUser getBotUserByChatId(Long chatId) {
-        return botUserRepository.findBotUserByChatId(chatId);
+    public DogUser getBotUserByChatId(Long chatId) {
+        return dogUserRepository.findBotUserByChatId(chatId);
     }
 
-    public Optional<BotUser> getBotUser(Long id) {
-        Optional<BotUser> findBotUser = botUserRepository.findById(id);
+    public Optional<DogUser> getBotUser(Long id) {
+        Optional<DogUser> findBotUser = dogUserRepository.findById(id);
         return findBotUser;
     }
 
     public void deleteBotUser(Long id) {
-        botUserRepository.deleteById(id);
+        dogUserRepository.deleteById(id);
     }
 
-    public BotUser getByPhoneNumber(Long phoneNumber){
-        return botUserRepository.findByPhoneNumber(phoneNumber);
+    public DogUser getByPhoneNumber(Long phoneNumber){
+        return dogUserRepository.findByPhoneNumber(phoneNumber);
     }
 
-    public BotUser editBotUser(BotUser botUser) {
-        return botUserRepository.save(botUser);
+    public DogUser editBotUser(DogUser dogUser) {
+        return dogUserRepository.save(dogUser);
     }
 
-    public List<BotUser> getAll() {
-        return List.copyOf(botUserRepository.findAll());
+    public List<DogUser> getAll() {
+        return List.copyOf(dogUserRepository.findAll());
     }
 
 }
