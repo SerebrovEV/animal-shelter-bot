@@ -1,6 +1,7 @@
 package com.animalshelter.animalshelterbot.service;
 
 import com.animalshelter.animalshelterbot.model.BotUser;
+import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -60,6 +61,15 @@ public class ValidatorUserService {
      */
     public String validateGetUser(Message message) {
         BotUser botUser = botUserService.getBotUserByChatId(message.from().id());
+        if (botUser != null) {
+            return botUser.toStringUser();
+        }
+        return "Клиент не найден! Пожалуйста добавьте контакты для обратной связи или" +
+                " запросите вызов волонтера. Спасибо!";
+    }
+
+    public String validateGetUser(CallbackQuery callbackQuery) {
+        BotUser botUser = botUserService.getBotUserByChatId(callbackQuery.from().id());
         if (botUser != null) {
             return botUser.toStringUser();
         }

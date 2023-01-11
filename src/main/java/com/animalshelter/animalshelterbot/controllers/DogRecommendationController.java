@@ -25,7 +25,10 @@ import java.nio.file.Paths;
 @RequiredArgsConstructor
 public class DogRecommendationController implements CommandController {
 
+    private static final String backButtonText = "Назад";
     private final String pathToFileRecommendation = "src/main/resources/textinfo/dog_dating_rules_recommendation.txt";
+    private final String pathToFileAdvice = "src/main/resources/textinfo/cynologist_advice.txt";
+    private final String getPathToFileRecommendationDisabilitiesDog = "src/main/resources/textinfo/recommendations_for_a_dog_with_disabilities.txt";
 
     private final String pathToFileRejectionsReason = "src/main/resources/textinfo/rejection_reason.txt";
 
@@ -52,7 +55,7 @@ public class DogRecommendationController implements CommandController {
         String text = Files.readString(Paths.get(pathToFileRecommendation));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(("Назад"))
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton((backButtonText))
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
 
@@ -68,7 +71,7 @@ public class DogRecommendationController implements CommandController {
         String text = Files.readString(Paths.get(pathToFileCynologistTeam));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(("Назад"))
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton((backButtonText))
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
 
@@ -84,7 +87,43 @@ public class DogRecommendationController implements CommandController {
         String text = Files.readString(Paths.get(pathToFileRejectionsReason));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton("Назад")
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(backButtonText)
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
+    /**
+     * Получение советов от кинологов. <br>
+     * Запрос осуществляется по значению  {@link Callbacks#DOG_CYNOLOGIST_ADVICES}
+     *
+     * @return Советы от кинолога
+     * @throws IOException
+     */
+    @Callback(name = Callbacks.DOG_CYNOLOGIST_ADVICES)
+    public SendMessage handleCytologistAdviceCallbackMessage(CallbackQuery callbackQuery) throws IOException {
+        String text = Files.readString(Paths.get(pathToFileAdvice));
+        return new SendMessage(callbackQuery.from().id(), text)
+                .parseMode(ParseMode.Markdown)
+                .replyMarkup(new InlineKeyboardMarkup().addRow(
+                new InlineKeyboardButton(backButtonText)
+                        .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())
+        ));
+    }
+
+    /**
+     * Получение советов по обустройству дома для собаки с с ограниченными возможностями.  <br>
+     * Запрос осуществляется по значению  {@link Callbacks#DOG_DISABLED_HOUSING_RECOMMENDATION}
+     *
+     * @return Рекомендации по обустройству дома
+     * @throws IOException
+     */
+    @Callback(name = Callbacks.DOG_DISABLED_HOUSING_RECOMMENDATION)
+    public SendMessage handleDogDisabledHousingCallbackMessage(CallbackQuery callbackQuery) throws IOException {
+        String text = Files.readString(Paths.get(getPathToFileRecommendationDisabilitiesDog));
+        return new SendMessage(callbackQuery.from().id(), text)
+                .parseMode(ParseMode.Markdown)
+                .replyMarkup(new InlineKeyboardMarkup().addRow(
+                        new InlineKeyboardButton(backButtonText)
+                                .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())
+                ));
+    }
+
 }
