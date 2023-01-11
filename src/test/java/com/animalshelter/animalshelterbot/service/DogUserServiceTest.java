@@ -17,13 +17,13 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
 /**
- * Тесты для проверки работоспособности {@link BotUserService}
+ * Тесты для проверки работоспособности {@link DogUserService}
  */
 @ExtendWith(MockitoExtension.class)
-class BotUserServiceTest {
+class DogUserServiceTest {
 
     @InjectMocks
-    private BotUserService out;
+    private DogUserService out;
 
     @Mock
     DogUserRepository dogUserRepository;
@@ -50,9 +50,9 @@ class BotUserServiceTest {
         DogUser expected2 = new DogUser("Test2", 89871234568L, 123456781L);
         DogUser expected3 = new DogUser("Test3", 89871234569L, 123456782L);
 
-        DogUser actual = out.addBotUser(BOT_USER1);
-        DogUser actual2 = out.addBotUser(BOT_USER2);
-        DogUser actual3 = out.addBotUser(BOT_USER3);
+        DogUser actual = out.addDogUser(BOT_USER1);
+        DogUser actual2 = out.addDogUser(BOT_USER2);
+        DogUser actual3 = out.addDogUser(BOT_USER3);
 
         assertThat(actual.toString()).isEqualTo(expected.toString());
         assertThat(actual2.toString()).isEqualTo(expected2.toString());
@@ -78,9 +78,9 @@ class BotUserServiceTest {
         DogUser expected2 = new DogUser("Test2", 89871234568L, 123456781L);
         DogUser expected3 = new DogUser("Test3", 89871234569L, 123456782L);
 
-        DogUser actual = out.getBotUserByChatId(BOT_USER1.getChatId());
-        DogUser actual2 = out.getBotUserByChatId(BOT_USER2.getChatId());
-        DogUser actual3 = out.getBotUserByChatId(BOT_USER3.getChatId());
+        DogUser actual = out.getDogUserByChatId(BOT_USER1.getChatId());
+        DogUser actual2 = out.getDogUserByChatId(BOT_USER2.getChatId());
+        DogUser actual3 = out.getDogUserByChatId(BOT_USER3.getChatId());
 
         verify(dogUserRepository, times(1)).findBotUserByChatId(chatId1);
         verify(dogUserRepository, times(1)).findBotUserByChatId(chatId2);
@@ -111,9 +111,9 @@ class BotUserServiceTest {
         DogUser expected2 = new DogUser("Test2", 89871234568L, 123456781L);
         DogUser expected3 = new DogUser("Test3", 89871234569L, 123456782L);
 
-        DogUser actual = out.getBotUser(botId1).get();
-        DogUser actual2 = out.getBotUser(botId2).get();
-        DogUser actual3 = out.getBotUser(botId3).get();
+        DogUser actual = out.getDogUser(botId1).get();
+        DogUser actual2 = out.getDogUser(botId2).get();
+        DogUser actual3 = out.getDogUser(botId3).get();
 
         verify(dogUserRepository, times(1)).findById(botId1);
         verify(dogUserRepository, times(1)).findById(botId2);
@@ -132,7 +132,7 @@ class BotUserServiceTest {
     @Test
     void deleteBotUser() {
         Long botId1 = 1L;
-        out.deleteBotUser(botId1);
+        out.deleteDogUser(botId1);
         verify(dogUserRepository, times(1)).deleteById(botId1);
 
     }
@@ -151,7 +151,7 @@ class BotUserServiceTest {
 
         when(dogUserRepository.save(BOT_USER1)).thenReturn(BOT_USER1);
         DogUser expected = new DogUser("Test", 89871234567L, 123456789L);
-        DogUser actual = out.editBotUser(BOT_USER1);
+        DogUser actual = out.editDogUser(BOT_USER1);
         assertThat(actual.toString()).isEqualTo(expected.toString());
         assertThat(actual).isEqualTo(expected);
     }
@@ -166,7 +166,7 @@ class BotUserServiceTest {
                 new DogUser("Test", 89871234567L, 123456789L),
                 new DogUser("Test2", 89871234568L, 123456781L),
                 new DogUser("Test3", 89871234569L, 123456782L)));
-        List<DogUser> actual = out.getAll();
+        List<DogUser> actual = out.getAllDogUser();
 
         assertThat(actual).isEqualTo(expected);
     }

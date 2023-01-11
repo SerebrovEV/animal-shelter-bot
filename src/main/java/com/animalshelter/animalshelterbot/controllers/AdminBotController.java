@@ -3,7 +3,7 @@ package com.animalshelter.animalshelterbot.controllers;
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
 import com.animalshelter.animalshelterbot.model.DogUser;
-import com.animalshelter.animalshelterbot.service.BotUserService;
+import com.animalshelter.animalshelterbot.service.DogUserService;
 import com.animalshelter.animalshelterbot.service.ValidatorUserService;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -22,7 +22,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class AdminBotController implements CommandController {
-    private final BotUserService botUserService;
+    private final DogUserService dogUserService;
     private final ValidatorUserService validatorUserService;
     private final Logger LOG = LoggerFactory.getLogger(AdminBotController.class);
 
@@ -128,7 +128,7 @@ public class AdminBotController implements CommandController {
     /**
      * <i>Метод для получения контактных данных всех усыновителей администратором
      * <br>
-     * Используется метод {@link BotUserService#getAll()} </i>
+     * Используется метод {@link DogUserService#getAllDogUser()} </i>
      * @param message
      * @return {@link SendMessage}
      */
@@ -137,7 +137,7 @@ public class AdminBotController implements CommandController {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запросил всех пользователей из базы данных", idAdmin);
-        List<DogUser> allUsers = botUserService.getAll();
+        List<DogUser> allUsers = dogUserService.getAllDogUser();
         return new SendMessage(idAdmin, allUsers.toString());
     }
 

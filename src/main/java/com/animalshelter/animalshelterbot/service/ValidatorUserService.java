@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class ValidatorUserService {
 
-    private final BotUserService botUserService;
+    private final DogUserService dogUserService;
     private final Pattern ADD_PATTERN_FROM_USER = Pattern.compile("([\\d]{11})(\\s)([\\W]+)");
     private final Pattern ADD_PATTERN_FROM_ADMIN = Pattern.compile("([\\W]{9})(\\s)([\\d]{11})(\\s)([\\W]+)");
     private final Pattern FIND_PATTERN = Pattern.compile("([\\W]{5})(\\s)([\\d]+)");
@@ -43,8 +43,8 @@ public class ValidatorUserService {
         }
         Long phone = Long.valueOf(matcher.group(1));
         Long chatId = message.from().id();
-        if (botUserService.getBotUserByChatId(chatId) == null) {
-            DogUser dogUser = botUserService.addBotUser(new DogUser(name, phone, chatId));
+        if (dogUserService.getDogUserByChatId(chatId) == null) {
+            DogUser dogUser = dogUserService.addDogUser(new DogUser(name, phone, chatId));
             return "Добавлена запись контакта: " + dogUser.toStringUser();
         }
         return "Данный пользователь уже есть";
@@ -59,7 +59,7 @@ public class ValidatorUserService {
      * @return String в зависимости от проверки сообщения
      */
     public String validateGetUser(Message message) {
-        DogUser dogUser = botUserService.getBotUserByChatId(message.from().id());
+        DogUser dogUser = dogUserService.getDogUserByChatId(message.from().id());
         if (dogUser != null) {
             return dogUser.toStringUser();
         }
@@ -83,8 +83,8 @@ public class ValidatorUserService {
             return "Некорректный номер телефона";
         }
         Long phone = Long.valueOf(matcher.group(3));
-        if (botUserService.getByPhoneNumber(phone) == null) {
-            DogUser dogUser = botUserService.addBotUser(new DogUser(name, phone));
+        if (dogUserService.getByPhoneNumber(phone) == null) {
+            DogUser dogUser = dogUserService.addDogUser(new DogUser(name, phone));
             return "Добавлена запись контакта: " + dogUser.toString();
         }
         return "Данный усыновитель уже есть";
@@ -102,7 +102,7 @@ public class ValidatorUserService {
         Matcher matcher = FIND_PATTERN.matcher(message.text());
         if (matcher.find()) {
             Long id = Long.valueOf(matcher.group(3));
-            Optional<DogUser> findBotUser = botUserService.getBotUser(id);
+            Optional<DogUser> findBotUser = dogUserService.getDogUser(id);
             if (findBotUser.isEmpty()) {
                 return "Усыновитель не найден, проверти правильность введения id.";
             }
@@ -124,11 +124,11 @@ public class ValidatorUserService {
         Matcher matcher = DELETE_PATTERN.matcher(message.text());
         if (matcher.find()) {
             Long id = Long.valueOf(matcher.group(3));
-            Optional<DogUser> deleteBotUser = botUserService.getBotUser(id);
+            Optional<DogUser> deleteBotUser = dogUserService.getDogUser(id);
             if (deleteBotUser.isEmpty()) {
                 return "Усыновитель не найден, проверти правильность введения id.";
             }
-            botUserService.deleteBotUser(id);
+            dogUserService.deleteDogUser(id);
             return deleteBotUser.get() + "удален";
         }
         return "Некорректный запрос";
@@ -149,14 +149,14 @@ public class ValidatorUserService {
                 return "Некорректный номер телефона";
             }
             Long id = Long.valueOf(matcher.group(3));
-            Optional<DogUser> editBotUser = botUserService.getBotUser(id);
+            Optional<DogUser> editBotUser = dogUserService.getDogUser(id);
             if (editBotUser.isEmpty()) {
                 return "Усыновитель не найден, проверти правильность введения id.";
             }
             DogUser newDogUser = editBotUser.get();
             newDogUser.setUserName(matcher.group(7));
             newDogUser.setPhoneNumber(Long.parseLong(matcher.group(5)));
-            botUserService.editBotUser(newDogUser);
+            dogUserService.editDogUser(newDogUser);
             return editBotUser.get() + " изменен";
         }
         return "Некорректный запрос";

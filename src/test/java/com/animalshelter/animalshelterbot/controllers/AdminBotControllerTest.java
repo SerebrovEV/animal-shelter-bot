@@ -1,7 +1,7 @@
 package com.animalshelter.animalshelterbot.controllers;
 
 import com.animalshelter.animalshelterbot.model.DogUser;
-import com.animalshelter.animalshelterbot.service.BotUserService;
+import com.animalshelter.animalshelterbot.service.DogUserService;
 import com.animalshelter.animalshelterbot.service.ValidatorUserService;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
@@ -33,7 +33,7 @@ class AdminBotControllerTest {
     User user;
 
     @Mock
-    BotUserService botUserService;
+    DogUserService dogUserService;
 
     private final String ADMIN_COMMAND = "Правила использования: \n" +
             "Сохранить 89871234567 Иван - добавление контакта усыновителя;\n" +
@@ -112,7 +112,7 @@ class AdminBotControllerTest {
         DogUser dogUser3 = new DogUser("Test3", 89871234569L);
         DogUser dogUser4 = new DogUser("Test4", 89871234561L);
         List<DogUser> dogUsers = List.of(dogUser, dogUser2, dogUser3, dogUser4);
-        when(botUserService.getAll()).thenReturn(dogUsers);
+        when(dogUserService.getAllDogUser()).thenReturn(dogUsers);
 
         SendMessage expected = new SendMessage(1L, List.of(dogUser, dogUser2, dogUser3, dogUser4).toString());
         SendMessage actual = out.getAllBotUser(message);

@@ -1,7 +1,9 @@
 package com.animalshelter.animalshelterbot.service;
 
 
+import com.animalshelter.animalshelterbot.model.CatUser;
 import com.animalshelter.animalshelterbot.model.DogUser;
+import com.animalshelter.animalshelterbot.repository.CatUserRepository;
 import com.animalshelter.animalshelterbot.repository.DogUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,35 +18,35 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class BotUserService {
+public class DogUserService {
     private final DogUserRepository dogUserRepository;
 
-    public DogUser addBotUser(DogUser dogUser) {
+    public DogUser addDogUser(DogUser dogUser) {
         return dogUserRepository.save(dogUser);
     }
 
-    public DogUser getBotUserByChatId(Long chatId) {
+    public DogUser getDogUserByChatId(Long chatId) {
         return dogUserRepository.findBotUserByChatId(chatId);
     }
 
-    public Optional<DogUser> getBotUser(Long id) {
+    public Optional<DogUser> getDogUser(Long id) {
         Optional<DogUser> findBotUser = dogUserRepository.findById(id);
         return findBotUser;
     }
 
-    public void deleteBotUser(Long id) {
+    public void deleteDogUser(Long id) {
         dogUserRepository.deleteById(id);
     }
 
-    public DogUser getByPhoneNumber(Long phoneNumber){
+    public DogUser getByPhoneNumber(Long phoneNumber) {
         return dogUserRepository.findByPhoneNumber(phoneNumber);
     }
 
-    public DogUser editBotUser(DogUser dogUser) {
+    public DogUser editDogUser(DogUser dogUser) {
         return dogUserRepository.save(dogUser);
     }
 
-    public List<DogUser> getAll() {
+    public List<DogUser> getAllDogUser() {
         return List.copyOf(dogUserRepository.findAll());
     }
 
