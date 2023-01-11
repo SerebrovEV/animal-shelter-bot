@@ -23,14 +23,17 @@ import java.nio.file.Paths;
 /**
  * <i>Контроллер получения информации и рекомендаций для работы с собакой.</i>
  * <br>
- */
+  */
 @Component
 @RequiredArgsConstructor
 public class DogRecommendationController implements CommandController {
 
     private final TelegramBotSender telegramBotSender;
 
+    private static final String backButtonText = "Назад";
     private final String pathToFileRecommendation = "src/main/resources/textinfo/dog_dating_rules_recommendation.txt";
+    private final String pathToFileAdvice = "src/main/resources/textinfo/cynologist_advice.txt";
+    private final String getPathToFileRecommendationDisabilitiesDog = "src/main/resources/textinfo/recommendations_for_a_dog_with_disabilities.txt";
 
     private final String pathToFileRejectionsReason = "src/main/resources/textinfo/rejection_reason.txt";
 
@@ -39,7 +42,7 @@ public class DogRecommendationController implements CommandController {
     private final String pathToFileDocList = "src/main/resources/textinfo/doc_list.txt";
 
     /**
-     * Для проверки. TODO удалить
+     *Для проверки. TODO удалить
      */
     @Command(name = "/rules")
     public SendMessage handleDescriptionMessage(Message message) throws IOException {
@@ -51,7 +54,6 @@ public class DogRecommendationController implements CommandController {
     /**
      * Получение информации о знакомстве с собакой <br>
      * Запрос осуществляется по значению  {@link Callbacks#DOG_MEETING_RULES_INFO}
-     *
      * @return Рекомендации для знакомства с собакой
      * @throws IOException
      */
@@ -83,9 +85,9 @@ public class DogRecommendationController implements CommandController {
     /**
      * Получение информации о причинах отказа <br>
      * Запрос осуществляется по значению  {@link Callbacks#DOG_DECLINE_CAUSES}
-     *
      * @return Спсок причин для отказа.
-     * @throws IOException TODO Можно использовать и для кошек. Но с Callbacks.CAT_DECLINE_CAUSES и "Назад" в соотв-ее меню
+     * @throws IOException
+     * TODO Можно использовать и для кошек. Но с Callbacks.CAT_DECLINE_CAUSES и "Назад" в соотв-ее меню
      */
     @Callback(name = Callbacks.DOG_DECLINE_CAUSES)
     public SendMessage handleDogDeclineCausesCallbackMessage(CallbackQuery callbackQuery) throws IOException {
@@ -118,4 +120,40 @@ public class DogRecommendationController implements CommandController {
                 .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton("Назад")
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
+    /**
+     * Получение советов от кинологов. <br>
+     * Запрос осуществляется по значению  {@link Callbacks#DOG_CYNOLOGIST_ADVICES}
+     *
+     * @return Советы от кинолога
+     * @throws IOException
+     */
+    @Callback(name = Callbacks.DOG_CYNOLOGIST_ADVICES)
+    public SendMessage handleCytologistAdviceCallbackMessage(CallbackQuery callbackQuery) throws IOException {
+        String text = Files.readString(Paths.get(pathToFileAdvice));
+        return new SendMessage(callbackQuery.from().id(), text)
+                .parseMode(ParseMode.Markdown)
+                .replyMarkup(new InlineKeyboardMarkup().addRow(
+                new InlineKeyboardButton(backButtonText)
+                        .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())
+        ));
+    }
+
+    /**
+     * Получение советов по обустройству дома для собаки с с ограниченными возможностями.  <br>
+     * Запрос осуществляется по значению  {@link Callbacks#DOG_DISABLED_HOUSING_RECOMMENDATION}
+     *
+     * @return Рекомендации по обустройству дома
+     * @throws IOException
+     */
+    @Callback(name = Callbacks.DOG_DISABLED_HOUSING_RECOMMENDATION)
+    public SendMessage handleDogDisabledHousingCallbackMessage(CallbackQuery callbackQuery) throws IOException {
+        String text = Files.readString(Paths.get(getPathToFileRecommendationDisabilitiesDog));
+        return new SendMessage(callbackQuery.from().id(), text)
+                .parseMode(ParseMode.Markdown)
+                .replyMarkup(new InlineKeyboardMarkup().addRow(
+                        new InlineKeyboardButton(backButtonText)
+                                .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())
+                ));
+    }
+
 }

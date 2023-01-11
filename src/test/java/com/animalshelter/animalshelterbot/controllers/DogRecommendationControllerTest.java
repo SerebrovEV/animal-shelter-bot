@@ -71,6 +71,27 @@ class DogRecommendationControllerTest {
         assertThat(message.getParameters().get("text")).isNotNull();
     }
 
+    @Test
+    public void handleCytologistAdviceCallbackMessage() throws URISyntaxException, IOException {
+        String json = Files.readString(Paths.get(DogRecommendationControllerTest.class.getResource("dog_dating_rules.json").toURI()));
+        CallbackQuery callback = getCallback(json);
+
+        SendMessage message = dogRecommendationController.handleCytologistAdviceCallbackMessage(callback);
+        assertThat(message.getParameters().get("chat_id")).isEqualTo(callback.from().id());
+        assertThat(message.getParameters().get("text")).isNotNull();
+    }
+
+    @Test
+    public void handleDogDisabledHousingCallbackMessage() throws URISyntaxException, IOException {
+        String json = Files.readString(Paths.get(DogRecommendationControllerTest.class.getResource("dog_dating_rules.json").toURI()));
+        CallbackQuery callback = getCallback(json);
+
+        SendMessage message = dogRecommendationController.handleDogDisabledHousingCallbackMessage(callback);
+        assertThat(message.getParameters().get("chat_id")).isEqualTo(callback.from().id());
+        assertThat(message.getParameters().get("text")).isNotNull();
+    }
+
+
     private CallbackQuery getCallback(String json) {
         return BotUtils.fromJson(json, CallbackQuery.class);
     }

@@ -1,7 +1,6 @@
 package com.animalshelter.animalshelterbot.model;
 
-import liquibase.pro.packaged.S;
-import liquibase.repackaged.net.sf.jsqlparser.expression.operators.relational.EqualsTo;
+
 import lombok.Getter;
 import lombok.Setter;
 
