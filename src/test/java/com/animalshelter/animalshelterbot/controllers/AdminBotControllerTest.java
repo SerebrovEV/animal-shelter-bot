@@ -2,11 +2,10 @@ package com.animalshelter.animalshelterbot.controllers;
 
 import com.animalshelter.animalshelterbot.model.DogUser;
 import com.animalshelter.animalshelterbot.service.DogUserService;
-import com.animalshelter.animalshelterbot.service.ValidatorUserService;
+import com.animalshelter.animalshelterbot.service.ValidatorDogUserService;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
-import liquibase.pro.packaged.B;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +25,7 @@ class AdminBotControllerTest {
     @InjectMocks
     AdminBotController out;
     @Mock
-    ValidatorUserService validatorUserService;
+    ValidatorDogUserService validatorDogUserService;
     @Mock
     Message message;
     @Mock
@@ -63,7 +62,7 @@ class AdminBotControllerTest {
     void createBotUser() {
         DogUser dogUser = new DogUser("Test", 89871234567L);
         SendMessage expected = new SendMessage(1L, dogUser.toString());
-        when(validatorUserService.validateUserFromAdmin(message)).thenReturn(dogUser.toString());
+        when(validatorDogUserService.validateUserFromAdmin(message)).thenReturn(dogUser.toString());
         SendMessage actual = out.createBotUser(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
@@ -72,7 +71,7 @@ class AdminBotControllerTest {
     @Test
     void getBotUser() {
         DogUser dogUser = new DogUser("Test", 89871234567L);
-        when(validatorUserService.validateGetUserFromAdmin(any())).thenReturn(dogUser.toString());
+        when(validatorDogUserService.validateGetUserFromAdmin(any())).thenReturn(dogUser.toString());
 
         SendMessage expected = new SendMessage(1L, dogUser.toString());
 
@@ -85,7 +84,7 @@ class AdminBotControllerTest {
     void deleteBotUser() {
         DogUser dogUser = new DogUser("Test", 89871234567L);
         SendMessage expected = new SendMessage(1L, dogUser.toString());
-        when(validatorUserService.validateDeleteUser(any())).thenReturn(dogUser.toString());
+        when(validatorDogUserService.validateDeleteUser(any())).thenReturn(dogUser.toString());
 
         SendMessage actual = out.deleteBotUser(message);
 
@@ -97,7 +96,7 @@ class AdminBotControllerTest {
     void editBotUser() {
         DogUser dogUser = new DogUser("Test", 89871234567L);
         SendMessage expected = new SendMessage(1L, dogUser.toString());
-        when(validatorUserService.validateEditUser(message)).thenReturn(dogUser.toString());
+        when(validatorDogUserService.validateEditUser(message)).thenReturn(dogUser.toString());
 
         SendMessage actual = out.editBotUser(message);
 

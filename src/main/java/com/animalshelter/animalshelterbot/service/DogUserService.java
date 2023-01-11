@@ -1,9 +1,7 @@
 package com.animalshelter.animalshelterbot.service;
 
 
-import com.animalshelter.animalshelterbot.model.CatUser;
 import com.animalshelter.animalshelterbot.model.DogUser;
-import com.animalshelter.animalshelterbot.repository.CatUserRepository;
 import com.animalshelter.animalshelterbot.repository.DogUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +11,7 @@ import java.util.Optional;
 
 /**
  * <i>Сервис для добавления, получения, редактирования и удаления контактных данных усыновителей
- * {@link DogUser} в/из базы данных</i>
+ * {@link DogUser} в/из базы данных собачего приюта</i>
  */
 
 @Service
@@ -26,7 +24,7 @@ public class DogUserService {
     }
 
     public DogUser getDogUserByChatId(Long chatId) {
-        return dogUserRepository.findBotUserByChatId(chatId);
+        return dogUserRepository.findDogUserByChatId(chatId);
     }
 
     public Optional<DogUser> getDogUser(Long id) {
@@ -38,8 +36,8 @@ public class DogUserService {
         dogUserRepository.deleteById(id);
     }
 
-    public DogUser getByPhoneNumber(Long phoneNumber) {
-        return dogUserRepository.findByPhoneNumber(phoneNumber);
+    public DogUser getDogUserByPhoneNumber(Long phoneNumber) {
+        return dogUserRepository.findDogUserByPhoneNumber(phoneNumber);
     }
 
     public DogUser editDogUser(DogUser dogUser) {

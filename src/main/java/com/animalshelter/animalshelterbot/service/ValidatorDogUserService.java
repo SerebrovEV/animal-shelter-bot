@@ -1,7 +1,7 @@
 package com.animalshelter.animalshelterbot.service;
 
+import com.animalshelter.animalshelterbot.controllers.DogUserController;
 import com.animalshelter.animalshelterbot.model.DogUser;
-import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,13 +12,13 @@ import java.util.regex.Pattern;
 
 /**
  * <i> Сервис для обработки входящих сообщений с контроллеров
- * {@link com.animalshelter.animalshelterbot.controllers.BotUserController} и {@link com.animalshelter.animalshelterbot.controllers.AdminBotController} из телеграма
+ * {@link DogUserController} и {@link com.animalshelter.animalshelterbot.controllers.AdminBotController} из телеграма
  * и подготовки ответного сообщения пользователю</i>
  */
 
 @Service
 @RequiredArgsConstructor
-public class ValidatorUserService {
+public class ValidatorDogUserService {
 
     private final DogUserService dogUserService;
     private final Pattern ADD_PATTERN_FROM_USER = Pattern.compile("([\\d]{11})(\\s)([\\W]+)");
@@ -30,43 +30,47 @@ public class ValidatorUserService {
     /**
      * <i> Метод для проверки и обработки входящего сообщения от пользователя.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.BotUserController#addBotUser(Message)}. </i>
+     * Запрос выполняется через метод {@link DogUserController#handleAddDogUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
      */
-    public String validateUser(Message message) {
+    public String validateDogUser(Message message) {
         Matcher matcher = ADD_PATTERN_FROM_USER.matcher(message.text());
-        matcher.find();
-        String name = matcher.group(3);
-        if (!matcher.group(1).startsWith("8")) {
-            return "Некорректный номер телефона";
+        if (matcher.find()) {
+            String name = matcher.group(3);
+            if (!matcher.group(1).startsWith("8")) {
+                return "Некорректный номер телефона";
+            }
+            Long phone = Long.valueOf(matcher.group(1));
+            Long chatId = message.from().id();
+            if (dogUserService.getDogUserByChatId(chatId) == null) {
+                DogUser dogUser = dogUserService.addDogUser(new DogUser(name, phone, chatId));
+                return "Добавлена запись контакта: " + dogUser.toStringUser();
+            }
+            return "Данный пользователь уже есть";
         }
-        Long phone = Long.valueOf(matcher.group(1));
-        Long chatId = message.from().id();
-        if (dogUserService.getDogUserByChatId(chatId) == null) {
-            DogUser dogUser = dogUserService.addDogUser(new DogUser(name, phone, chatId));
-            return "Добавлена запись контакта: " + dogUser.toStringUser();
-        }
-        return "Данный пользователь уже есть";
+        return "Некорректный запрос";
     }
 
-    /**
-     * <i>Метод для проверки входящего сообщения от пользователя для проверки контакта.
-     * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.BotUserController#getContactMessage(Message)}.</i>
-     *
-     * @param message
-     * @return String в зависимости от проверки сообщения
-     */
-    public String validateGetUser(Message message) {
-        DogUser dogUser = dogUserService.getDogUserByChatId(message.from().id());
-        if (dogUser != null) {
-            return dogUser.toStringUser();
-        }
-        return "Клиент не найден! Пожалуйста добавьте контакты для обратной связи или" +
-                " запросите вызов волонтера. Спасибо!";
-    }
+//    /**
+//     * <i>Метод для проверки входящего сообщения от пользователя для проверки контакта.
+//     * <br>
+//     * Запрос выполняется через метод {@link DogUserController#getContactMessage(Message)}.</i>
+//     *
+//     * @param message
+//     * @return String в зависимости от проверки сообщения
+//     */
+//    public String validateGetUser(Message message) {
+//        DogUser dogUser = dogUserService.getDogUserByChatId(message.from().id());
+//        if (dogUser != null) {
+//            return dogUser.toStringUser();
+//        }
+//        return "Клиент не найден! Пожалуйста добавьте контакты для обратной связи или" +
+//                " запросите вызов волонтера. Спасибо!";
+//    }
+
+    // Ниже в работе!!!!
 
     /**
      * <i> Метод для проверки и обработки входящего сообщения на сохранение контактных данных от администратора.
@@ -84,7 +88,7 @@ public class ValidatorUserService {
             return "Некорректный номер телефона";
         }
         Long phone = Long.valueOf(matcher.group(3));
-        if (dogUserService.getByPhoneNumber(phone) == null) {
+        if (dogUserService.getDogUserByPhoneNumber(phone) == null) {
             DogUser dogUser = dogUserService.addDogUser(new DogUser(name, phone));
             return "Добавлена запись контакта: " + dogUser.toString();
         }

@@ -16,9 +16,9 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class ValidatorUserServiceTest {
+class ValidatorDogUserServiceTest {
     @InjectMocks
-    private ValidatorUserService out;
+    private ValidatorDogUserService out;
 
     @Mock
     private DogUserService dogUserService;
@@ -40,7 +40,7 @@ class ValidatorUserServiceTest {
         when(dogUserService.addDogUser(dogUser)).thenReturn(dogUser);
 
         String expected = "Добавлена запись контакта: " + dogUser.toStringUser();
-        String actual = out.validateUser(message);
+        String actual = out.validateDogUser(message);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -48,7 +48,7 @@ class ValidatorUserServiceTest {
     void validateUserIncorrectText() {
         when(message.text()).thenReturn("79871234567 Тест");
         String expected = "Некорректный номер телефона";
-        String actual = out.validateUser(message);
+        String actual = out.validateDogUser(message);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -60,40 +60,48 @@ class ValidatorUserServiceTest {
         when(user.id()).thenReturn(1L);
         when(dogUserService.getDogUserByChatId(1L)).thenReturn(dogUser);
         String expected = "Данный пользователь уже есть";
-        String actual = out.validateUser(message);
+        String actual = out.validateDogUser(message);
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    void validateGetUser() {
-        DogUser dogUser = new DogUser("Тест", 89871234567L, 1L);
-        String expected = dogUser.toStringUser();
-        when(message.from()).thenReturn(user);
-        when(user.id()).thenReturn(1L);
-        when(dogUserService.getDogUserByChatId(1L)).thenReturn(dogUser);
-        String actual = out.validateGetUser(message);
-
+    void validateDogUserIncorrectMatcher(){
+        String expected = "Некорректный запрос";
+        when(message.text()).thenReturn("Найти и");
+        String actual = out.validateDogUser(message);
         assertThat(actual).isEqualTo(expected);
     }
-    @Test
-    void validateGetUserNotFound() {
-        String expected = "Клиент не найден! Пожалуйста добавьте контакты для обратной связи или" +
-                " запросите вызов волонтера. Спасибо!";
 
-        when(message.from()).thenReturn(user);
-        when(user.id()).thenReturn(1L);
-        when(dogUserService.getDogUserByChatId(1L)).thenReturn(null);
-        String actual = out.validateGetUser(message);
-
-        assertThat(actual).isEqualTo(expected);
-
-    }
+//    @Test
+//    void validateGetUser() {
+//        DogUser dogUser = new DogUser("Тест", 89871234567L, 1L);
+//        String expected = dogUser.toStringUser();
+//        when(message.from()).thenReturn(user);
+//        when(user.id()).thenReturn(1L);
+//        when(dogUserService.getDogUserByChatId(1L)).thenReturn(dogUser);
+//        String actual = out.validateGetUser(message);
+//
+//        assertThat(actual).isEqualTo(expected);
+//    }
+//    @Test
+//    void validateGetUserNotFound() {
+//        String expected = "Клиент не найден! Пожалуйста добавьте контакты для обратной связи или" +
+//                " запросите вызов волонтера. Спасибо!";
+//
+//        when(message.from()).thenReturn(user);
+//        when(user.id()).thenReturn(1L);
+//        when(dogUserService.getDogUserByChatId(1L)).thenReturn(null);
+//        String actual = out.validateGetUser(message);
+//
+//        assertThat(actual).isEqualTo(expected);
+//
+//    }
     @Test
     void validateUserFromAdmin(){
         DogUser dogUser = new DogUser("Иван", 89871234567L);
 
         when(message.text()).thenReturn("Сохранить 89871234567 Иван");
-        when(dogUserService.getByPhoneNumber(89871234567L)).thenReturn(null);
+        when(dogUserService.getDogUserByPhoneNumber(89871234567L)).thenReturn(null);
         when(dogUserService.addDogUser(dogUser)).thenReturn(dogUser);
 
         String expected = "Добавлена запись контакта: " + dogUser;
@@ -106,7 +114,7 @@ class ValidatorUserServiceTest {
         DogUser dogUser = new DogUser("Иван", 89871234567L);
 
         when(message.text()).thenReturn("Сохранить 89871234567 Иван");
-        when(dogUserService.getByPhoneNumber(89871234567L)).thenReturn(dogUser);
+        when(dogUserService.getDogUserByPhoneNumber(89871234567L)).thenReturn(dogUser);
 
         String expected = "Данный усыновитель уже есть";
         String actual = out.validateUserFromAdmin(message);

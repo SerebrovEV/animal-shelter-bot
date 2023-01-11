@@ -1,10 +1,12 @@
 package com.animalshelter.animalshelterbot.controllers;
 
 import com.animalshelter.animalshelterbot.model.DogUser;
-import com.animalshelter.animalshelterbot.service.ValidatorUserService;
+import com.animalshelter.animalshelterbot.service.ValidatorDogUserService;
+import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,69 +19,76 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 /**
- * Тесты для проверки работоспособности {@link BotUserController}
+ * Тесты для проверки работоспособности {@link DogUserController}
  */
 @ExtendWith(MockitoExtension.class)
-class BotUserControllerTest {
+class DogUserControllerTest {
 
     @InjectMocks
-    private BotUserController out;
+    private DogUserController out;
 
     @Mock
     Message message;
 
     @Mock
+    CallbackQuery callbackQuery;
+
+    @Mock
     User user;
 
     @Mock
-    private ValidatorUserService validatorUserService;
+    private ValidatorDogUserService validatorDogUserService;
 
     private final String ADD_MESSAGE = "Для того, чтобы оставить контактные данные для обратной " +
-            "связи отправьте сообщение в форме:\n 89871234567 Иван \n и мы вам перезвоним.";
+            "связи отправьте сообщение в форме:\n Возьму собаку 89871234567 Иван \n и мы вам перезвоним.";
 
-    @BeforeEach
-    public void setOut() {
-        when(message.from()).thenReturn(user);
-        when(user.id()).thenReturn(1L);
-    }
+
 
     @Test
-    void addMessage() {
+    void handleAddMessage() {
         SendMessage expected = new SendMessage(1L, ADD_MESSAGE);
-        SendMessage actual = out.addMessage(message);
+        when(message.from()).thenReturn(user);
+        when(user.id()).thenReturn(1L);
+        SendMessage actual = out.handleAddMessage(message);
 
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
     }
 
+    @Test
+    void handleAddMessageDog() {
+        SendMessage expected = new SendMessage(1L, ADD_MESSAGE);
+        when(callbackQuery.from()).thenReturn(user);
+        when(user.id()).thenReturn(1L);
+
+        SendMessage actual = out.handleAddMessageDog(callbackQuery);
+
+        assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
+        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
+
+    }
+
 //    @Test
 //    void getContactMessage() {
-//        BotUser botUser = new BotUser("Test", 89871234567L, 1L);
-//        when(validatorUserService.validateGetUser(message)).thenReturn(botUser.toStringUser());
-//        SendMessage expected = new SendMessage(1L,botUser.toStringUser());
+//        DogUser dogUser = new DogUser("Test", 89871234567L, 1L);
+//        when(validatorDogUserService.м(any())).thenReturn(dogUser.toStringUser());
+//        SendMessage expected = new SendMessage(1L, dogUser.toStringUser());
 //
 //        SendMessage actual = out.getContactMessage(message);
 //        assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
 //        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
 //    }
-    @Test
-    void getContactMessage() {
-        DogUser dogUser = new DogUser("Test", 89871234567L, 1L);
-        when(validatorUserService.validateGetUser(any())).thenReturn(dogUser.toStringUser());
-        SendMessage expected = new SendMessage(1L, dogUser.toStringUser());
-
-        SendMessage actual = out.getContactMessage(message);
-        assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
-        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
-    }
 
     @Test
-    void addBotUser() {
+    void handleAddDogUser() {
         DogUser dogUser = new DogUser("Test", 89871234567L, 1L);
         SendMessage expected = new SendMessage(1L, dogUser.toStringUser());
-        when(validatorUserService.validateUser(any())).thenReturn(dogUser.toStringUser());
+        when(message.from()).thenReturn(user);
+        when(user.id()).thenReturn(1L);
 
-        SendMessage actual = out.addBotUser(message);
+        when(validatorDogUserService.validateDogUser(any())).thenReturn(dogUser.toStringUser());
+
+        SendMessage actual = out.handleAddDogUser(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
     }

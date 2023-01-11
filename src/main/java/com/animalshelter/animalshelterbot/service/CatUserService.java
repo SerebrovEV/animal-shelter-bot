@@ -2,9 +2,7 @@ package com.animalshelter.animalshelterbot.service;
 
 
 import com.animalshelter.animalshelterbot.model.CatUser;
-import com.animalshelter.animalshelterbot.model.DogUser;
 import com.animalshelter.animalshelterbot.repository.CatUserRepository;
-import com.animalshelter.animalshelterbot.repository.DogUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +11,7 @@ import java.util.Optional;
 
 /**
  * <i>Сервис для добавления, получения, редактирования и удаления контактных данных усыновителей
- * {@link CatUser} в/из базы данных</i>
+ * {@link CatUser} в/из базы данных кошачего приюта</i>
  */
 
 @Service
@@ -29,12 +27,16 @@ public class CatUserService {
         return catUserRepository.findCatUserByChatId(chatId);
     }
 
-    public CatUser getByPhoneNumber(Long phoneNumber) {
+    public CatUser getCatUserByPhoneNumber(Long phoneNumber) {
         return catUserRepository.findByPhoneNumber(phoneNumber);
     }
 
     public CatUser editCatUser(CatUser catUser) {
         return catUserRepository.save(catUser);
+    }
+    public Optional<CatUser> getCatUser(Long id) {
+        Optional<CatUser> findCatUser = catUserRepository.findById(id);
+        return findCatUser;
     }
 
     public void deleteCatUser(Long id) {

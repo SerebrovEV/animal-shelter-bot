@@ -4,7 +4,7 @@ import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
 import com.animalshelter.animalshelterbot.model.DogUser;
 import com.animalshelter.animalshelterbot.service.DogUserService;
-import com.animalshelter.animalshelterbot.service.ValidatorUserService;
+import com.animalshelter.animalshelterbot.service.ValidatorDogUserService;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminBotController implements CommandController {
     private final DogUserService dogUserService;
-    private final ValidatorUserService validatorUserService;
+    private final ValidatorDogUserService validatorDogUserService;
     private final Logger LOG = LoggerFactory.getLogger(AdminBotController.class);
 
     private final String ADMIN_COMMAND = "Правила использования: \n" +
@@ -44,11 +44,13 @@ public class AdminBotController implements CommandController {
     private static final String FIND_CONTACT_PATTERN = "Найти(\\s)([\\d]+)";
     private final String REPORT_PATTERN = "[Отчет]";
 
+    //Список id чатов волонтеров для администрирования
     private final List<Long> ADMIN_ID_CHAT = List.of();
 
     /**
      * <i>Метод для получения инструкции по использованию команд администратора.
      * <br>
+     *
      * @param {@link Message}
      * @return {@link SendMessage}
      */
@@ -64,7 +66,8 @@ public class AdminBotController implements CommandController {
     /**
      * <i>Метод для записи контактных данных усыновителя администратором
      * <br>
-     * Используется метод {@link ValidatorUserService#validateUserFromAdmin(Message)}</i>
+     * Используется метод {@link ValidatorDogUserService#validateUserFromAdmin(Message)}</i>
+     *
      * @param message
      * @return {@link SendMessage}
      */
@@ -73,14 +76,15 @@ public class AdminBotController implements CommandController {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} сохраняет контакт усыновителя в базу данных", idAdmin);
-        String answer = validatorUserService.validateUserFromAdmin(message);
+        String answer = validatorDogUserService.validateUserFromAdmin(message);
         return new SendMessage(message.from().id(), answer);
     }
 
     /**
      * <i>Метод для получения контактных данных усыновителя администратором
      * <br>
-     * Используется метод {@link ValidatorUserService#validateGetUserFromAdmin(Message)} </i>
+     * Используется метод {@link ValidatorDogUserService#validateGetUserFromAdmin(Message)} </i>
+     *
      * @param message
      * @return {@link SendMessage}
      */
@@ -89,14 +93,15 @@ public class AdminBotController implements CommandController {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запрашивает контакт усыновителя в базе данных", idAdmin);
-        String answer = validatorUserService.validateGetUserFromAdmin(message);
+        String answer = validatorDogUserService.validateGetUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
 
     /**
      * <i>Метод для удаления контактных данных усыновителя администратором
      * <br>
-     * Используется метод {@link ValidatorUserService#validateDeleteUser(Message)} </i>
+     * Используется метод {@link ValidatorDogUserService#validateDeleteUser(Message)} </i>
+     *
      * @param message
      * @return {@link SendMessage}
      */
@@ -105,14 +110,15 @@ public class AdminBotController implements CommandController {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
         Long idAdmin = message.from().id();
         LOG.warn("Администратор {} запросил удаление усыновителя из базы данных", idAdmin);
-        String answer = validatorUserService.validateDeleteUser(message);
+        String answer = validatorDogUserService.validateDeleteUser(message);
         return new SendMessage(message.from().id(), answer);
     }
 
     /**
      * <i>Метод для редактирования контактных данных усыновителя администратором
      * <br>
-     * Используется метод {@link ValidatorUserService#validateEditUser(Message)} </i>
+     * Используется метод {@link ValidatorDogUserService#validateEditUser(Message)} </i>
+     *
      * @param message
      * @return {@link SendMessage}
      */
@@ -121,7 +127,7 @@ public class AdminBotController implements CommandController {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
         Long idAdmin = message.from().id();
         LOG.warn("Администратор {} изменяет контакт усыновителя в базе данных", idAdmin);
-        String answer = validatorUserService.validateEditUser(message);
+        String answer = validatorDogUserService.validateEditUser(message);
         return new SendMessage(message.from().id(), answer);
     }
 
@@ -129,6 +135,7 @@ public class AdminBotController implements CommandController {
      * <i>Метод для получения контактных данных всех усыновителей администратором
      * <br>
      * Используется метод {@link DogUserService#getAllDogUser()} </i>
+     *
      * @param message
      * @return {@link SendMessage}
      */
@@ -145,6 +152,7 @@ public class AdminBotController implements CommandController {
      * <i>Метод для получения контактных данных недобросовестных усыновителей администратором
      * <br>
      * Используется метод  </i>
+     *
      * @param message
      * @return {@link SendMessage}
      */
@@ -160,6 +168,7 @@ public class AdminBotController implements CommandController {
      * <i>Метод для получения последнего отчета усыновителя администратором
      * <br>
      * Используется метод </i>
+     *
      * @param message
      * @return {@link SendMessage}
      */
