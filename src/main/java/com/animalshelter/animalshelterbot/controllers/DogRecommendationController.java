@@ -62,7 +62,7 @@ public class DogRecommendationController implements CommandController {
         String text = Files.readString(Paths.get(pathToFileRecommendation));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(("Назад"))
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton((backButtonText))
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
 
@@ -78,7 +78,7 @@ public class DogRecommendationController implements CommandController {
         String text = Files.readString(Paths.get(pathToFileCynologistTeam));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(("Назад"))
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton((backButtonText))
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
 
@@ -94,7 +94,7 @@ public class DogRecommendationController implements CommandController {
         String text = Files.readString(Paths.get(pathToFileRejectionsReason));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton("Назад")
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(backButtonText)
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
 
@@ -117,7 +117,7 @@ public class DogRecommendationController implements CommandController {
 
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton("Назад")
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(backButtonText)
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
     /**
@@ -132,7 +132,7 @@ public class DogRecommendationController implements CommandController {
         String text = Files.readString(Paths.get(pathToFileHousingRecommendation));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton("Назад")
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(backButtonText)
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
     /**
@@ -147,7 +147,7 @@ public class DogRecommendationController implements CommandController {
         String text = Files.readString(Paths.get(pathToFilePuppyHousingRecommendation));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton("Назад")
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(backButtonText)
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
     /**
@@ -162,7 +162,7 @@ public class DogRecommendationController implements CommandController {
         String text = Files.readString(Paths.get(pathToFileTransportationRecommendation));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton("Назад")
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(backButtonText)
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
     /**
