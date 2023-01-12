@@ -16,3 +16,17 @@ create table cat_user(
     user_name text,
     phone_number  bigint
 );
+--changeset mara:1
+create table adopted_dog(
+   id             BIGSERIAL,
+   dog_name       TEXT,
+   adoption_date  DATE,
+   trial_period   INTEGER
+);
+--changeset mara:2
+ create table adopted_cat(
+     id             BIGSERIAL,
+     cat_name       TEXT,
+     adoption_date  DATE,
+     trial_period   INTEGER
+ );
