@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 /**
  * <i> Сервис для обработки входящих сообщений с контроллеров
- * {@link com.animalshelter.animalshelterbot.controllers.CatUserController} и {@link com.animalshelter.animalshelterbot.controllers.AdminBotController} из телеграма
+ * {@link com.animalshelter.animalshelterbot.controllers.CatUserController} и  из телеграма
  * и подготовки ответного сообщения пользователю</i>
  */
 
@@ -75,7 +75,7 @@ public class ValidatorCatUserService {
     /**
      * <i> Метод для проверки и обработки входящего сообщения на сохранение контактных данных от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminBotController#createBotUser(Message)}. </i>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#createBotUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
@@ -98,7 +98,7 @@ public class ValidatorCatUserService {
     /**
      * <i> Метод для проверки и обработки входящего сообщения на получение контактных данных от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminBotController#getBotUser(Message)}. </i>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#getBotUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
@@ -120,7 +120,7 @@ public class ValidatorCatUserService {
     /**
      * <i> Метод для проверки и обработки входящего сообщения на удаление контактных данных от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminBotController#deleteBotUser(Message)}. </i>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#deleteBotUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
@@ -142,7 +142,7 @@ public class ValidatorCatUserService {
     /**
      * <i> Метод для проверки и обработки входящего сообщения на изменение контактных данных от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminBotController#editBotUser(Message)}. </i>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#editBotUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки

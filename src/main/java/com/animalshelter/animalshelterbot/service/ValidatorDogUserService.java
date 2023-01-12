@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 /**
  * <i> Сервис для обработки входящих сообщений с контроллеров
- * {@link DogUserController} и {@link com.animalshelter.animalshelterbot.controllers.AdminBotController} из телеграма
+ * {@link DogUserController} и {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController} из телеграма
  * и подготовки ответного сообщения пользователю</i>
  */
 
@@ -21,8 +21,8 @@ import java.util.regex.Pattern;
 public class ValidatorDogUserService {
 
     private final DogUserService dogUserService;
-    private final Pattern ADD_PATTERN_FROM_USER = Pattern.compile("([\\d]{11})(\\s)([\\W]+)");
-    private final Pattern ADD_PATTERN_FROM_ADMIN = Pattern.compile("([\\W]{9})(\\s)([\\d]{11})(\\s)([\\W]+)");
+    private final Pattern ADD_PATTERN = Pattern.compile("([\\d]{11})(\\s)([\\W]+)");
+   // private final Pattern ADD_PATTERN_FROM_ADMIN = Pattern.compile("([\\d]{11})(\\s)([\\W]+)");
     private final Pattern FIND_PATTERN = Pattern.compile("([\\W]{5})(\\s)([\\d]+)");
     private final Pattern EDIT_PATTERN = Pattern.compile("([\\W]{8})(\\s)([\\d]+)(\\s)([\\d]{11})(\\s)([\\W]+)");
     private final Pattern DELETE_PATTERN = Pattern.compile("([\\W]{7})(\\s)([\\d]+)");
@@ -36,7 +36,7 @@ public class ValidatorDogUserService {
      * @return String в зависимости от результата обработки
      */
     public String validateDogUser(Message message) {
-        Matcher matcher = ADD_PATTERN_FROM_USER.matcher(message.text());
+        Matcher matcher = ADD_PATTERN.matcher(message.text());
         if (matcher.find()) {
             String name = matcher.group(3);
             if (!matcher.group(1).startsWith("8")) {
@@ -75,30 +75,32 @@ public class ValidatorDogUserService {
     /**
      * <i> Метод для проверки и обработки входящего сообщения на сохранение контактных данных от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminBotController#createBotUser(Message)}. </i>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#createBotUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
      */
     public String validateUserFromAdmin(Message message) {
-        Matcher matcher = ADD_PATTERN_FROM_ADMIN.matcher(message.text());
-        matcher.find();
-        String name = matcher.group(5);
-        if (!matcher.group(3).startsWith("8")) {
-            return "Некорректный номер телефона";
+        Matcher matcher = ADD_PATTERN.matcher(message.text());
+        if (matcher.find()) {
+            String name = matcher.group(3);
+            if (!matcher.group(1).startsWith("8")) {
+                return "Некорректный номер телефона";
+            }
+            Long phone = Long.valueOf(matcher.group(1));
+            if (dogUserService.getDogUserByPhoneNumber(phone) == null) {
+                DogUser dogUser = dogUserService.addDogUser(new DogUser(name, phone));
+                return "Добавлена запись контакта: " + dogUser.toString();
+            }
+            return "Данный усыновитель уже есть";
         }
-        Long phone = Long.valueOf(matcher.group(3));
-        if (dogUserService.getDogUserByPhoneNumber(phone) == null) {
-            DogUser dogUser = dogUserService.addDogUser(new DogUser(name, phone));
-            return "Добавлена запись контакта: " + dogUser.toString();
-        }
-        return "Данный усыновитель уже есть";
+        return "Некорректный запрос";
     }
 
     /**
      * <i> Метод для проверки и обработки входящего сообщения на получение контактных данных от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminBotController#getBotUser(Message)}. </i>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#getBotUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
@@ -120,7 +122,7 @@ public class ValidatorDogUserService {
     /**
      * <i> Метод для проверки и обработки входящего сообщения на удаление контактных данных от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminBotController#deleteBotUser(Message)}. </i>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#deleteBotUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
@@ -142,7 +144,7 @@ public class ValidatorDogUserService {
     /**
      * <i> Метод для проверки и обработки входящего сообщения на изменение контактных данных от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminBotController#editBotUser(Message)}. </i>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#editBotUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки

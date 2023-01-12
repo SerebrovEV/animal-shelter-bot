@@ -21,28 +21,28 @@ import java.util.List;
  */
 @Component
 @RequiredArgsConstructor
-public class AdminBotController implements CommandController {
+public class AdminDogUserController implements CommandController {
     private final DogUserService dogUserService;
     private final ValidatorDogUserService validatorDogUserService;
-    private final Logger LOG = LoggerFactory.getLogger(AdminBotController.class);
+    private final Logger LOG = LoggerFactory.getLogger(AdminDogUserController.class);
 
     private final String ADMIN_COMMAND = "Правила использования: \n" +
-            "Сохранить 89871234567 Иван - добавление контакта усыновителя;\n" +
-            "Найти 10 - поиск пользователя с id = 10;\n" +
-            "Изменить 10 89871234567 Миша - изменение пользователя с id = 10;\n" +
-            "Удалить 10 - удаление пользователя с id = 10;\n" +
+            "Сохранить СП 89871234567 Иван - добавление контакта усыновителя;\n" +
+            "Найти СП 10 - поиск пользователя с id = 10;\n" +
+            "Изменить СП 10 89871234567 Миша - изменение пользователя с id = 10;\n" +
+            "Удалить СП 10 - удаление пользователя с id = 10;\n" +
             "/getAll - получить список всех усыновителей;\n" +
             "/badUser - получить список усыновителей, которые не прислали отчеты;\n" +
-            "Отчет 10 - получить последний отчет от усыновителя id = 10.";
+            "Отчет СП 10 - получить последний отчет от усыновителя id = 10.";
 
 
-    private static final String SAVE_CONTACT_PATTERN = "Сохранить(\\s)([\\d]{11})(\\s)([\\W]+)";
+    private static final String SAVE_CONTACT_PATTERN = "Сохранить СП ([\\d]{11})(\\s)([\\W]+)";
 
-    private static final String EDIT_CONTACT_PATTERN = "Изменить(\\s)([\\d]+)(\\s)([\\d]{11})(\\s)([\\W]+)";
-    private static final String DELETE_CONTACT_PATTERN = "Удалить(\\s)([\\d]+)";
+    private static final String EDIT_CONTACT_PATTERN = "Изменить СП ([\\d]+)(\\s)([\\d]{11})(\\s)([\\W]+)";
+    private static final String DELETE_CONTACT_PATTERN = "Удалить СП ([\\d]+)";
 
-    private static final String FIND_CONTACT_PATTERN = "Найти(\\s)([\\d]+)";
-    private final String REPORT_PATTERN = "[Отчет]";
+    private static final String FIND_CONTACT_PATTERN = "Найти СП ([\\d]+)";
+    private final String REPORT_PATTERN = "Отчет СП ([\\d]+)";
 
     //Список id чатов волонтеров для администрирования
     private final List<Long> ADMIN_ID_CHAT = List.of();
