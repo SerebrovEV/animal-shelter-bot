@@ -45,6 +45,7 @@ public class StartController implements CommandController {
     private static final String getContactsButtonText = "Записать контактные данные";
 
     private static final String firstMeetingRulesButtonText = "Правила знакомства с собакой";
+    private static final String firstMeetingCatRulesButtonText = "Правила знакомства с кошкой";
     private static final String documentListButtonText = "Список необходимых документов";
     private static final String transportationRecommendationsButtonText = "Рекомендации по транспортировке";
     private static final String youngHousingRecommendationsButtonText = "Рекомендации по обустройству дома для детёныша";
@@ -159,7 +160,7 @@ public class StartController implements CommandController {
     public SendMessage catAdoptionInfoMenu(CallbackQuery callbackQuery) {
         return new SendMessage(callbackQuery.from().id(), catAdoptionInfoText)
                 .replyMarkup(new InlineKeyboardMarkup()
-                        .addRow(new InlineKeyboardButton(firstMeetingRulesButtonText).callbackData(Callbacks.CAT_MEETING_RULES_INFO.name()))
+                        .addRow(new InlineKeyboardButton(firstMeetingCatRulesButtonText).callbackData(Callbacks.CAT_MEETING_RULES_INFO.name()))
                         .addRow(new InlineKeyboardButton(documentListButtonText).callbackData(Callbacks.CAT_DOCUMENT_LIST.name()))
                         .addRow(new InlineKeyboardButton(transportationRecommendationsButtonText).callbackData(Callbacks.CAT_TRANSPORTATION_RECOMMENDATION.name()))
                         .addRow(new InlineKeyboardButton(youngHousingRecommendationsButtonText).callbackData(Callbacks.CAT_YOUNG_HOUSING_RECOMMENDATION.name()))
