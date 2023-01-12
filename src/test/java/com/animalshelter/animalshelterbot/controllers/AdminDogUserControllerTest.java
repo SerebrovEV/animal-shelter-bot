@@ -35,13 +35,15 @@ class AdminDogUserControllerTest {
     DogUserService dogUserService;
 
     private final String ADMIN_COMMAND = "Правила использования: \n" +
-            "Сохранить 89871234567 Иван - добавление контакта усыновителя;\n" +
-            "Найти 10 - поиск пользователя с id = 10;\n" +
-            "Изменить 10 89871234567 Миша - изменение пользователя с id = 10;\n" +
-            "Удалить 10 - удаление пользователя с id = 10;\n" +
-            "/getAll - получить список всех усыновителей;\n" +
-            "/badUser - получить список усыновителей, которые не прислали отчеты;\n" +
-            "Отчет 10 - получить последний отчет от усыновителя id = 10.";
+            "/infoAboutAdminDogUser - команды для использования;\n" +
+            "Сохранить СП 89871234567 Иван - добавить усыновителя;\n" +
+            "Найти СП 10 - найти усыновителя с id = 10;\n" +
+            "Изменить СП 10 89871234567 Миша - изменить усыновителя с id = 10;\n" +
+            "Удалить СП 10 - удалить усыновителя с id = 10;\n" +
+            "/getAllDogUser - получить список всех усыновителей;\n" +
+            "/badDogUser - получить список усыновителей, которые не прислали отчеты за сегодняшний день;\n" +
+            "Отчет СП 10 - получить последний отчет от усыновителя с id = 10;\n" +
+            "Предупреждение 10 - отправить предупреждение усыновителю id = 10.";
 
     @BeforeEach
     public void setOut() {
@@ -50,62 +52,62 @@ class AdminDogUserControllerTest {
     }
 
     @Test
-    void infoAboutUseBot() {
+    void handleInfoAboutAdminDogUser() {
         SendMessage expected = new SendMessage(1L, ADMIN_COMMAND);
-        SendMessage actual = out.infoAboutUseBot(message);
+        SendMessage actual = out.handleInfoAboutAdminDogUser(message);
 
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
     }
 
     @Test
-    void createBotUser() {
+    void handleCreateDogUser() {
         DogUser dogUser = new DogUser("Test", 89871234567L);
         SendMessage expected = new SendMessage(1L, dogUser.toString());
-        when(validatorDogUserService.validateUserFromAdmin(message)).thenReturn(dogUser.toString());
-        SendMessage actual = out.createBotUser(message);
+        when(validatorDogUserService.validateDogUserFromAdmin(message)).thenReturn(dogUser.toString());
+        SendMessage actual = out.handleCreateDogUser(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
     }
 
     @Test
-    void getBotUser() {
+    void handleGetDogUser() {
         DogUser dogUser = new DogUser("Test", 89871234567L);
-        when(validatorDogUserService.validateGetUserFromAdmin(any())).thenReturn(dogUser.toString());
+        when(validatorDogUserService.validateGetDogUserFromAdmin(any())).thenReturn(dogUser.toString());
 
         SendMessage expected = new SendMessage(1L, dogUser.toString());
 
-        SendMessage actual = out.getBotUser(message);
+        SendMessage actual = out.handleGetDogUser(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
     }
 
     @Test
-    void deleteBotUser() {
+    void handleDeleteDogUser() {
         DogUser dogUser = new DogUser("Test", 89871234567L);
         SendMessage expected = new SendMessage(1L, dogUser.toString());
-        when(validatorDogUserService.validateDeleteUser(any())).thenReturn(dogUser.toString());
+        when(validatorDogUserService.validateDeleteDogUserFromAdmin(any())).thenReturn(dogUser.toString());
 
-        SendMessage actual = out.deleteBotUser(message);
+        SendMessage actual = out.handleDeleteDogUser(message);
 
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
     }
 
     @Test
-    void editBotUser() {
+    void handleEditDogUser() {
         DogUser dogUser = new DogUser("Test", 89871234567L);
         SendMessage expected = new SendMessage(1L, dogUser.toString());
-        when(validatorDogUserService.validateEditUser(message)).thenReturn(dogUser.toString());
+        when(validatorDogUserService.validateEditDogUserFromAdmin(message)).thenReturn(dogUser.toString());
 
-        SendMessage actual = out.editBotUser(message);
+        SendMessage actual = out.handleEditDogUser(message);
 
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
     }
 
     @Test
-    void getAllBotUser() {
+    void handleGetAllDogUser() {
         DogUser dogUser = new DogUser("Test", 89871234567L);
         DogUser dogUser2 = new DogUser("Test2", 89871234568L);
         DogUser dogUser3 = new DogUser("Test3", 89871234569L);
@@ -114,18 +116,11 @@ class AdminDogUserControllerTest {
         when(dogUserService.getAllDogUser()).thenReturn(dogUsers);
 
         SendMessage expected = new SendMessage(1L, List.of(dogUser, dogUser2, dogUser3, dogUser4).toString());
-        SendMessage actual = out.getAllBotUser(message);
+        SendMessage actual = out.handleGetAllDogUser(message);
 
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
 
     }
 
-//    @Test
-//    void getBadUser() {
-//    }
-
-//    @Test
-//    void getLastReport() {
-//    }
 }

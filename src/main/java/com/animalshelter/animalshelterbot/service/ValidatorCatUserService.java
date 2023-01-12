@@ -21,11 +21,9 @@ import java.util.regex.Pattern;
 public class ValidatorCatUserService {
 
     private final CatUserService catUserService;
-    private final Pattern ADD_PATTERN_FROM_USER = Pattern.compile("([\\d]{11})(\\s)([\\W]+)");
-    private final Pattern ADD_PATTERN_FROM_ADMIN = Pattern.compile("([\\W]{9})(\\s)([\\d]{11})(\\s)([\\W]+)");
-    private final Pattern FIND_PATTERN = Pattern.compile("([\\W]{5})(\\s)([\\d]+)");
-    private final Pattern EDIT_PATTERN = Pattern.compile("([\\W]{8})(\\s)([\\d]+)(\\s)([\\d]{11})(\\s)([\\W]+)");
-    private final Pattern DELETE_PATTERN = Pattern.compile("([\\W]{7})(\\s)([\\d]+)");
+    private final Pattern ADD_PATTERN = Pattern.compile("([\\d]{11})(\\s)([\\W]+)");
+    private final Pattern FIND_AND_DELETE_PATTERN = Pattern.compile("([\\d]+)");
+    private final Pattern EDIT_PATTERN = Pattern.compile("([\\d]+)(\\s)([\\d]{11})(\\s)([\\W]+)");
 
     /**
      * <i> Метод для проверки и обработки входящего сообщения от пользователя.
@@ -36,7 +34,7 @@ public class ValidatorCatUserService {
      * @return String в зависимости от результата обработки
      */
     public String validateCatUser(Message message) {
-        Matcher matcher = ADD_PATTERN_FROM_USER.matcher(message.text());
+        Matcher matcher = ADD_PATTERN.matcher(message.text());
         if (matcher.find()) {
             String name = matcher.group(3);
             if (!matcher.group(1).startsWith("8")) {
@@ -48,7 +46,7 @@ public class ValidatorCatUserService {
                 CatUser catUser = catUserService.addCatUser(new CatUser(name, phone, chatId));
                 return "Добавлена запись контакта: " + catUser.toStringUser();
             }
-            return "Данный пользователь уже есть";
+            return "Данный пользователь уже есть, свяжитесь с волонтером для уточнения информации";
         }
         return "Некорректный запрос";
     }
@@ -75,22 +73,22 @@ public class ValidatorCatUserService {
     /**
      * <i> Метод для проверки и обработки входящего сообщения на сохранение контактных данных от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#createBotUser(Message)}. </i>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#handleCreateDogUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
      */
-    public String validateUserFromAdmin(Message message) {
-        Matcher matcher = ADD_PATTERN_FROM_ADMIN.matcher(message.text());
+    public String validateCatUserFromAdmin(Message message) {
+        Matcher matcher = ADD_PATTERN.matcher(message.text());
         matcher.find();
-        String name = matcher.group(5);
-        if (!matcher.group(3).startsWith("8")) {
+        String name = matcher.group(3);
+        if (!matcher.group(1).startsWith("8")) {
             return "Некорректный номер телефона";
         }
-        Long phone = Long.valueOf(matcher.group(3));
+        Long phone = Long.valueOf(matcher.group(1));
         if (catUserService.getCatUserByPhoneNumber(phone) == null) {
             CatUser catUser = catUserService.addCatUser(new CatUser(name, phone));
-            return "Добавлена запись контакта: " + catUser.toString();
+            return "Добавлена запись контакта: " + catUser.toString() + " в базу данных приюта для кошек.";
         }
         return "Данный усыновитель уже есть";
     }
@@ -98,20 +96,20 @@ public class ValidatorCatUserService {
     /**
      * <i> Метод для проверки и обработки входящего сообщения на получение контактных данных от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#getBotUser(Message)}. </i>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#handleGetDogUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
      */
-    public String validateGetUserFromAdmin(Message message) {
-        Matcher matcher = FIND_PATTERN.matcher(message.text());
+    public String validateGetCatUserFromAdmin(Message message) {
+        Matcher matcher = FIND_AND_DELETE_PATTERN.matcher(message.text());
         if (matcher.find()) {
-            Long id = Long.valueOf(matcher.group(3));
+            Long id = Long.valueOf(matcher.group(1));
             Optional<CatUser> findCatUser = catUserService.getCatUser(id);
             if (findCatUser.isEmpty()) {
-                return "Усыновитель не найден, проверти правильность введения id.";
+                return "Усыновитель не найден в базе данных приюта для кошек, проверьте правильность введения id.";
             }
-            return findCatUser.get().toString();
+            return findCatUser.get().toString() + " из базы данных приюта для кошек.";
         }
         return "Некорректный запрос";
 
@@ -120,21 +118,21 @@ public class ValidatorCatUserService {
     /**
      * <i> Метод для проверки и обработки входящего сообщения на удаление контактных данных от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#deleteBotUser(Message)}. </i>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#handleDeleteDogUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
      */
-    public String validateDeleteUser(Message message) {
-        Matcher matcher = DELETE_PATTERN.matcher(message.text());
+    public String validateDeleteCatUserFromAdmin(Message message) {
+        Matcher matcher = FIND_AND_DELETE_PATTERN.matcher(message.text());
         if (matcher.find()) {
-            Long id = Long.valueOf(matcher.group(3));
+            Long id = Long.valueOf(matcher.group(1));
             Optional<CatUser> deleteCatUser = catUserService.getCatUser(id);
             if (deleteCatUser.isEmpty()) {
-                return "Усыновитель не найден, проверти правильность введения id.";
+                return "Усыновитель не найден в базе данных приюта для кошек, проверьте правильность введения id.";
             }
             catUserService.deleteCatUser(id);
-            return deleteCatUser.get() + "удален";
+            return deleteCatUser.get() + " удален из базы данных приюта для кошек";
         }
         return "Некорректный запрос";
     }
@@ -142,27 +140,27 @@ public class ValidatorCatUserService {
     /**
      * <i> Метод для проверки и обработки входящего сообщения на изменение контактных данных от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#editBotUser(Message)}. </i>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#handleEditDogUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
      */
-    public String validateEditUser(Message message) {
+    public String validateEditCatUserFromAdmin(Message message) {
         Matcher matcher = EDIT_PATTERN.matcher(message.text());
         if (matcher.find()) {
-            if (!matcher.group(5).startsWith("8")) {
+            if (!matcher.group(3).startsWith("8")) {
                 return "Некорректный номер телефона";
             }
-            Long id = Long.valueOf(matcher.group(3));
+            Long id = Long.valueOf(matcher.group(1));
             Optional<CatUser> editCatUser = catUserService.getCatUser(id);
             if (editCatUser.isEmpty()) {
-                return "Усыновитель не найден, проверти правильность введения id.";
+                return "Усыновитель не найден в базе данных приюта для кошек, проверьте правильность введения id.";
             }
             CatUser newCatUser = editCatUser.get();
-            newCatUser.setUserName(matcher.group(7));
-            newCatUser.setPhoneNumber(Long.parseLong(matcher.group(5)));
+            newCatUser.setUserName(matcher.group(5));
+            newCatUser.setPhoneNumber(Long.parseLong(matcher.group(3)));
             catUserService.editCatUser(newCatUser);
-            return editCatUser.get() + " изменен";
+            return editCatUser.get() + " изменен в базе данных приюта для кошек.";
         }
         return "Некорректный запрос";
     }

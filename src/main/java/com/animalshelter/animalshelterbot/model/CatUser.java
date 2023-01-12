@@ -38,9 +38,9 @@ public class CatUser {
     @Override
     public String toString() {
         return "Усыновитель: " +
-                "id =" + id +
-                ", Имя ='" + userName + '\'' +
-                ", Номер телефона =" + phoneNumber + "\n";
+                "id = " + id +
+                ", Имя = '" + userName + '\'' +
+                ", Номер телефона = " + phoneNumber + "\n";
     }
 
     public String toStringUser(){

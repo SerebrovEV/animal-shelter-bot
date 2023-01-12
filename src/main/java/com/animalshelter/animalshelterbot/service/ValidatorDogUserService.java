@@ -22,10 +22,9 @@ public class ValidatorDogUserService {
 
     private final DogUserService dogUserService;
     private final Pattern ADD_PATTERN = Pattern.compile("([\\d]{11})(\\s)([\\W]+)");
-   // private final Pattern ADD_PATTERN_FROM_ADMIN = Pattern.compile("([\\d]{11})(\\s)([\\W]+)");
-    private final Pattern FIND_PATTERN = Pattern.compile("([\\W]{5})(\\s)([\\d]+)");
-    private final Pattern EDIT_PATTERN = Pattern.compile("([\\W]{8})(\\s)([\\d]+)(\\s)([\\d]{11})(\\s)([\\W]+)");
-    private final Pattern DELETE_PATTERN = Pattern.compile("([\\W]{7})(\\s)([\\d]+)");
+    private final Pattern FIND_AND_DELETE_PATTERN = Pattern.compile("([\\d]+)");
+    private final Pattern EDIT_PATTERN = Pattern.compile("([\\d]+)(\\s)([\\d]{11})(\\s)([\\W]+)");
+   // private final Pattern DELETE_PATTERN = Pattern.compile("([\\d]+)");
 
     /**
      * <i> Метод для проверки и обработки входящего сообщения от пользователя.
@@ -48,7 +47,7 @@ public class ValidatorDogUserService {
                 DogUser dogUser = dogUserService.addDogUser(new DogUser(name, phone, chatId));
                 return "Добавлена запись контакта: " + dogUser.toStringUser();
             }
-            return "Данный пользователь уже есть";
+            return "Данный пользователь уже есть, свяжитесь с волонтером для уточнения информации";
         }
         return "Некорректный запрос";
     }
@@ -70,17 +69,15 @@ public class ValidatorDogUserService {
 //                " запросите вызов волонтера. Спасибо!";
 //    }
 
-    // Ниже в работе!!!!
-
     /**
-     * <i> Метод для проверки и обработки входящего сообщения на сохранение контактных данных от администратора.
+     * <i> Метод для проверки и обработки входящего сообщения на сохранение контактных данных в БД приюта для собак от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#createBotUser(Message)}. </i>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#handleCreateDogUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
      */
-    public String validateUserFromAdmin(Message message) {
+    public String validateDogUserFromAdmin(Message message) {
         Matcher matcher = ADD_PATTERN.matcher(message.text());
         if (matcher.find()) {
             String name = matcher.group(3);
@@ -90,81 +87,81 @@ public class ValidatorDogUserService {
             Long phone = Long.valueOf(matcher.group(1));
             if (dogUserService.getDogUserByPhoneNumber(phone) == null) {
                 DogUser dogUser = dogUserService.addDogUser(new DogUser(name, phone));
-                return "Добавлена запись контакта: " + dogUser.toString();
+                return "Добавлена запись контакта: " + dogUser.toString() + " в базу данных приюта для собак";
             }
-            return "Данный усыновитель уже есть";
+            return "Данный усыновитель уже есть в базе данных приюта для собак";
         }
         return "Некорректный запрос";
     }
 
     /**
-     * <i> Метод для проверки и обработки входящего сообщения на получение контактных данных от администратора.
+     * <i> Метод для проверки и обработки входящего сообщения на получение контактных данных из БД приюта собак от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#getBotUser(Message)}. </i>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#handleGetDogUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
      */
-    public String validateGetUserFromAdmin(Message message) {
-        Matcher matcher = FIND_PATTERN.matcher(message.text());
+    public String validateGetDogUserFromAdmin(Message message) {
+        Matcher matcher = FIND_AND_DELETE_PATTERN.matcher(message.text());
         if (matcher.find()) {
-            Long id = Long.valueOf(matcher.group(3));
+            Long id = Long.valueOf(matcher.group(1));
             Optional<DogUser> findBotUser = dogUserService.getDogUser(id);
             if (findBotUser.isEmpty()) {
-                return "Усыновитель не найден, проверти правильность введения id.";
+                return "Усыновитель не найден в базе данных приюта для собак, проверьте правильность введения id.";
             }
-            return findBotUser.get().toString();
+            return findBotUser.get().toString() + " из базы данных приюта для собак.";
         }
         return "Некорректный запрос";
 
     }
 
     /**
-     * <i> Метод для проверки и обработки входящего сообщения на удаление контактных данных от администратора.
+     * <i> Метод для проверки и обработки входящего сообщения на удаление контактных данных в БД приюта собак от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#deleteBotUser(Message)}. </i>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#handleDeleteDogUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
      */
-    public String validateDeleteUser(Message message) {
-        Matcher matcher = DELETE_PATTERN.matcher(message.text());
+    public String validateDeleteDogUserFromAdmin(Message message) {
+        Matcher matcher = FIND_AND_DELETE_PATTERN.matcher(message.text());
         if (matcher.find()) {
-            Long id = Long.valueOf(matcher.group(3));
+            Long id = Long.valueOf(matcher.group(1));
             Optional<DogUser> deleteBotUser = dogUserService.getDogUser(id);
             if (deleteBotUser.isEmpty()) {
-                return "Усыновитель не найден, проверти правильность введения id.";
+                return "Усыновитель не найден в базе данных приюта для собак, проверьте правильность введения id.";
             }
             dogUserService.deleteDogUser(id);
-            return deleteBotUser.get() + "удален";
+            return deleteBotUser.get() + "удален из базы данных приюта для собак.";
         }
         return "Некорректный запрос";
     }
 
     /**
-     * <i> Метод для проверки и обработки входящего сообщения на изменение контактных данных от администратора.
+     * <i> Метод для проверки и обработки входящего сообщения на изменение контактных данных в БД приюта собак от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#editBotUser(Message)}. </i>
+     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#handleEditDogUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
      */
-    public String validateEditUser(Message message) {
+    public String validateEditDogUserFromAdmin(Message message) {
         Matcher matcher = EDIT_PATTERN.matcher(message.text());
         if (matcher.find()) {
-            if (!matcher.group(5).startsWith("8")) {
+            if (!matcher.group(3).startsWith("8")) {
                 return "Некорректный номер телефона";
             }
-            Long id = Long.valueOf(matcher.group(3));
-            Optional<DogUser> editBotUser = dogUserService.getDogUser(id);
-            if (editBotUser.isEmpty()) {
-                return "Усыновитель не найден, проверти правильность введения id.";
+            Long id = Long.valueOf(matcher.group(1));
+            Optional<DogUser> editDogUser = dogUserService.getDogUser(id);
+            if (editDogUser.isEmpty()) {
+                return "Усыновитель не найден в базе данных приюта для собак, проверьте правильность введения id.";
             }
-            DogUser newDogUser = editBotUser.get();
-            newDogUser.setUserName(matcher.group(7));
-            newDogUser.setPhoneNumber(Long.parseLong(matcher.group(5)));
+            DogUser newDogUser = editDogUser.get();
+            newDogUser.setUserName(matcher.group(5));
+            newDogUser.setPhoneNumber(Long.parseLong(matcher.group(3)));
             dogUserService.editDogUser(newDogUser);
-            return editBotUser.get() + " изменен";
+            return editDogUser.get() + " изменен в базе данных приюта для собак.";
         }
         return "Некорректный запрос";
     }
