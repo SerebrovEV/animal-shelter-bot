@@ -32,11 +32,11 @@ create table adopted_dog(
  );
 --changeset mara:3
 ALTER TABLE adopted_dog
-ADD COLUMN dog_user_id BIGINT REFERENCES adopted_dog(id);
+ADD COLUMN dog_user_id BIGINT REFERENCES dog_user(id);
 
 --changeset mara:4
 ALTER TABLE adopted_cat
-    ADD COLUMN cat_user_id BIGINT REFERENCES adopted_cat(id);
+    ADD COLUMN cat_user_id BIGINT REFERENCES cat_user(id);
  --changeset sev:3
 create table dog_report
 (
@@ -52,3 +52,8 @@ create table cat_report
     photo       text,
     text        text
 );
+--changeset sev:4
+ALTER TABLE dog_report
+    ADD COLUMN adopted_dog_id BIGINT REFERENCES adopted_dog(id);
+ALTER TABLE cat_report
+    ADD COLUMN adopted_cat_id BIGINT REFERENCES adopted_cat(id);
