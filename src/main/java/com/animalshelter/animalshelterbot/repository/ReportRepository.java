@@ -1,7 +1,7 @@
 package com.animalshelter.animalshelterbot.repository;
 
-import com.animalshelter.animalshelterbot.model.Report;
+import com.animalshelter.animalshelterbot.model.DogReport;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ReportRepository extends JpaRepository<Report, Long> {
+public interface ReportRepository extends JpaRepository<DogReport, Long> {
 }

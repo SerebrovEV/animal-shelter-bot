@@ -31,9 +31,17 @@ create table adopted_dog(
      trial_period   INTEGER
  );
  --changeset sev:3
-create table report
+create table dog_report
 (
     id          bigserial primary key,
-    photo       oid,
+    date date,
+    photo       text,
+    text        text
+);
+create table cat_report
+(
+    id          bigserial primary key,
+    date date,
+    photo       text,
     text        text
 );
