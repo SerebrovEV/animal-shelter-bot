@@ -37,3 +37,18 @@ ADD COLUMN dog_user_id BIGINT REFERENCES adopted_dog(id);
 --changeset mara:4
 ALTER TABLE adopted_cat
     ADD COLUMN cat_user_id BIGINT REFERENCES adopted_cat(id);
+ --changeset sev:3
+create table dog_report
+(
+    id          bigserial primary key,
+    date date,
+    photo       text,
+    text        text
+);
+create table cat_report
+(
+    id          bigserial primary key,
+    date date,
+    photo       text,
+    text        text
+);
