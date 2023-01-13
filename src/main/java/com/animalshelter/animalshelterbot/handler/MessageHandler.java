@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,14 +49,16 @@ public class MessageHandler {
             Pattern pattern = Pattern.compile(annotation.pattern());
             Matcher matcher = pattern.matcher(message.text());
 
+            if(annotation.chatId() != 0 && annotation.chatId() != message.chat().id()) {
+                continue;
+            }
+
             if(!(annotation.name().equals(message.text()) || matcher.matches())) {
                 continue;
             }
 
             SendMessage sendMessage = (SendMessage) method.invoke(commandController, message);
             SendResponse sendResponse = bot.execute(sendMessage);
-
-            return;
         }
     }
 
@@ -77,15 +80,17 @@ public class MessageHandler {
 
             Callback annotation = method.getAnnotation(Callback.class);
 
-            if(!annotation.name().equals(callbackQuery.data())) {
+            if(annotation.chatId() != 0 && annotation.chatId() != callbackQuery.from().id()) {
+                continue;
+            }
+
+            if(!annotation.name().name().equals(callbackQuery.data())) {
                 continue;
             }
 
             SendMessage sendMessage = (SendMessage) method.invoke(commandController, callbackQuery);
 
             SendResponse sendResponse = bot.execute(sendMessage);
-
-            return;
         }
     }
 }
