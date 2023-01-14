@@ -48,6 +48,8 @@ public enum Callbacks {
     CAT_HOUSING_RECOMMENDATION("cat_housing_recommendation"),
     CAT_DISABLED_HOUSING_RECOMMENDATION("cat_disabled_housing_recommendation"),
     CAT_DECLINE_CAUSES("cat_cynologist_recommendation"),
+    CAT_ADD_REPORT_YES("createReport"),
+    CAT_ADD_REPORT_NO("nothing")
     ;
 
     private final String name;
