@@ -21,5 +21,9 @@ public class DogReport {
 
     private String text;
 
+    @ManyToOne
+    @JoinColumn(name = "adopted_dog_id")
+    private AdoptedDog adoptedDog;
+
 
 }
