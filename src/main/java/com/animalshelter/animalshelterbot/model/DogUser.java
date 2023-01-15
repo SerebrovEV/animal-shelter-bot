@@ -4,10 +4,8 @@ package com.animalshelter.animalshelterbot.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -20,6 +18,9 @@ public class DogUser {
     private Long chatId;
     private String userName;
     private Long phoneNumber;
+
+    @OneToMany(mappedBy = "dogUser")
+    private Collection<AdoptedDog> adoptedDogs;
 
     public DogUser() {
     }
