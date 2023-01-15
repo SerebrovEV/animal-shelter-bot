@@ -25,7 +25,7 @@ public class MessageHandler {
     private final TelegramBot bot;
 
     public void handleMessage(Message message) {
-        if(message.text() == null) {
+        if(message.text() == null && message.caption() == null) {
             return;
         }
 
@@ -46,14 +46,22 @@ public class MessageHandler {
 
             Command annotation = method.getAnnotation(Command.class);
 
+            String text;
+
+            if(message.text() != null) {
+                text = message.text();
+            } else {
+                text = message.caption();
+            }
+
             Pattern pattern = Pattern.compile(annotation.pattern());
-            Matcher matcher = pattern.matcher(message.text());
+            Matcher matcher = pattern.matcher(text);
 
             if(annotation.chatId() != 0 && annotation.chatId() != message.chat().id()) {
                 continue;
             }
 
-            if(!(annotation.name().equals(message.text()) || matcher.matches())) {
+            if(!(annotation.name().equals(text) || matcher.matches())) {
                 continue;
             }
 
