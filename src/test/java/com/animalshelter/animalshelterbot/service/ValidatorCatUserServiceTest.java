@@ -73,7 +73,7 @@ class ValidatorCatUserServiceTest {
     void validateUserFromAdmin() {
         CatUser catUser = new CatUser("Иван", 89871234567L);
 
-        when(message.text()).thenReturn("Сохранить 89871234567 Иван");
+        when(message.text()).thenReturn("Сохранить КП 89871234567 Иван");
         when(catUserService.getCatUserByPhoneNumber(89871234567L)).thenReturn(null);
         when(catUserService.addCatUser(catUser)).thenReturn(catUser);
 
@@ -86,7 +86,7 @@ class ValidatorCatUserServiceTest {
     void validateUserFromAdminExistingUser(){
         CatUser catUser = new CatUser("Иван", 89871234567L);
 
-        when(message.text()).thenReturn("Сохранить 89871234567 Иван");
+        when(message.text()).thenReturn("Сохранить КП 89871234567 Иван");
         when(catUserService.getCatUserByPhoneNumber(89871234567L)).thenReturn(catUser);
 
         String expected = "Данный усыновитель уже есть";
@@ -96,7 +96,7 @@ class ValidatorCatUserServiceTest {
 
     @Test
     void validateUserFromAdminIncorrectNumber(){
-        when(message.text()).thenReturn("Сохранить 79871234567 Иван");
+        when(message.text()).thenReturn("Сохранить КП 79871234567 Иван");
         String expected = "Некорректный номер телефона";
         String actual = out.validateCatUserFromAdmin(message);
         assertThat(actual).isEqualTo(expected);
@@ -106,7 +106,7 @@ class ValidatorCatUserServiceTest {
     void validateGetUserFromAdmin() {
         CatUser catUser = new CatUser("Тест", 89871234567L);
         String expected = catUser.toString() + " из базы данных приюта для кошек.";
-        when(message.text()).thenReturn("Найти 10");
+        when(message.text()).thenReturn("Найти КП 10");
         when(catUserService.getCatUser(10L)).thenReturn(Optional.of(catUser));
         String actual = out.validateGetCatUserFromAdmin(message);
 
@@ -116,7 +116,7 @@ class ValidatorCatUserServiceTest {
     @Test
     void validateGetUserFromAdminNotFound(){
         String expected = "Усыновитель не найден в базе данных приюта для кошек, проверьте правильность введения id.";
-        when(message.text()).thenReturn("Найти 10");
+        when(message.text()).thenReturn("Найти КП 10");
         when(catUserService.getCatUser(10L)).thenReturn(Optional.empty());
         String actual = out.validateGetCatUserFromAdmin(message);
         assertThat(actual).isEqualTo(expected);
@@ -134,7 +134,7 @@ class ValidatorCatUserServiceTest {
     void validateDeleteUser() {
         CatUser catUser = new CatUser("Тест", 89871234567L);
         String expected = catUser + " удален из базы данных приюта для кошек";
-        when(message.text()).thenReturn("Удалить 10");
+        when(message.text()).thenReturn("Удалить КП 10");
         when(catUserService.getCatUser(10L)).thenReturn(Optional.of(catUser));
         String actual = out.validateDeleteCatUserFromAdmin(message);
         assertThat(actual).isEqualTo(expected);
@@ -143,7 +143,7 @@ class ValidatorCatUserServiceTest {
     @Test
     void validateDeleteUserNotFound(){
         String expected = "Усыновитель не найден в базе данных приюта для кошек, проверьте правильность введения id.";
-        when(message.text()).thenReturn("Удалить 10");
+        when(message.text()).thenReturn("Удалить КП 10");
         when(catUserService.getCatUser(10L)).thenReturn(Optional.empty());
         String actual = out.validateDeleteCatUserFromAdmin(message);
         assertThat(actual).isEqualTo(expected);
@@ -161,7 +161,7 @@ class ValidatorCatUserServiceTest {
         CatUser catUser = new CatUser("Тест", 89871234567L);
         CatUser catUser2 = new CatUser("Миша", 89871234562L);
         String expected = catUser2 + " изменен в базе данных приюта для кошек.";
-        when(message.text()).thenReturn("Изменить 10 89871234562 Миша");
+        when(message.text()).thenReturn("Изменить КП 10 89871234562 Миша");
         when(catUserService.getCatUser(10L)).thenReturn(Optional.of(catUser));
         String actual = out.validateEditCatUserFromAdmin(message);
         assertThat(actual).isEqualTo(expected);
@@ -170,7 +170,7 @@ class ValidatorCatUserServiceTest {
     @Test
     void validateEditUserIncorrectNumber(){
         String expected = "Некорректный номер телефона";
-        when(message.text()).thenReturn("Изменить 10 79871234562 Миша");
+        when(message.text()).thenReturn("Изменить КП 10 79871234562 Миша");
         String actual = out.validateEditCatUserFromAdmin(message);
         assertThat(actual).isEqualTo(expected);
     }
@@ -178,7 +178,7 @@ class ValidatorCatUserServiceTest {
     @Test
     void validateEditUserNotFound(){
         String expected = "Усыновитель не найден в базе данных приюта для кошек, проверьте правильность введения id.";
-        when(message.text()).thenReturn("Изменить 10 89871234562 Миша");
+        when(message.text()).thenReturn("Изменить КП 10 89871234562 Миша");
         when(catUserService.getCatUser(10L)).thenReturn(Optional.empty());
         String actual = out.validateEditCatUserFromAdmin(message);
         assertThat(actual).isEqualTo(expected);
