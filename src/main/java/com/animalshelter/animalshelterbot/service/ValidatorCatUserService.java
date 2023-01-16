@@ -1,7 +1,9 @@
 package com.animalshelter.animalshelterbot.service;
 
-import com.animalshelter.animalshelterbot.controllers.DogUserController;
+
 import com.animalshelter.animalshelterbot.model.CatUser;
+import com.animalshelter.animalshelterbot.controllers.CatUserController;
+import com.animalshelter.animalshelterbot.controllers.AdminCatUserController;
 import com.pengrad.telegrambot.model.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +14,7 @@ import java.util.regex.Pattern;
 
 /**
  * <i> Сервис для обработки входящих сообщений с контроллеров
- * {@link com.animalshelter.animalshelterbot.controllers.CatUserController} и  из телеграма
+ * {@link CatUserController} и  из телеграма
  * и подготовки ответного сообщения пользователю</i>
  */
 
@@ -28,7 +30,7 @@ public class ValidatorCatUserService {
     /**
      * <i> Метод для проверки и обработки входящего сообщения от пользователя.
      * <br>
-     * Запрос выполняется через метод {@link DogUserController#handleAddDogUser(Message)}. </i>
+     * Запрос выполняется через метод {@link CatUserController#handleAddCatUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
@@ -68,12 +70,11 @@ public class ValidatorCatUserService {
 //                " запросите вызов волонтера. Спасибо!";
 //    }
 
-    // Ниже в работе!!!! Надо проверять
 
     /**
      * <i> Метод для проверки и обработки входящего сообщения на сохранение контактных данных от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#handleCreateDogUser(Message)}. </i>
+     * Запрос выполняется через метод {@link AdminCatUserController#handleCreateCatUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
@@ -96,7 +97,7 @@ public class ValidatorCatUserService {
     /**
      * <i> Метод для проверки и обработки входящего сообщения на получение контактных данных от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#handleGetDogUser(Message)}. </i>
+     * Запрос выполняется через метод {@link AdminCatUserController#handleGetCatUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
@@ -112,13 +113,12 @@ public class ValidatorCatUserService {
             return findCatUser.get().toString() + " из базы данных приюта для кошек.";
         }
         return "Некорректный запрос";
-
     }
 
     /**
      * <i> Метод для проверки и обработки входящего сообщения на удаление контактных данных от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#handleDeleteDogUser(Message)}. </i>
+     * Запрос выполняется через метод {@link AdminCatUserController#handleDeleteCatUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
@@ -140,7 +140,7 @@ public class ValidatorCatUserService {
     /**
      * <i> Метод для проверки и обработки входящего сообщения на изменение контактных данных от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#handleEditDogUser(Message)}. </i>
+     * Запрос выполняется через метод {@link AdminCatUserController#handleEditCatUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки

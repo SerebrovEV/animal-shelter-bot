@@ -1,5 +1,6 @@
 package com.animalshelter.animalshelterbot.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import java.util.Collection;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @Entity
 public class AdoptedCat {
     @Id
@@ -26,6 +28,10 @@ public class AdoptedCat {
     public AdoptedCat() {
     }
 
+    public AdoptedCat(String catName) {
+        this.catName = catName;
+    }
+
     public AdoptedCat(String catName, Date adoptionDate, Integer trialPeriod){
         this.catName = catName;
         this.adoptionDate = adoptionDate;
@@ -33,10 +39,9 @@ public class AdoptedCat {
     }
 
     @Override
-
     public String toString(){
-        return "Кошка по кличке:" + catName + "взята из приюта:" + adoptionDate
-                + "период адаптации:" + trialPeriod;
+        return "Кошка: ID: "+ id + ", имя: " + catName + ", взята из приюта: " + adoptionDate
+                + ", период адаптации: " + trialPeriod;
     }
 
 }

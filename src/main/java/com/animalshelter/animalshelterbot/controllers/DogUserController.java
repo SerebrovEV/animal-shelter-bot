@@ -2,6 +2,7 @@ package com.animalshelter.animalshelterbot.controllers;
 
 import com.animalshelter.animalshelterbot.handler.Callback;
 import com.animalshelter.animalshelterbot.handler.Command;
+import com.pengrad.telegrambot.model.Update;
 import com.animalshelter.animalshelterbot.handler.CommandController;
 import com.animalshelter.animalshelterbot.organisation.Callbacks;
 import com.animalshelter.animalshelterbot.service.ValidatorDogUserService;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 /**
  * <i> Контроллер для получения или сохранения контактных данных пользователя в базу данных.</i>
  * <br>
- * Запрос через {@link com.pengrad.telegrambot.model.Update} на добавление контакта осуществляется по команде
+ * Запрос через {@link Update} на добавление контакта осуществляется по команде
  * {@link #ADD_CONTACT}
  * <br>
  */
