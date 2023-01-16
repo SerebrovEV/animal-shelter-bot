@@ -120,6 +120,14 @@ public class ValidateAdoptedCatService {
         return "Некорректный запрос";
     }
 
+    /**
+     * <i> Метод для проверки и обработки входящего сообщения на усыновление кошки от администратора.
+     * <br>
+     * Запрос выполняется через метод {@link AdminCatController#handleTakeCat(Message)}. </i>
+     *
+     * @param message
+     * @return String в зависимости от результата обработки
+     */
     public String validateTakeCat(Message message) {
         Matcher matcher = TAKE_PATTERN.matcher(message.text());
         if (matcher.find()) {
@@ -143,6 +151,14 @@ public class ValidateAdoptedCatService {
         return "Некорректный запрос";
     }
 
+    /**
+     * <i> Метод для проверки и обработки входящего сообщения на возврат кошки от администратора.
+     * <br>
+     * Запрос выполняется через метод {@link AdminCatController#handleReturnCat(Message)}. </i>
+     *
+     * @param message
+     * @return String в зависимости от результата обработки
+     */
     public String validateReturnCat(Message message) {
         Matcher matcher = RETURN_PATTERN.matcher(message.text());
         if (matcher.find()) {
@@ -161,6 +177,14 @@ public class ValidateAdoptedCatService {
         return "Некорректный запрос";
     }
 
+    /**
+     * <i> Метод для проверки и обработки входящего сообщения на продления периода адаптации кошки от администратора.
+     * <br>
+     * Запрос выполняется через метод {@link AdminCatController#handleExtendCat(Message)}. </i>
+     *
+     * @param message
+     * @return String в зависимости от результата обработки
+     */
     public String validateExtendCat(Message message) {
         Matcher matcher = EXTEND_PATTERN.matcher(message.text());
         if (matcher.find()) {

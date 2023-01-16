@@ -121,4 +121,34 @@ class AdoptedCatServiceTest {
 
         assertThat(actual).isEqualTo(expected);
     }
+
+    @Test
+    void getAllBusyCat() {
+        when(adoptedCatRepository.findAllByCatUserNotNull()).thenReturn(new ArrayList<>(List.of(
+                CAT1,
+                CAT2,
+                CAT3)));
+        List<AdoptedCat> expected = new ArrayList<>(List.of(
+                new AdoptedCat("Test"),
+                new AdoptedCat("Test2"),
+                new AdoptedCat("Test3")));
+        List<AdoptedCat> actual = out.getAllBusyCat();
+
+        assertThat(actual).isEqualTo(expected);
+    }
+    @Test
+    void getAllFreeCat() {
+        when(adoptedCatRepository.findAllByCatUserIsNull()).thenReturn(new ArrayList<>(List.of(
+                CAT1,
+                CAT2,
+                CAT3)));
+        List<AdoptedCat> expected = new ArrayList<>(List.of(
+                new AdoptedCat("Test"),
+                new AdoptedCat("Test2"),
+                new AdoptedCat("Test3")));
+        List<AdoptedCat> actual = out.getAllFreeCat();
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
 }

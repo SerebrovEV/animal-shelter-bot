@@ -52,22 +52,6 @@ public class ValidatorDogUserService {
         return "Некорректный запрос";
     }
 
-//    /**
-//     * <i>Метод для проверки входящего сообщения от пользователя для проверки контакта.
-//     * <br>
-//     * Запрос выполняется через метод {@link DogUserController#getContactMessage(Message)}.</i>
-//     *
-//     * @param message
-//     * @return String в зависимости от проверки сообщения
-//     */
-//    public String validateGetUser(Message message) {
-//        DogUser dogUser = dogUserService.getDogUserByChatId(message.from().id());
-//        if (dogUser != null) {
-//            return dogUser.toStringUser();
-//        }
-//        return "Клиент не найден! Пожалуйста добавьте контакты для обратной связи или" +
-//                " запросите вызов волонтера. Спасибо!";
-//    }
 
     /**
      * <i> Метод для проверки и обработки входящего сообщения на сохранение контактных данных в БД приюта для собак от администратора.

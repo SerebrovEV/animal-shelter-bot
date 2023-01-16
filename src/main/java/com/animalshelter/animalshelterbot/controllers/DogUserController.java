@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * <i> Контроллер для получения или сохранения контактных данных пользователя в базу данных.</i>
+ * <i> Контроллер для сохранения контактных данных пользователя в базу данных.</i>
  * <br>
  * Запрос через {@link Update} на добавление контакта осуществляется по команде
  * {@link #ADD_CONTACT}
@@ -55,24 +55,6 @@ public class DogUserController implements CommandController {
                         new InlineKeyboardButton(backButtonText).callbackData(Callbacks.DOG_MENU.name())
                 ));
     }
-
-//    /**
-//     * <i>Метод для получения пользователем контактных данных, которые он записал в базу данных
-//     * <br>
-//     * Используется метод {@link ValidatorUserService#validateGetUser(Message)}</i>
-//     * @param message
-//     * @return {@link SendMessage}
-//     */
-//    @Command(name = GET_CONTACT)
-//    public SendMessage getContactMessage(Message message) {
-//        long idUser = message.from().id();
-//        logger.info("Пользователь {} запросил проверку своего контакта в БД", idUser);
-//        return new SendMessage(idUser, validatorUserService.validateGetUser(message));
-//    }
-//    @Callback(name = GET_CONTACT)
-//    public SendMessage getContactMessage(CallbackQuery callbackQuery) {
-//        return new SendMessage(callbackQuery.from().id(), validatorUserService.validateGetUser(callbackQuery));
-//    }
 
 
     /**

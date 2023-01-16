@@ -121,6 +121,13 @@ public class AdminCatController implements CommandController {
         String answer = validateAdoptedCatService.validateEditCat(message);
         return new SendMessage(idAdmin, answer);
     }
+    /**
+     * <i>Метод для получения списка всех кошек в базе данных приюта для кошек администратором
+     * <br>
+     *
+     * @param message
+     * @return {@link SendMessage}
+     */
     @Command(name = "/getAllCat")
     public SendMessage handleGetAllCat(Message message) {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
@@ -130,6 +137,13 @@ public class AdminCatController implements CommandController {
         return new SendMessage(idAdmin, answer);
     }
 
+    /**
+     * <i>Метод для получения списка свободных кошек в базе данных приюта для кошек администратором
+     * <br>
+     *
+     * @param message
+     * @return {@link SendMessage}
+     */
     @Command(name = "/getAllFreeCat")
     public SendMessage handleGetAllFreeCat(Message message) {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
@@ -138,6 +152,14 @@ public class AdminCatController implements CommandController {
        String answer = adoptedCatService.getAllFreeCat().toString();
         return new SendMessage(idAdmin, answer);
     }
+
+    /**
+     * <i>Метод для получения списка усыновленных кошек в базе данных приюта для кошек администратором
+     * <br>
+     *
+     * @param message
+     * @return {@link SendMessage}
+     */
     @Command(name = "/getAllBusyCat")
     public SendMessage handleGetAllBusyCat(Message message) {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
@@ -147,6 +169,13 @@ public class AdminCatController implements CommandController {
         return new SendMessage(idAdmin, answer);
     }
 
+    /**
+     * <i>Метод для назначения усыновителя кошке в базе данных приюта для кошек администратором
+     * <br>
+     *
+     * @param message
+     * @return {@link SendMessage}
+     */
     @Command(pattern = TAKE_CAT_PATTERN)
     public SendMessage handleTakeCat(Message message) {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
@@ -155,6 +184,14 @@ public class AdminCatController implements CommandController {
         String answer = validateAdoptedCatService.validateTakeCat(message);
         return new SendMessage(idAdmin, answer);
     }
+
+    /**
+     * <i>Метод для удаления усыновителя кошке в базе данных приюта для кошек администратором
+     * <br>
+     *
+     * @param message
+     * @return {@link SendMessage}
+     */
     @Command(pattern = RETURN_CAT_PATTERN)
     public SendMessage handleReturnCat(Message message) {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
@@ -164,6 +201,13 @@ public class AdminCatController implements CommandController {
         return new SendMessage(idAdmin, answer);
     }
 
+    /**
+     * <i>Метод для продления периода адаптации для кошки в базе данных приюта для кошек администратором
+     * <br>
+     *
+     * @param message
+     * @return {@link SendMessage}
+     */
     @Command(pattern = EXTEND_CAT_PATTERN)
     public SendMessage handleExtendCat(Message message) {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
