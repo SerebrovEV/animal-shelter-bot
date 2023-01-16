@@ -35,4 +35,12 @@ public class AdoptedCatService {
     public List<AdoptedCat> getAllCat() {
         return List.copyOf(adoptedCatRepository.findAll());
     }
+
+    public List<AdoptedCat> getAllBusyCat() {
+        return List.copyOf(adoptedCatRepository.findAllByCatUserNotNull());
+    }
+
+    public List<AdoptedCat> getAllFreeCat() {
+        return List.copyOf(adoptedCatRepository.findAllByCatUserIsNull());
+    }
 }

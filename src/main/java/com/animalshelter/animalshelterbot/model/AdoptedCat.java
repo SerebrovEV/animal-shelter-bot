@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Collection;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -41,7 +42,16 @@ public class AdoptedCat {
     @Override
     public String toString(){
         return "Кошка: ID: "+ id + ", имя: " + catName + ", взята из приюта: " + adoptionDate
-                + ", период адаптации: " + trialPeriod;
+                + ", период адаптации: " + trialPeriod + " дней, " + validateCatUser();
+    }
+
+    private String validateCatUser(){
+        Optional<CatUser> isCatUser = Optional.ofNullable(this.catUser);
+        if (isCatUser.isEmpty()) {
+            return "без усыновителя\n";
+        } else {
+            return isCatUser.get().toString();
+        }
     }
 
 }
