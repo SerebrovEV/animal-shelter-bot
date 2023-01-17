@@ -30,9 +30,6 @@ public class TelegramBotUpdateListener implements UpdatesListener {
         updates.forEach(update -> {
             try {
                 if(update.message() != null) {
-                    if (update.message().photo() != null) {
-                        messageHandler.handlePhoto(update.message());
-                    }
                     messageHandler.handleMessage(update.message());
                 }
 

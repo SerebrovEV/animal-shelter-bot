@@ -12,5 +12,8 @@ import java.util.Optional;
 public interface CatReportRepository extends JpaRepository<CatReport, Long> {
     Collection<CatReport> findCatReportByDate(Date date);
 
+    Collection<CatReport> findCatReportsByAdoptedCat_Id(Long id);
+
     Optional<CatReport> findCatReportByDateAndAdoptedCat_Id(Date date, Long id);
+
 }
