@@ -11,6 +11,7 @@ import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import java.util.List;
 
 /**
  * <i>Контроллер обработки навигации по боту. Отвечает за ответ на все {@link Callback}`и-меню</i> <br>
@@ -57,6 +58,9 @@ public class StartController implements CommandController {
 
     private static final String START_COMMAND = "/start";
 
+    /**
+    * Обработка команды {@value this#START_COMMAND}. Выдаёт стартовое меню
+    */
     @Command(name = START_COMMAND)
     public SendMessage startMenu(Message message) {
         return new SendMessage(message.from().id(), startMenuText)
@@ -66,6 +70,9 @@ public class StartController implements CommandController {
                 ));
     }
 
+    /**
+     * Обработка коллбека START_MENU. Выдаёт стартовое меню
+     */
     @Callback(name = Callbacks.START_MENU)
     public SendMessage startMenu(CallbackQuery callbackQuery) {
         return new SendMessage(callbackQuery.from().id(), startMenuText)
@@ -75,6 +82,9 @@ public class StartController implements CommandController {
                 ));
     }
 
+    /**
+     * Обработка коллбека DOG_MENU. Выдаёт основное меню для собаки
+     */
     @Callback(name = Callbacks.DOG_MENU)
     public SendMessage dogMenu(CallbackQuery callbackQuery) {
         return new SendMessage(callbackQuery.from().id(), dogMenuText)
@@ -89,6 +99,9 @@ public class StartController implements CommandController {
                 );
     }
 
+    /**
+     * Обработка коллбека CAT_MENU. Выдаёт основное меню для кошки
+     */
     @Callback(name = Callbacks.CAT_MENU)
     public SendMessage catMenu(CallbackQuery callbackQuery) {
         return new SendMessage(callbackQuery.from().id(), catMenuText)
@@ -103,6 +116,9 @@ public class StartController implements CommandController {
                 );
     }
 
+    /**
+     * Обработка коллбека DOG_INFO_MENU. Выдаёт информационное меню для собаки
+     */
     @Callback(name = Callbacks.DOG_INFO_MENU)
     public SendMessage dogInfoMenu(CallbackQuery callbackQuery) {
         return new SendMessage(callbackQuery.from().id(), dogShelterInfoText)
@@ -119,6 +135,9 @@ public class StartController implements CommandController {
                 );
     }
 
+    /**
+     * Обработка коллбека CAT_INFO_MENU. Выдаёт информационное меню для кошки
+     */
     @Callback(name = Callbacks.CAT_INFO_MENU)
     public SendMessage catInfoMenu(CallbackQuery callbackQuery) {
         return new SendMessage(callbackQuery.from().id(), catShelterInfoText)
@@ -135,6 +154,9 @@ public class StartController implements CommandController {
                 );
     }
 
+    /**
+     * Обработка коллбека DOG_ADOPTION_INFO_MENU. Выдаёт меню усыновления для собаки
+     */
     @Callback(name = Callbacks.DOG_ADOPTION_INFO_MENU)
     public SendMessage dogAdoptionInfoMenu(CallbackQuery callbackQuery) {
         return new SendMessage(callbackQuery.from().id(), dogAdoptionInfoText)
@@ -156,6 +178,9 @@ public class StartController implements CommandController {
                 );
     }
 
+    /**
+     * Обработка коллбека CAT_ADOPTION_INFO_MENU. Выдаёт меню усыновления для кошки
+     */
     @Callback(name = Callbacks.CAT_ADOPTION_INFO_MENU)
     public SendMessage catAdoptionInfoMenu(CallbackQuery callbackQuery) {
         return new SendMessage(callbackQuery.from().id(), catAdoptionInfoText)
