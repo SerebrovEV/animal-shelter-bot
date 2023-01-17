@@ -52,7 +52,7 @@ public class AdoptedCatService {
     public List<AdoptedCat> getAllCatWithEndPeriod() {
 
         return List.copyOf(getAllBusyCat()).stream()
-                .filter(s -> (s.getAdoptionDate().compareTo(Date.valueOf(LocalDate.now().plusDays(s.getTrialPeriod())))) > 0)
+                .filter(s -> !s.getAdoptionDate().toLocalDate().plusDays(30).isAfter(LocalDate.now()))
                 .collect(Collectors.toList());
-    }
+}
 }
