@@ -4,10 +4,13 @@ import com.animalshelter.animalshelterbot.controllers.AdminCatController;
 import com.animalshelter.animalshelterbot.model.AdoptedCat;
 import com.animalshelter.animalshelterbot.controllers.CatUserController;
 import com.animalshelter.animalshelterbot.model.CatUser;
+import com.animalshelter.animalshelterbot.organisation.Callbacks;
+import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Message;
+import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
+import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -26,7 +29,8 @@ import java.util.regex.Pattern;
 public class ValidateAdoptedCatService {
     private final AdoptedCatService adoptedCatService;
     private final CatUserService catUserService;
-    private final Logger LOG = LoggerFactory.getLogger(ValidateAdoptedCatService.class);
+    private final TelegramBot telegramBot;
+
     private final Pattern ADD_PATTERN = Pattern.compile("([\\W]{9})(\\s)([\\W]{1})(\\s)([\\W]+)");
     private final Pattern FIND_AND_DELETE_PATTERN = Pattern.compile("([\\d]+)");
 
@@ -34,6 +38,11 @@ public class ValidateAdoptedCatService {
     private final Pattern TAKE_PATTERN = Pattern.compile("([\\W]{9})(\\s)([\\d]+)(\\s)([\\W]{1})(\\s)([\\d]+)");
     private final Pattern RETURN_PATTERN = Pattern.compile("([\\d]+)");
     private final Pattern EXTEND_PATTERN = Pattern.compile("([\\d]+)(\\s)([\\W]{2})(\\s)([\\d]+)");
+
+    private final String ATTENTION_MESSAGE = "Добрый день! Вам было назначено дополнительное время испытательного срока," +
+            " новых дней: + ";
+
+    private static final String catButtonText = "Вернуться";
 
     /**
      * <i> Метод для проверки и обработки входящего сообщения на сохранение кошек от администратора.
@@ -193,13 +202,26 @@ public class ValidateAdoptedCatService {
             if (editCat.isEmpty()) {
                 return "Кошка не найдена в базе данных приюта для кошек, проверьте правильность введения id.";
             }
+            AdoptedCat newCat = editCat.get();
+            Long chatIdUser = newCat.getCatUser().getChatId();
+
+            if (chatIdUser == null) {
+                return "Продление не выполнено! Для корректной работы необходимо попросить усыновителя добавить" +
+                        " контактные данные через телеграм-бота прописав сообщение:\n Взял кота 89817885244 Иван";
+            }
+
             int newPeriod = Integer.parseInt(matcher.group(5));
+
             if (newPeriod == 14 || newPeriod == 30) {
-                AdoptedCat newCat = editCat.get();
-                newCat.setTrialPeriod(editCat.get().getTrialPeriod()+newPeriod);
+                newCat.setTrialPeriod(editCat.get().getTrialPeriod() + newPeriod);
                 adoptedCatService.editAdoptedCat(newCat);
+                telegramBot.execute(new SendMessage(chatIdUser, ATTENTION_MESSAGE + newPeriod)
+                        .replyMarkup(new InlineKeyboardMarkup(
+                                new InlineKeyboardButton(catButtonText).callbackData(Callbacks.CAT_MENU.name())
+                        )));
                 return newCat + " изменен в базе данных приюта для кошек.";
             }
+
             return "Некорректный запрос на добавление дней к периоду адаптации, можно добавить либо 14, либо 30 дней.";
         }
         return "Некорректный запрос";

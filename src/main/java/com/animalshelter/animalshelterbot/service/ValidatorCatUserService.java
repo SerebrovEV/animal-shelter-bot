@@ -4,7 +4,12 @@ package com.animalshelter.animalshelterbot.service;
 import com.animalshelter.animalshelterbot.model.CatUser;
 import com.animalshelter.animalshelterbot.controllers.CatUserController;
 import com.animalshelter.animalshelterbot.controllers.AdminCatUserController;
+import com.animalshelter.animalshelterbot.organisation.Callbacks;
+import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Message;
+import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
+import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +28,20 @@ import java.util.regex.Pattern;
 public class ValidatorCatUserService {
 
     private final CatUserService catUserService;
+    private final TelegramBot telegramBot;
+
     private final Pattern ADD_PATTERN = Pattern.compile("([\\d]{11})(\\s)([\\W]+)");
-    private final Pattern FIND_AND_DELETE_PATTERN = Pattern.compile("([\\d]+)");
+    private final Pattern NUMBER_PATTERN = Pattern.compile("([\\d]+)");
     private final Pattern EDIT_PATTERN = Pattern.compile("([\\d]+)(\\s)([\\d]{11})(\\s)([\\W]+)");
+
+    private final String CONGRATULATION_MESSAGE = "Поздравляем, вы прошли испытательный срок. Продолжайте и" +
+            " впредь заботится о своем новом любимце и он ответит вам любовью ответ:)";
+
+    private final String RETURN_MESSAGE = "К сожалению, вы не прошли испытательный срок. Вам требуется вернуть животное " +
+            "в приют. Если вы не можете к нам приехать, мы можем направить к вам волонтера для возврата животного. Для " +
+            "этого свяжитесь с нами.";
+
+    private static final String catButtonText = "Вернуться";
 
     /**
      * <i> Метод для проверки и обработки входящего сообщения от пользователя.
@@ -39,12 +55,15 @@ public class ValidatorCatUserService {
         Matcher matcher = ADD_PATTERN.matcher(message.text());
         if (matcher.find()) {
             String name = matcher.group(3);
+
             if (!matcher.group(1).startsWith("8")) {
                 return "Некорректный номер телефона";
             }
+
             Long phone = Long.valueOf(matcher.group(1));
             Long chatId = message.from().id();
-            if (catUserService.getCatUserByChatId(chatId) == null) {
+
+            if (catUserService.getCatUserByChatId(chatId).isEmpty() && catUserService.getCatUserByPhoneNumber(phone).isEmpty()) {
                 CatUser catUser = catUserService.addCatUser(new CatUser(name, phone, chatId));
                 return "Добавлена запись контакта: " + catUser.toStringUser();
             }
@@ -53,23 +72,43 @@ public class ValidatorCatUserService {
         return "Некорректный запрос";
     }
 
-//    /**
-//     * <i>Метод для проверки входящего сообщения от пользователя для проверки контакта.
-//     * <br>
-//     * Запрос выполняется через метод {@link DogUserController#getContactMessage(Message)}.</i>
-//     *
-//     * @param message
-//     * @return String в зависимости от проверки сообщения
-//     */
-//    public String validateGetUser(Message message) {
-//        DogUser dogUser = dogUserService.getDogUserByChatId(message.from().id());
-//        if (dogUser != null) {
-//            return dogUser.toStringUser();
-//        }
-//        return "Клиент не найден! Пожалуйста добавьте контакты для обратной связи или" +
-//                " запросите вызов волонтера. Спасибо!";
-//    }
 
+    /**
+     * <i> Метод для проверки и обработки входящего сообщения на добавление Id chat от пользователя.
+     * <br>
+     * Запрос выполняется через метод {@link CatUserController#handleAddCatUser(Message)}. </i>
+     *
+     * @param message
+     * @return String в зависимости от результата обработки
+     */
+    public String validateCatUserIdChat(Message message) {
+        Matcher matcher = ADD_PATTERN.matcher(message.text());
+        if (matcher.find()) {
+            String name = matcher.group(3);
+            if (!matcher.group(1).startsWith("8")) {
+                return "Некорректный номер телефона";
+            }
+
+            Long phone = Long.valueOf(matcher.group(1));
+            Long chatId = message.from().id();
+
+            if (catUserService.getCatUserByChatId(chatId).isPresent()) {
+                return "Обновить запись не удалось, свяжитесь с волонтером для уточнения информации";
+            }
+
+            Optional<CatUser> catUser = catUserService.getCatUserByPhoneNumber(phone);
+            if (catUser.isEmpty()) {
+                return "Телефон не найден, свяжитесь с волонтером для уточнения информации";
+            }
+
+            CatUser newCatUser = catUser.get();
+            newCatUser.setChatId(chatId);
+            catUserService.editCatUser(newCatUser);
+            System.out.println("Here");
+            return "Обновлена запись контакта: " + newCatUser.toStringUser() + ". Спасибо!";
+        }
+        return "Некорректный запрос";
+    }
 
     /**
      * <i> Метод для проверки и обработки входящего сообщения на сохранение контактных данных от администратора.
@@ -81,17 +120,19 @@ public class ValidatorCatUserService {
      */
     public String validateCatUserFromAdmin(Message message) {
         Matcher matcher = ADD_PATTERN.matcher(message.text());
-        matcher.find();
-        String name = matcher.group(3);
-        if (!matcher.group(1).startsWith("8")) {
-            return "Некорректный номер телефона";
+        if (matcher.find()) {
+            String name = matcher.group(3);
+            if (!matcher.group(1).startsWith("8")) {
+                return "Некорректный номер телефона";
+            }
+            Long phone = Long.valueOf(matcher.group(1));
+            if (catUserService.getCatUserByPhoneNumber(phone).isEmpty()) {
+                CatUser catUser = catUserService.addCatUser(new CatUser(name, phone));
+                return "Добавлена запись контакта: " + catUser.toString() + " в базу данных приюта для кошек.";
+            }
+            return "Данный усыновитель уже есть";
         }
-        Long phone = Long.valueOf(matcher.group(1));
-        if (catUserService.getCatUserByPhoneNumber(phone) == null) {
-            CatUser catUser = catUserService.addCatUser(new CatUser(name, phone));
-            return "Добавлена запись контакта: " + catUser.toString() + " в базу данных приюта для кошек.";
-        }
-        return "Данный усыновитель уже есть";
+        return "Некорректный запрос";
     }
 
     /**
@@ -103,7 +144,7 @@ public class ValidatorCatUserService {
      * @return String в зависимости от результата обработки
      */
     public String validateGetCatUserFromAdmin(Message message) {
-        Matcher matcher = FIND_AND_DELETE_PATTERN.matcher(message.text());
+        Matcher matcher = NUMBER_PATTERN.matcher(message.text());
         if (matcher.find()) {
             Long id = Long.valueOf(matcher.group(1));
             Optional<CatUser> findCatUser = catUserService.getCatUser(id);
@@ -124,7 +165,7 @@ public class ValidatorCatUserService {
      * @return String в зависимости от результата обработки
      */
     public String validateDeleteCatUserFromAdmin(Message message) {
-        Matcher matcher = FIND_AND_DELETE_PATTERN.matcher(message.text());
+        Matcher matcher = NUMBER_PATTERN.matcher(message.text());
         if (matcher.find()) {
             Long id = Long.valueOf(matcher.group(1));
             Optional<CatUser> deleteCatUser = catUserService.getCatUser(id);
@@ -166,4 +207,44 @@ public class ValidatorCatUserService {
     }
 
 
+    public String validateCongratulationCatUserFromAdmin(Message message) {
+        Matcher matcher = NUMBER_PATTERN.matcher(message.text());
+        if (matcher.find()) {
+            Long id = Long.valueOf(matcher.group(1));
+            Optional<CatUser> findCatUser = catUserService.getCatUser(id);
+            if (findCatUser.isEmpty()) {
+                return "Усыновитель не найден в базе данных приюта для кошек, проверьте правильность введения id.";
+            }
+            Long chatIdUser = findCatUser.get().getChatId();
+            if (chatIdUser == null) {
+                return "Команда не выполнена! Для корректной работы необходимо попросить усыновителя добавить" +
+                        " контактные данные через телеграм-бота прописав сообщение:\n Взял кота 89817885244 Иван";
+            }
+            telegramBot.execute(new SendMessage(chatIdUser, CONGRATULATION_MESSAGE));
+            return findCatUser.get() + " направлено поздравление.";
+        }
+        return "Некорректный запрос";
+    }
+
+    public String validateReturnCatUserFromAdmin(Message message) {
+        Matcher matcher = NUMBER_PATTERN.matcher(message.text());
+        if (matcher.find()) {
+            Long id = Long.valueOf(matcher.group(1));
+            Optional<CatUser> findCatUser = catUserService.getCatUser(id);
+            if (findCatUser.isEmpty()) {
+                return "Усыновитель не найден в базе данных приюта для кошек, проверьте правильность введения id.";
+            }
+            Long chatIdUser = findCatUser.get().getChatId();
+            if (chatIdUser == null) {
+                return "Команда не выполнена! Для корректной работы необходимо попросить усыновителя добавить" +
+                        " контактные данные через телеграм-бота прописав сообщение:\n Взял кота 89817885244 Иван";
+            }
+            telegramBot.execute(new SendMessage(chatIdUser, RETURN_MESSAGE)
+                    .replyMarkup(new InlineKeyboardMarkup(
+                            new InlineKeyboardButton(catButtonText).callbackData(Callbacks.CAT_MENU.name())
+                    )));
+            return findCatUser.get() + " направлено уведомление.";
+        }
+        return "Некорректный запрос";
+    }
 }

@@ -56,7 +56,7 @@ class ValidatorCatUserServiceTest {
         when(message.text()).thenReturn("89871234567 Тест");
         when(message.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
-        when(catUserService.getCatUserByChatId(1L)).thenReturn(catUser);
+        when(catUserService.getCatUserByChatId(1L)).thenReturn(Optional.of(catUser));
         String expected = "Данный пользователь уже есть, свяжитесь с волонтером для уточнения информации";
         String actual = out.validateCatUser(message);
         assertThat(actual).isEqualTo(expected);
@@ -87,7 +87,7 @@ class ValidatorCatUserServiceTest {
         CatUser catUser = new CatUser("Иван", 89871234567L);
 
         when(message.text()).thenReturn("Сохранить КП 89871234567 Иван");
-        when(catUserService.getCatUserByPhoneNumber(89871234567L)).thenReturn(catUser);
+        when(catUserService.getCatUserByPhoneNumber(89871234567L)).thenReturn(Optional.of(catUser));
 
         String expected = "Данный усыновитель уже есть";
         String actual = out.validateCatUserFromAdmin(message);

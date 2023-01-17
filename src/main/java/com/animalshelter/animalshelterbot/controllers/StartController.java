@@ -11,6 +11,7 @@ import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 /**
@@ -19,7 +20,15 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class StartController implements CommandController {
+    //    @Value("${telegram.volunteer.chat.id}")
+    //    private Long VOLUNTEER_CHAT_ID;
+
     private static final String startMenuText = "Привет! Данный бот может помочь вам взять и содержать животное из приюта. Для продолжения выберите животное:";
+    private static final String AdminMenuText = "Основные команды для администратора:\n" +
+            "/infoAboutAdminCat - команда для вызова меню с информацией о работе с кошками из приюта для кошек;\n" +
+            "/infoAboutAdminDog - команда для вызова меню с информацией о работе с  собаками из приюта для собак;\n" +
+            "/infoAboutAdminCatUser - команда для вызова меню с информацией о работе с усыновителями из приюта для кошек;\n" +
+            "/infoAboutAdminDogUser - команда для вызова меню с информацией о работе с усыновителями из приюта для собак";
 
     private static final String dogMenuText = "Вы выбрали приют для собак. Для продолжения выберите раздел:";
     private static final String dogShelterInfoText = "В данном разделе можно получить информацию о приюте. Выберите, какую информацию вы хотите получить:";
@@ -58,9 +67,11 @@ public class StartController implements CommandController {
 
     private static final String START_COMMAND = "/start";
 
+    private static final String HELP_ADMIN_COMMAND = "/adminhelp";
+
     /**
-    * Обработка команды {@value this#START_COMMAND}. Выдаёт стартовое меню
-    */
+     * Обработка команды {@value this#START_COMMAND}. Выдаёт стартовое меню
+     */
     @Command(name = START_COMMAND)
     public SendMessage startMenu(Message message) {
         return new SendMessage(message.from().id(), startMenuText)
@@ -89,13 +100,13 @@ public class StartController implements CommandController {
     public SendMessage dogMenu(CallbackQuery callbackQuery) {
         return new SendMessage(callbackQuery.from().id(), dogMenuText)
                 .replyMarkup(new InlineKeyboardMarkup()
-                    .addRow(new InlineKeyboardButton(shelterCommonInfoButtonText).callbackData(Callbacks.DOG_INFO_MENU.name()))
-                    .addRow(new InlineKeyboardButton(adoptionInfoButtonText).callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name()))
-                    .addRow(new InlineKeyboardButton(keepingPetButtonText).callbackData(Callbacks.DOG_REPORT.name()))
-                    .addRow(
-                            new InlineKeyboardButton(callVolunteerButtonText).callbackData(Callbacks.DOG_CALL_VOLUNTEER.name()),
-                            new InlineKeyboardButton(backButtonText).callbackData(Callbacks.START_MENU.name())
-                    )
+                        .addRow(new InlineKeyboardButton(shelterCommonInfoButtonText).callbackData(Callbacks.DOG_INFO_MENU.name()))
+                        .addRow(new InlineKeyboardButton(adoptionInfoButtonText).callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name()))
+                        .addRow(new InlineKeyboardButton(keepingPetButtonText).callbackData(Callbacks.DOG_REPORT.name()))
+                        .addRow(
+                                new InlineKeyboardButton(callVolunteerButtonText).callbackData(Callbacks.DOG_CALL_VOLUNTEER.name()),
+                                new InlineKeyboardButton(backButtonText).callbackData(Callbacks.START_MENU.name())
+                        )
                 );
     }
 
@@ -123,15 +134,15 @@ public class StartController implements CommandController {
     public SendMessage dogInfoMenu(CallbackQuery callbackQuery) {
         return new SendMessage(callbackQuery.from().id(), dogShelterInfoText)
                 .replyMarkup(new InlineKeyboardMarkup()
-                    .addRow(new InlineKeyboardButton(shelterInfoButtonText).callbackData(Callbacks.DOG_SHELTER_INFO.name()))
-                    .addRow(new InlineKeyboardButton(scheduleButtonText).callbackData(Callbacks.DOG_SCHEDULE_INFO.name()))
-                    .addRow(new InlineKeyboardButton(carButtonText).callbackData(Callbacks.DOG_CAR_INFO.name()))
-                    .addRow(new InlineKeyboardButton(safetyInfoButtonText).callbackData(Callbacks.DOG_SHELTER_SAFETY_INFO.name()))
-                    .addRow(new InlineKeyboardButton(getContactsButtonText).callbackData(Callbacks.DOG_CONTACT_INFO.name()))
-                    .addRow(
-                            new InlineKeyboardButton(callVolunteerButtonText).callbackData(Callbacks.DOG_CALL_VOLUNTEER.name()),
-                            new InlineKeyboardButton(backButtonText).callbackData(Callbacks.DOG_MENU.name())
-                    )
+                        .addRow(new InlineKeyboardButton(shelterInfoButtonText).callbackData(Callbacks.DOG_SHELTER_INFO.name()))
+                        .addRow(new InlineKeyboardButton(scheduleButtonText).callbackData(Callbacks.DOG_SCHEDULE_INFO.name()))
+                        .addRow(new InlineKeyboardButton(carButtonText).callbackData(Callbacks.DOG_CAR_INFO.name()))
+                        .addRow(new InlineKeyboardButton(safetyInfoButtonText).callbackData(Callbacks.DOG_SHELTER_SAFETY_INFO.name()))
+                        .addRow(new InlineKeyboardButton(getContactsButtonText).callbackData(Callbacks.DOG_CONTACT_INFO.name()))
+                        .addRow(
+                                new InlineKeyboardButton(callVolunteerButtonText).callbackData(Callbacks.DOG_CALL_VOLUNTEER.name()),
+                                new InlineKeyboardButton(backButtonText).callbackData(Callbacks.DOG_MENU.name())
+                        )
                 );
     }
 
@@ -199,4 +210,14 @@ public class StartController implements CommandController {
                         )
                 );
     }
+
+    /**
+     * Обработка команды HELP_ADMIN_COMMAND. Выдаёт меню c информацией, как управлять и пользоваться ботом
+     */
+    @Command(name = HELP_ADMIN_COMMAND)
+    public SendMessage adminHelpMenu(Message message) {
+        //   if (VOLUNTEER_CHAT_ID == message.from().id())
+        return new SendMessage(message.from().id(), AdminMenuText);
+    }
+
 }

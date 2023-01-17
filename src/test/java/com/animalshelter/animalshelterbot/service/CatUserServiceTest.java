@@ -66,17 +66,17 @@ class CatUserServiceTest {
         Long chatId3 = 123456782L;
 
 
-        when(catUserRepository.findCatUserByChatId(chatId1)).thenReturn(BOT_USER1);
-        when(catUserRepository.findCatUserByChatId(chatId2)).thenReturn(BOT_USER2);
-        when(catUserRepository.findCatUserByChatId(chatId3)).thenReturn(BOT_USER3);
+        when(catUserRepository.findCatUserByChatId(chatId1)).thenReturn(Optional.ofNullable(BOT_USER1));
+        when(catUserRepository.findCatUserByChatId(chatId2)).thenReturn(Optional.ofNullable(BOT_USER2));
+        when(catUserRepository.findCatUserByChatId(chatId3)).thenReturn(Optional.ofNullable(BOT_USER3));
 
         CatUser expected = new CatUser("Test", 89871234567L, 123456789L);
         CatUser expected2 = new CatUser("Test2", 89871234568L, 123456781L);
         CatUser expected3 = new CatUser("Test3", 89871234569L, 123456782L);
 
-        CatUser actual = out.getCatUserByChatId(BOT_USER1.getChatId());
-        CatUser actual2 = out.getCatUserByChatId(BOT_USER2.getChatId());
-        CatUser actual3 = out.getCatUserByChatId(BOT_USER3.getChatId());
+        CatUser actual = out.getCatUserByChatId(BOT_USER1.getChatId()).get();
+        CatUser actual2 = out.getCatUserByChatId(BOT_USER2.getChatId()).get();
+        CatUser actual3 = out.getCatUserByChatId(BOT_USER3.getChatId()).get();
 
         verify(catUserRepository, times(1)).findCatUserByChatId(chatId1);
         verify(catUserRepository, times(1)).findCatUserByChatId(chatId2);
@@ -93,9 +93,9 @@ class CatUserServiceTest {
 
     @Test
     void getCatUserByPhoneNumber() {
-        when(catUserRepository.findByPhoneNumber(anyLong())).thenReturn(BOT_USER1);
+        when(catUserRepository.findByPhoneNumber(anyLong())).thenReturn(Optional.ofNullable(BOT_USER1));
         CatUser expected = new CatUser("Test", 89871234567L, 123456789L);
-        CatUser actual = out.getCatUserByPhoneNumber(BOT_USER1.getPhoneNumber());
+        CatUser actual = out.getCatUserByPhoneNumber(BOT_USER1.getPhoneNumber()).get();
         assertThat(actual).isEqualTo(expected);
         assertThat(actual.toString()).isEqualTo(expected.toString());
     }

@@ -28,8 +28,8 @@ public class CatUserController implements CommandController {
     private final Logger logger = LoggerFactory.getLogger(CatUserController.class);
     private final ValidatorCatUserService validatorcatUserService;
     private final String ADD_CONTACT = "/addContactCat";
-    //private final String GET_CONTACT = "/getContact";
     private static final String ADD_CONTACT_PATTERN = "Возьму кота ([\\d]{11})(\\s)([\\W]+)";
+    private static final String ADD_ID_CHAT_PATTERN = "Взял кота ([\\d]{11})(\\s)([\\W]+)";
     private static final String backButtonText = "Назад";
 
     private final String ADD_MESSAGE = "Для того, чтобы оставить контактные данные для обратной " +
@@ -38,7 +38,7 @@ public class CatUserController implements CommandController {
     @Command(name = ADD_CONTACT)
     public SendMessage handleAddMessage(Message message) {
         long idUser = message.from().id();
-        logger.info("Пользователь {} запросил пример для записи контакта в БД", idUser);
+        logger.info("Пользователь {} запросил пример для записи контакта в базу данных приюта для кошек", idUser);
         return new SendMessage(idUser, ADD_MESSAGE)
                 .replyMarkup(new InlineKeyboardMarkup().addRow(
                         new InlineKeyboardButton(backButtonText).callbackData(Callbacks.CAT_MENU.name())
@@ -48,35 +48,15 @@ public class CatUserController implements CommandController {
     @Callback(name = Callbacks.CAT_CONTACT_INFO)
     public SendMessage handleAddMessageCat(CallbackQuery callbackQuery) {
         long idUser = callbackQuery.from().id();
-        logger.info("Пользователь {} запросил пример для записи контакта в БД кошачего приюта", idUser);
+        logger.info("Пользователь {} запросил пример для записи контакта в базу данных приюта для кошек", idUser);
         return new SendMessage(idUser, ADD_MESSAGE)
                 .replyMarkup(new InlineKeyboardMarkup().addRow(
                         new InlineKeyboardButton(backButtonText).callbackData(Callbacks.CAT_MENU.name())
                 ));
     }
 
-
-//    /**
-//     * <i>Метод для получения пользователем контактных данных, которые он записал в базу данных
-//     * <br>
-//     * Используется метод {@link ValidatorUserService#validateGetUser(Message)}</i>
-//     * @param message
-//     * @return {@link SendMessage}
-//     */
-//    @Command(name = GET_CONTACT)
-//    public SendMessage getContactMessage(Message message) {
-//        long idUser = message.from().id();
-//        logger.info("Пользователь {} запросил проверку своего контакта в БД", idUser);
-//        return new SendMessage(idUser, validatorUserService.validateGetUser(message));
-//    }
-//    @Callback(name = GET_CONTACT)
-//    public SendMessage getContactMessage(CallbackQuery callbackQuery) {
-//        return new SendMessage(callbackQuery.from().id(), validatorUserService.validateGetUser(callbackQuery));
-//    }
-
-
     /**
-     * <i> Метод для записи контактных данных усыновителя в базу данных кошачего приюта
+     * <i> Метод для записи контактных данных усыновителя в базу данных приюта для кошек
      * <br>
      * Используется метод {@link ValidatorCatUserService#validateCatUser(Message)}</i>
      *
@@ -86,8 +66,18 @@ public class CatUserController implements CommandController {
     @Command(pattern = ADD_CONTACT_PATTERN)
     public SendMessage handleAddCatUser(Message message) {
         long idUser = message.from().id();
-        logger.info("Пользователь {} производит запись контактных данных в БД кошачего приюта", idUser);
+        logger.info("Пользователь {} производит запись контактных данных в базу данных приюта для кошек", idUser);
         return new SendMessage(idUser, validatorcatUserService.validateCatUser(message))
+                .replyMarkup(new InlineKeyboardMarkup().addRow(
+                        new InlineKeyboardButton(backButtonText).callbackData(Callbacks.CAT_MENU.name())
+                ));
+    }
+
+    @Command(pattern = ADD_ID_CHAT_PATTERN)
+    public SendMessage handleAddCatUserIDChat(Message message) {
+        long idUser = message.from().id();
+        logger.info("Пользователь {} производит запись контактных данных в базу данных приюта для кошек", idUser);
+        return new SendMessage(idUser, validatorcatUserService.validateCatUserIdChat(message))
                 .replyMarkup(new InlineKeyboardMarkup().addRow(
                         new InlineKeyboardButton(backButtonText).callbackData(Callbacks.CAT_MENU.name())
                 ));

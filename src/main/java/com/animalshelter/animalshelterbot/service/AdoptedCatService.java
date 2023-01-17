@@ -5,8 +5,12 @@ import com.animalshelter.animalshelterbot.repository.AdoptedCatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 /**
  * <i>Сервис для добавления, получения, редактирования и удаления кошек
  * {@link AdoptedCat} в/из базы данных приюта для кошек</i>
@@ -28,7 +32,8 @@ public class AdoptedCatService {
     public Optional<AdoptedCat> getAdoptedCat(Long idAdoptedCat) {
         return adoptedCatRepository.findById(idAdoptedCat);
     }
-    public AdoptedCat editAdoptedCat(AdoptedCat adoptedCat){
+
+    public AdoptedCat editAdoptedCat(AdoptedCat adoptedCat) {
         return adoptedCatRepository.save(adoptedCat);
     }
 
@@ -42,5 +47,12 @@ public class AdoptedCatService {
 
     public List<AdoptedCat> getAllFreeCat() {
         return List.copyOf(adoptedCatRepository.findAllByCatUserIsNull());
+    }
+
+    public List<AdoptedCat> getAllCatWithEndPeriod() {
+
+        return List.copyOf(getAllBusyCat()).stream()
+                .filter(s -> (s.getAdoptionDate().compareTo(Date.valueOf(LocalDate.now().plusDays(s.getTrialPeriod())))) > 0)
+                .collect(Collectors.toList());
     }
 }
