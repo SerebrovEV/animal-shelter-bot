@@ -2,6 +2,7 @@ package com.animalshelter.animalshelterbot.service;
 
 import com.animalshelter.animalshelterbot.model.AdoptedCat;
 import com.animalshelter.animalshelterbot.model.CatUser;
+import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Message;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +31,9 @@ class ValidateAdoptedCatServiceTest {
 
     @Mock
     Message message;
+
+    @Mock
+    TelegramBot telegramBot;
 
     @Test
     void validateAddCat() {
@@ -247,6 +251,8 @@ class ValidateAdoptedCatServiceTest {
         AdoptedCat adoptedCat2 = new AdoptedCat("Тест");
         adoptedCat.setTrialPeriod(30);
         adoptedCat2.setTrialPeriod(44);
+        adoptedCat.setCatUser(new CatUser("Тест", 10L, 1L));
+        adoptedCat2.setCatUser(new CatUser("Тест", 10L, 1L));
 
         when(message.text()).thenReturn("Продлить к 2 на 14");
         when(adoptedCatService.getAdoptedCat(anyLong())).thenReturn(Optional.of(adoptedCat));
@@ -267,11 +273,26 @@ class ValidateAdoptedCatServiceTest {
     @Test
     void validateExtendCatIncorrectDaySet() {
         AdoptedCat adoptedCat = new AdoptedCat("Тест");
+        adoptedCat.setCatUser(new CatUser("Тест", 10L, 1L));
 
         when(message.text()).thenReturn("Продлить к 2 на 25");
         when(adoptedCatService.getAdoptedCat(anyLong())).thenReturn(Optional.of(adoptedCat));
 
         String expected = "Некорректный запрос на добавление дней к периоду адаптации, можно добавить либо 14, либо 30 дней.";
+        String actual = out.validateExtendCat(message);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void validateExtendCatNotIdChat() {
+        AdoptedCat adoptedCat = new AdoptedCat("Тест");
+        adoptedCat.setCatUser(new CatUser("Тест", 10L));
+
+        when(message.text()).thenReturn("Продлить к 2 на 25");
+        when(adoptedCatService.getAdoptedCat(anyLong())).thenReturn(Optional.of(adoptedCat));
+
+        String expected = "Продление не выполнено! Для корректной работы необходимо попросить усыновителя добавить" +
+                " контактные данные через телеграм-бота прописав сообщение:\n Взял кота 89817885244 Иван";
         String actual = out.validateExtendCat(message);
         assertThat(actual).isEqualTo(expected);
     }

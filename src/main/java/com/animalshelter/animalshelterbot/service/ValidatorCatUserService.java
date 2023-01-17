@@ -104,7 +104,6 @@ public class ValidatorCatUserService {
             CatUser newCatUser = catUser.get();
             newCatUser.setChatId(chatId);
             catUserService.editCatUser(newCatUser);
-            System.out.println("Here");
             return "Обновлена запись контакта: " + newCatUser.toStringUser() + ". Спасибо!";
         }
         return "Некорректный запрос";
@@ -206,7 +205,14 @@ public class ValidatorCatUserService {
         return "Некорректный запрос";
     }
 
-
+    /**
+     * <i> Метод для проверки и обработки входящего сообщения на отправку поздравления усыновителю от администратора.
+     * <br>
+     * Запрос выполняется через метод {@link AdminCatUserController#handleCongratulationCatUser(Message)}. </i>
+     *
+     * @param message
+     * @return String в зависимости от результата обработки
+     */
     public String validateCongratulationCatUserFromAdmin(Message message) {
         Matcher matcher = NUMBER_PATTERN.matcher(message.text());
         if (matcher.find()) {
@@ -226,6 +232,14 @@ public class ValidatorCatUserService {
         return "Некорректный запрос";
     }
 
+    /**
+     * <i> Метод для проверки и обработки входящего сообщения на отправку условий возврата усыновителю от администратора.
+     * <br>
+     * Запрос выполняется через метод {@link AdminCatUserController#handleCongratulationCatUser(Message)}. </i>
+     *
+     * @param message
+     * @return String в зависимости от результата обработки
+     */
     public String validateReturnCatUserFromAdmin(Message message) {
         Matcher matcher = NUMBER_PATTERN.matcher(message.text());
         if (matcher.find()) {

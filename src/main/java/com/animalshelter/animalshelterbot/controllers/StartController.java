@@ -12,8 +12,6 @@ import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
  * <i>Контроллер обработки навигации по боту. Отвечает за ответ на все {@link Callback}`и-меню</i> <br>
  */
@@ -24,7 +22,7 @@ public class StartController implements CommandController {
     //    private Long VOLUNTEER_CHAT_ID;
 
     private static final String startMenuText = "Привет! Данный бот может помочь вам взять и содержать животное из приюта. Для продолжения выберите животное:";
-    private static final String AdminMenuText = "Основные команды для администратора:\n" +
+    private static final String adminMenuText = "Основные команды для администратора:\n" +
             "/infoAboutAdminCat - команда для вызова меню с информацией о работе с кошками из приюта для кошек;\n" +
             "/infoAboutAdminDog - команда для вызова меню с информацией о работе с  собаками из приюта для собак;\n" +
             "/infoAboutAdminCatUser - команда для вызова меню с информацией о работе с усыновителями из приюта для кошек;\n" +
@@ -217,7 +215,7 @@ public class StartController implements CommandController {
     @Command(name = HELP_ADMIN_COMMAND)
     public SendMessage adminHelpMenu(Message message) {
         //   if (VOLUNTEER_CHAT_ID == message.from().id())
-        return new SendMessage(message.from().id(), AdminMenuText);
+        return new SendMessage(message.from().id(), adminMenuText);
     }
 
 }

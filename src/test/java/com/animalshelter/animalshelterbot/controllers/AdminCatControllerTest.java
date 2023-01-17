@@ -36,7 +36,7 @@ class AdminCatControllerTest {
 
     private AdoptedCat adoptedCat;
 
-    private final String ADMIN_COMMAND = "Правила работы с кошками: \n" +
+    private final String ADMIN_COMMAND = "Команды для работы с кошками: \n" +
             "/infoAboutAdminCat - команды для использования;\n" +
             "Сохранить к Мурзик - добавить кошку в базу данных приюта;\n" +
             "Найти к 10 - найти кошку с id = 10;\n" +
@@ -47,7 +47,8 @@ class AdminCatControllerTest {
             "Продлить к 2 на 14 (30) - продлить период адаптации кошке с id=2 на 14 дней(или на 30 дней) для плохого усыновителя;\n" +
             "/getAllCat - получить список всех кошек;\n" +
             "/getAllFreeCat - получить список всех свободных кошек в приюте;\n" +
-            "/getAllBusyCat  - получить список всех кошек на испытательном периоде.";
+            "/getAllBusyCat  - получить список всех кошек на испытательном периоде."+
+            "/getAllCatWithEndPeriod - получить список всех кошек с окончаниям испытательного срока;\n";
 
     @BeforeEach
     public void setOut() {
@@ -168,6 +169,28 @@ class AdminCatControllerTest {
                 new SendMessage(1L, cat4.toString()));
 
         List<SendMessage> actual = out.handleGetAllBusyCat(message);
+
+        for (int i = 0; i < expected.size(); i++) {
+            assertThat(actual.get(i).getParameters().get("idUser")).isEqualTo(expected.get(i).getParameters().get("idUser"));
+            assertThat(actual.get(i).getParameters().get("text")).isEqualTo(expected.get(i).getParameters().get("text"));
+        }
+    }
+
+    @Test
+    void handleGetAllCatWithEndPeriod() {
+        AdoptedCat cat2 = new AdoptedCat("Test2");
+        AdoptedCat cat3 = new AdoptedCat("Test3");
+        AdoptedCat cat4 = new AdoptedCat("Test4");
+        List<AdoptedCat> cats = List.of(adoptedCat, cat2, cat3, cat4);
+        when(adoptedCatService.getAllCatWithEndPeriod()).thenReturn(cats);
+
+        List<SendMessage> expected = List.of(
+                new SendMessage(1L, adoptedCat.toString()),
+                new SendMessage(1L, cat2.toString()),
+                new SendMessage(1L, cat3.toString()),
+                new SendMessage(1L, cat4.toString()));
+
+        List<SendMessage> actual = out.handleGetAllCatWithEndPeriod(message);
 
         for (int i = 0; i < expected.size(); i++) {
             assertThat(actual.get(i).getParameters().get("idUser")).isEqualTo(expected.get(i).getParameters().get("idUser"));
