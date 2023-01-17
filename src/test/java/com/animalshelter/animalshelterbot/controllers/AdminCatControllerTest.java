@@ -116,11 +116,19 @@ class AdminCatControllerTest {
         List<AdoptedCat> cats = List.of(adoptedCat, cat2, cat3, cat4);
         when(adoptedCatService.getAllCat()).thenReturn(cats);
 
-        SendMessage expected = new SendMessage(1L, List.of(adoptedCat, cat2, cat3, cat4).toString());
-        SendMessage actual = out.handleGetAllCat(message);
+        List<SendMessage> expected = List.of(
+                new SendMessage(1L, adoptedCat.toString()),
+                new SendMessage(1L, cat2.toString()),
+                new SendMessage(1L, cat3.toString()),
+                new SendMessage(1L, cat4.toString()));
 
-        assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
-        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
+        List<SendMessage> actual = out.handleGetAllCat(message);
+
+        for (int i = 0; i < expected.size(); i++) {
+            assertThat(actual.get(i).getParameters().get("idUser")).isEqualTo(expected.get(i).getParameters().get("idUser"));
+            assertThat(actual.get(i).getParameters().get("text")).isEqualTo(expected.get(i).getParameters().get("text"));
+        }
+
     }
 
     @Test
@@ -131,11 +139,18 @@ class AdminCatControllerTest {
         List<AdoptedCat> cats = List.of(adoptedCat, cat2, cat3, cat4);
         when(adoptedCatService.getAllFreeCat()).thenReturn(cats);
 
-        SendMessage expected = new SendMessage(1L, List.of(adoptedCat, cat2, cat3, cat4).toString());
-        SendMessage actual = out.handleGetAllFreeCat(message);
+        List<SendMessage> expected = List.of(
+                new SendMessage(1L, adoptedCat.toString()),
+                new SendMessage(1L, cat2.toString()),
+                new SendMessage(1L, cat3.toString()),
+                new SendMessage(1L, cat4.toString()));
 
-        assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
-        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
+        List<SendMessage> actual = out.handleGetAllFreeCat(message);
+
+        for (int i = 0; i < expected.size(); i++) {
+            assertThat(actual.get(i).getParameters().get("idUser")).isEqualTo(expected.get(i).getParameters().get("idUser"));
+            assertThat(actual.get(i).getParameters().get("text")).isEqualTo(expected.get(i).getParameters().get("text"));
+        }
     }
 
     @Test
@@ -146,11 +161,18 @@ class AdminCatControllerTest {
         List<AdoptedCat> cats = List.of(adoptedCat, cat2, cat3, cat4);
         when(adoptedCatService.getAllBusyCat()).thenReturn(cats);
 
-        SendMessage expected = new SendMessage(1L, List.of(adoptedCat, cat2, cat3, cat4).toString());
-        SendMessage actual = out.handleGetAllBusyCat(message);
+        List<SendMessage> expected = List.of(
+                new SendMessage(1L, adoptedCat.toString()),
+                new SendMessage(1L, cat2.toString()),
+                new SendMessage(1L, cat3.toString()),
+                new SendMessage(1L, cat4.toString()));
 
-        assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
-        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
+        List<SendMessage> actual = out.handleGetAllBusyCat(message);
+
+        for (int i = 0; i < expected.size(); i++) {
+            assertThat(actual.get(i).getParameters().get("idUser")).isEqualTo(expected.get(i).getParameters().get("idUser"));
+            assertThat(actual.get(i).getParameters().get("text")).isEqualTo(expected.get(i).getParameters().get("text"));
+        }
     }
 
     @Test

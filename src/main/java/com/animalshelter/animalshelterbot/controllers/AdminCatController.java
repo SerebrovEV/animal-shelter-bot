@@ -2,6 +2,7 @@ package com.animalshelter.animalshelterbot.controllers;
 
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
+import com.animalshelter.animalshelterbot.model.AdoptedCat;
 import com.animalshelter.animalshelterbot.service.AdoptedCatService;
 import com.animalshelter.animalshelterbot.service.ValidateAdoptedCatService;
 import com.pengrad.telegrambot.model.Message;
@@ -10,6 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -121,6 +126,7 @@ public class AdminCatController implements CommandController {
         String answer = validateAdoptedCatService.validateEditCat(message);
         return new SendMessage(idAdmin, answer);
     }
+
     /**
      * <i>Метод для получения списка всех кошек в базе данных приюта для кошек администратором
      * <br>
@@ -129,12 +135,14 @@ public class AdminCatController implements CommandController {
      * @return {@link SendMessage}
      */
     @Command(name = "/getAllCat")
-    public SendMessage handleGetAllCat(Message message) {
+    public List<SendMessage> handleGetAllCat(Message message) {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запросил всех кошек в базе данных приюта для кошек", idAdmin);
-        String answer = adoptedCatService.getAllCat().toString();
-        return new SendMessage(idAdmin, answer);
+        List<AdoptedCat> answer = adoptedCatService.getAllCat();
+        return answer.stream()
+                .map(s -> new SendMessage(idAdmin, s.toString()))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -145,12 +153,14 @@ public class AdminCatController implements CommandController {
      * @return {@link SendMessage}
      */
     @Command(name = "/getAllFreeCat")
-    public SendMessage handleGetAllFreeCat(Message message) {
+    public List<SendMessage> handleGetAllFreeCat(Message message) {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запросил всех свободных кошек в базе данных приюта для кошек", idAdmin);
-       String answer = adoptedCatService.getAllFreeCat().toString();
-        return new SendMessage(idAdmin, answer);
+        List<AdoptedCat> answer = adoptedCatService.getAllFreeCat();
+        return answer.stream()
+                .map(s -> new SendMessage(idAdmin, s.toString()))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -161,12 +171,14 @@ public class AdminCatController implements CommandController {
      * @return {@link SendMessage}
      */
     @Command(name = "/getAllBusyCat")
-    public SendMessage handleGetAllBusyCat(Message message) {
+    public List<SendMessage> handleGetAllBusyCat(Message message) {
         //  if(ADMIN_ID_CHAT.contains(message.from().id()))
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запросил всех усыновленных кошек в базе данных приюта для кошек", idAdmin);
-        String answer = adoptedCatService.getAllBusyCat().toString();
-        return new SendMessage(idAdmin, answer);
+        List<AdoptedCat> answer = adoptedCatService.getAllBusyCat();
+        return answer.stream()
+                .map(s -> new SendMessage(idAdmin, s.toString()))
+                .collect(Collectors.toList());
     }
 
     /**
