@@ -77,7 +77,6 @@ class AboutControllerTest {
         assertThat(actual.getParameters().get("text")).isEqualTo(aboutCatDescriptionText);
 
     }
-
     @Test
     public void handleCallbackDogAddressAndHoursMessage() {
         SendMessage expected = new SendMessage(1L, "");
@@ -87,7 +86,6 @@ class AboutControllerTest {
         assertThat(actual.getParameters().get("chatId")).isEqualTo(expected.getParameters().get("chatId"));
         assertThat(actual.getParameters().get("text")).isEqualTo("");
     }
-
     @Test
     public void handleCallbackCatAddressAndHoursMessage() {
         SendMessage expected = new SendMessage(1L, "");
@@ -97,7 +95,6 @@ class AboutControllerTest {
         assertThat(actual.getParameters().get("chatId")).isEqualTo(expected.getParameters().get("chatId"));
         assertThat(actual.getParameters().get("text")).isEqualTo("");
     }
-
     @Test
     public void handleDogCarInfoCallbackMessage() {
         SendMessage expected = new SendMessage(1L, "Для оформления пропуска свяжитесь с начальником отдела" +
@@ -107,7 +104,6 @@ class AboutControllerTest {
         SendMessage actual = aboutController.handleDogCarInfoCallbackMessage(callbackQuery);
         assertThat(actual.getParameters().get("chatId")).isEqualTo(expected.getParameters().get("chatId"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
-
     }
 
     @Test

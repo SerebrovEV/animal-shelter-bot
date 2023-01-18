@@ -93,7 +93,6 @@ public class AboutController implements CommandController {
                 .addRow(new InlineKeyboardButton(backButtonText).callbackData(Callbacks.CAT_INFO_MENU.name())));
     }
 
-
     @Callback(name = Callbacks.DOG_CAR_INFO)
     public SendMessage handleDogCarInfoCallbackMessage(CallbackQuery callbackQuery) {
         String contactSecurity = "Для оформления пропуска свяжитесь с начальником отдела охраны Ивановым Иваном Ивановичем 89871234567 " +
