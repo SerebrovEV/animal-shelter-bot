@@ -36,8 +36,8 @@ public class AdoptedDog {
 
     @Override
     public String toString() {
-        return "Собака по кличке:" + dogName + "взята из приюта:" + adoptionDate
-                + "период адаптации:" + trialPeriod;
+        return "Собака: ID: "+ id + ", имя: " + dogName + ", взята из приюта: " + adoptionDate
+                + ", период адаптации: " + trialPeriod;
     }
 }
 

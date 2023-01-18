@@ -14,7 +14,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class ValidatorReportServiceTest {
 
-    private final ValidatorCatReportService validatorCatReportService = new ValidatorCatReportService();
+    private final ValidatorReportService validatorCatReportService = new ValidatorReportService();
 
 
     @Test

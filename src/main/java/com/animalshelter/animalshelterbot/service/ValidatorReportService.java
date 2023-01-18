@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
-public class ValidatorCatReportService {
+public class ValidatorReportService {
 
     private final Pattern ID_PATTERN = Pattern.compile("(\\d+)");
     private final Pattern DATE_PATTERN = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
