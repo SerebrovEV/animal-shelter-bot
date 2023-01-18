@@ -116,25 +116,4 @@ public class MessageHandler {
             )).forEach(bot::execute);
         }
     }
-
-    // если пришло фото
-    public void handlePhoto(Message message) {
-        for(CommandController commandController: controllers) {
-            try {
-                this.processControllerForPhoto(commandController, message);
-            } catch (InvocationTargetException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    public void processControllerForPhoto(CommandController commandController, Message message) throws InvocationTargetException, IllegalAccessException {
-        for(Method method: commandController.getClass().getDeclaredMethods()){
-            if(!method.isAnnotationPresent(Photo.class)) {
-                continue;
-            }
-            SendMessage sendMessage = (SendMessage) method.invoke(commandController, message);
-
-            SendResponse sendResponse = bot.execute(sendMessage);
-        }
-    }
 }
