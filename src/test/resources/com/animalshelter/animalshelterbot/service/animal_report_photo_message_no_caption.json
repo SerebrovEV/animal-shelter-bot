@@ -1,0 +1,13 @@
+{
+  "from": {
+    "id": 123
+  },
+  "photo": [
+    {
+      "file_id": "photoFirst"
+    },
+    {
+      "file_id": "photoSecond"
+    }
+  ]
+}
