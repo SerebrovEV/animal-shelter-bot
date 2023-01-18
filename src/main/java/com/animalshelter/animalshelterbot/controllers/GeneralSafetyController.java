@@ -7,39 +7,46 @@ import com.animalshelter.animalshelterbot.organisation.Callbacks;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
  * <i>Контроллер получения информации по общим рекомендациям по технике безопасности.</i>
- * <br>
- * Запрос через {@link Update#message()} осуществляется по команде {@link #GENERAL_SAFETY_COMMAND}
- * <br>
- * Запрос через {@link Update#callbackQuery()} осуществляется по значению  {@link #GENERAL_SAFETY_CALLBACK}
+ * Запрос через {@link Update#callbackQuery()} осуществляется по значению {@link Callbacks#DOG_SHELTER_SAFETY_INFO}
+ * и {@link Callbacks#CAT_SHELTER_SAFETY_INFO}
  */
 @Component
 @RequiredArgsConstructor
 public class GeneralSafetyController implements CommandController {
     private final String generalSafetyInfoText =
-            "Рекоменации по технике безопасности:\n"
+            "Рекомендации по технике безопасности:\n"
                     + "    - удобная обувь с нескользящей подошвой;\n"
                     + "    - одежда закрытого типа;\n"
                     + "    - за ограждения не заходить;\n"
                     + "    - животных с рук не кормить;\n"
-                    + "    - в вальеры c животными руки не сувать.";
+                    + "    - в вольеры c животными руки не совать.";
 
-    public static final String GENERAL_SAFETY_COMMAND = "/safetyInfo";
-    public static final String GENERAL_SAFETY_CALLBACK = "/safetyInfo";
 
-    @Command(name = GENERAL_SAFETY_COMMAND)
-    public SendMessage handleSafetyMessage(Message message) {
+    private static final String backButtonText = "Назад";
 
-        return new SendMessage(message.from().id(), generalSafetyInfoText);
-    }
 
     @Callback(name = Callbacks.DOG_SHELTER_SAFETY_INFO)
-    public SendMessage handleCallbackMessage(CallbackQuery callbackQuery) {
-        return new SendMessage(callbackQuery.from().id(), generalSafetyInfoText);
+    public SendMessage handleCallbackSafetyDogRules(CallbackQuery callbackQuery) {
+        return new SendMessage(callbackQuery.from().id(), generalSafetyInfoText)
+                .replyMarkup(new InlineKeyboardMarkup()
+                        .addRow(new InlineKeyboardButton(backButtonText).callbackData(Callbacks.DOG_INFO_MENU.name()
+                        )));
+    }
+
+
+    @Callback(name = Callbacks.CAT_SHELTER_SAFETY_INFO)
+    public SendMessage handleCallbackSafetyCatRules(CallbackQuery callbackQuery) {
+        return new SendMessage(callbackQuery.from().id(), generalSafetyInfoText)
+                .replyMarkup(new InlineKeyboardMarkup()
+                        .addRow(new InlineKeyboardButton(backButtonText).callbackData(Callbacks.CAT_INFO_MENU.name()
+                        )));
     }
 }
