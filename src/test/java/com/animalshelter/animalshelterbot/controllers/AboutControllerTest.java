@@ -31,56 +31,69 @@ class AboutControllerTest {
     @Mock
     TelegramBotSender telegramBotSender;
 
-    private final String aboutDescriptionText = "Приют Лапки Добра - это муниципальный приют для бездомных собак и кошек в Астане. " +
-            "В нем живет почти 2500 собак и 150 кошек. Большие и маленькие, пушистые и гладкие, веселые и задумчивые - и на всех одна" +
+    private final String aboutDogDescriptionText = "Приют Лапки Добра для собак - это муниципальный приют для бездомных собак в Астане. " +
+            "В нем живет почти 2500 собак. Большие и маленькие, пушистые и гладкие, веселые и задумчивые - и на всех одна" +
             " большая мечта - встретить своего Человека и найти Дом.\n" +
             "\n" +
             "Взять домой\n" +
             "\n" +
-            "Если вы хотите взять собаку или кошку, не ищите питомник, " +
-            "в котором можно купить щенка или котенка - просто свяжитесь с нами, " +
+            "Если вы хотите взять собаку, не ищите питомник, " +
+            "в котором можно купить щенка - просто свяжитесь с нами, " +
             "и вы обязательно найдете себе самого лучшего друга. Во всем мире это уже стало доброй традицией - человек, " +
             "который решил завести питомца, обращается в приют, чтобы подарить заботу и любовь тому, " +
             "кто уже появился на свет, но ему почему-то досталась нелегкая судьба. Мы поможем вам выбрать животное с учетом ваших пожеланий и предпочтений," +
-            " с радостью познакомим со всеми нашими собаками и кошками. Все наши питомцы привиты и стерилизованы.";
+            " с радостью познакомим со всеми нашими собаками. Все наши питомцы привиты и стерилизованы.";
+
+    private final String aboutCatDescriptionText = "Приют Лапки Добра для кошек - это муниципальный приют для кошек в Астане. " +
+            "В нем живет почти 150 кошек. Большие и маленькие, пушистые и гладкие, веселые и задумчивые - и на всех одна" +
+            " большая мечта - встретить своего Человека и найти Дом.\n" +
+            "\n" +
+            "Взять домой\n" +
+            "\n" +
+            "Если вы хотите взять кошку, не ищите питомник, " +
+            "в котором можно купить котенка - просто свяжитесь с нами, " +
+            "и вы обязательно найдете себе самого лучшего друга. Во всем мире это уже стало доброй традицией - человек, " +
+            "который решил завести питомца, обращается в приют, чтобы подарить заботу и любовь тому, " +
+            "кто уже появился на свет, но ему почему-то досталась нелегкая судьба. Мы поможем вам выбрать животное с учетом ваших пожеланий и предпочтений," +
+            " с радостью познакомим со всеми нашими кошками. Все наши питомцы привиты и стерилизованы.";
 
     @Test
-    public void handleDescriptionMessage() {
-        SendMessage expected = new SendMessage(1L, aboutDescriptionText);
-        when(message.from()).thenReturn(user);
-        when(user.id()).thenReturn(1L);
-        SendMessage actual = aboutController.handleDescriptionMessage(message);
-        assertThat(actual.getParameters().get("chatId")).isEqualTo(expected.getParameters().get("chatId"));
-        assertThat(actual.getParameters().get("text")).isEqualTo(aboutDescriptionText);
-    }
-
-    @Test
-    public void handleCallbackDescriptionMessage() {
-        SendMessage expected = new SendMessage(1L, aboutDescriptionText);
+    public void handleCallbackDogDescriptionMessage() {
+        SendMessage expected = new SendMessage(1L, aboutDogDescriptionText);
         when(callbackQuery.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
-        SendMessage actual = aboutController.handleCallbackDescriptionMessage(callbackQuery);
+        SendMessage actual = aboutController.handleCallbackDogDescriptionMessage(callbackQuery);
         assertThat(actual.getParameters().get("chatId")).isEqualTo(expected.getParameters().get("chatId"));
-        assertThat(actual.getParameters().get("text")).isEqualTo(aboutDescriptionText);
+        assertThat(actual.getParameters().get("text")).isEqualTo(aboutDogDescriptionText);
+
+    }
+    @Test
+    public void handleCallbackCatDescriptionMessage() {
+        SendMessage expected = new SendMessage(1L, aboutCatDescriptionText);
+        when(callbackQuery.from()).thenReturn(user);
+        when(user.id()).thenReturn(1L);
+        SendMessage actual = aboutController.handleCallbackCatDescriptionMessage(callbackQuery);
+        assertThat(actual.getParameters().get("chatId")).isEqualTo(expected.getParameters().get("chatId"));
+        assertThat(actual.getParameters().get("text")).isEqualTo(aboutCatDescriptionText);
 
     }
 
     @Test
-    public void handleAddressAndHoursMessage() {
+    public void handleCallbackDogAddressAndHoursMessage() {
         SendMessage expected = new SendMessage(1L, "");
-        when(message.from()).thenReturn(user);
+        when(callbackQuery.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
-        SendMessage actual = aboutController.handleAddressAndHoursMessage(message);
+        SendMessage actual = aboutController.handleCallbackDogAddressAndHoursMessage(callbackQuery);
         assertThat(actual.getParameters().get("chatId")).isEqualTo(expected.getParameters().get("chatId"));
         assertThat(actual.getParameters().get("text")).isEqualTo("");
     }
 
     @Test
-    public void handleCallbackAddressAndHoursMessage() {
+    public void handleCallbackCatAddressAndHoursMessage() {
         SendMessage expected = new SendMessage(1L, "");
         when(callbackQuery.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
-        SendMessage actual = aboutController.handleCallbackAddressAndHoursMessage(callbackQuery);
+        SendMessage actual = aboutController.handleCallbackCatAddressAndHoursMessage(callbackQuery);
         assertThat(actual.getParameters().get("chatId")).isEqualTo(expected.getParameters().get("chatId"));
         assertThat(actual.getParameters().get("text")).isEqualTo("");
     }
