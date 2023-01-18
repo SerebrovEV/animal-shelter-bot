@@ -1,10 +1,9 @@
 package com.animalshelter.animalshelterbot.repository;
 
-import com.animalshelter.animalshelterbot.model.BotUser;
+import com.animalshelter.animalshelterbot.model.CatReport;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BotUserRepository extends JpaRepository<BotUser, Long> {
-    BotUser findBotUserByChatId(Long id);
+public interface CatReportRepository extends JpaRepository<CatReport, Long> {
 }
