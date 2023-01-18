@@ -1,16 +1,16 @@
 package com.animalshelter.animalshelterbot.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Date;
+import java.util.Collection;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @Entity
 public class AdoptedCat {
     @Id
@@ -19,8 +19,17 @@ public class AdoptedCat {
     private String catName;
     private Date adoptionDate;
     private Integer trialPeriod;
+    @ManyToOne
+    @JoinColumn(name = "cat_user_id")
+    private CatUser catUser;
+    @OneToMany(mappedBy = "adoptedCat")
+    private Collection<CatReport> catReports;
 
     public AdoptedCat() {
+    }
+
+    public AdoptedCat(String catName) {
+        this.catName = catName;
     }
 
     public AdoptedCat(String catName, Date adoptionDate, Integer trialPeriod){
@@ -30,10 +39,9 @@ public class AdoptedCat {
     }
 
     @Override
-
     public String toString(){
-        return "Кошка по кличке:" + catName + "взято из приюта:" + adoptionDate
-                + "период адаптации:" + trialPeriod;
+        return "Кошка: ID: "+ id + ", имя: " + catName + ", взята из приюта: " + adoptionDate
+                + ", период адаптации: " + trialPeriod;
     }
 
 }

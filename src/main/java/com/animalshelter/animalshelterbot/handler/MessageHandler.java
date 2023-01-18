@@ -5,12 +5,10 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.request.SendMessage;
-import com.pengrad.telegrambot.response.SendResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,8 +22,11 @@ public class MessageHandler {
     private final List<CommandController> controllers;
     private final TelegramBot bot;
 
+    /**
+     * Обработка сообщения от {@link TelegramBotUpdateListener}
+     * */
     public void handleMessage(Message message) {
-        if(message.text() == null) {
+        if(message.text() == null && message.caption() == null) {
             return;
         }
 
@@ -38,6 +39,9 @@ public class MessageHandler {
         }
     }
 
+    /**
+     * Обработка контроллера при получении сообщения от {@link TelegramBotUpdateListener}
+     * */
     public void processController(CommandController commandController, Message message) throws InvocationTargetException, IllegalAccessException {
         for(Method method: commandController.getClass().getDeclaredMethods()){
             if(!method.isAnnotationPresent(Command.class)) {
@@ -46,22 +50,36 @@ public class MessageHandler {
 
             Command annotation = method.getAnnotation(Command.class);
 
+            String text;
+
+            if(message.text() != null) {
+                text = message.text();
+            } else {
+                text = message.caption();
+            }
+
             Pattern pattern = Pattern.compile(annotation.pattern());
-            Matcher matcher = pattern.matcher(message.text());
+            Matcher matcher = pattern.matcher(text);
 
             if(annotation.chatId() != 0 && annotation.chatId() != message.chat().id()) {
                 continue;
             }
 
-            if(!(annotation.name().equals(message.text()) || matcher.matches())) {
+            if(!(annotation.name().equals(text) || matcher.matches())) {
                 continue;
             }
 
-            SendMessage sendMessage = (SendMessage) method.invoke(commandController, message);
-            SendResponse sendResponse = bot.execute(sendMessage);
+            ((List<SendMessage>) (
+                    (method.getReturnType() == SendMessage.class) ?
+                            List.of((SendMessage) method.invoke(commandController, message)):
+                            method.invoke(commandController, message)
+            )).forEach(bot::execute);
         }
     }
 
+    /**
+     * Обработка коллбека от {@link TelegramBotUpdateListener}
+     * */
     public void handleCallback(CallbackQuery callbackQuery) throws InvocationTargetException, IllegalAccessException {
         if(callbackQuery.data() == null) {
             return;
@@ -72,6 +90,9 @@ public class MessageHandler {
         }
     }
 
+    /**
+     * Обработка контроллера при получении коллбека от {@link TelegramBotUpdateListener}
+     * */
     public void processController(CommandController commandController, CallbackQuery callbackQuery) throws InvocationTargetException, IllegalAccessException {
         for(Method method: commandController.getClass().getDeclaredMethods()){
             if(!method.isAnnotationPresent(Callback.class)) {
@@ -88,9 +109,11 @@ public class MessageHandler {
                 continue;
             }
 
-            SendMessage sendMessage = (SendMessage) method.invoke(commandController, callbackQuery);
-
-            SendResponse sendResponse = bot.execute(sendMessage);
+            ((List<SendMessage>) (
+                    (method.getReturnType() == SendMessage.class) ?
+                            List.of((SendMessage) method.invoke(commandController, callbackQuery)):
+                            method.invoke(commandController, callbackQuery)
+            )).forEach(bot::execute);
         }
     }
 }

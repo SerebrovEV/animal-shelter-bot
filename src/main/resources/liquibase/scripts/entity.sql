@@ -52,3 +52,8 @@ create table cat_report
     photo       text,
     text        text
 );
+--changeset sev:4
+ALTER TABLE dog_report
+    ADD COLUMN adopted_dog_id BIGINT REFERENCES adopted_dog(id);
+ALTER TABLE cat_report
+    ADD COLUMN adopted_cat_id BIGINT REFERENCES adopted_cat(id);
