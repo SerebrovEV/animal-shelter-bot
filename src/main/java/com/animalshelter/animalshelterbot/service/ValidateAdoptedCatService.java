@@ -2,7 +2,6 @@ package com.animalshelter.animalshelterbot.service;
 
 import com.animalshelter.animalshelterbot.controllers.AdminCatController;
 import com.animalshelter.animalshelterbot.model.AdoptedCat;
-import com.animalshelter.animalshelterbot.controllers.CatUserController;
 import com.animalshelter.animalshelterbot.model.CatUser;
 import com.animalshelter.animalshelterbot.organisation.Callbacks;
 import com.pengrad.telegrambot.TelegramBot;
@@ -20,8 +19,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * <i> Сервис для обработки входящих сообщений с контроллеров
- * {@link CatUserController} и  из телеграма
+ * <i> Сервис для обработки входящих сообщений с контроллерf
+ * {@link AdminCatController}
  * и подготовки ответного сообщения пользователю</i>
  */
 @Service

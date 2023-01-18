@@ -1,5 +1,6 @@
 package com.animalshelter.animalshelterbot.service;
 
+import com.animalshelter.animalshelterbot.controllers.AdminCatController;
 import com.animalshelter.animalshelterbot.model.CatUser;
 import com.animalshelter.animalshelterbot.repository.CatUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +16,9 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
-
+/**
+ * Тесты для проверки работоспособности {@link CatUserService}
+ */
 @ExtendWith(MockitoExtension.class)
 class CatUserServiceTest {
 

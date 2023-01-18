@@ -1,5 +1,6 @@
 package com.animalshelter.animalshelterbot.service;
 
+import com.animalshelter.animalshelterbot.controllers.AdminCatController;
 import com.animalshelter.animalshelterbot.model.CatUser;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Message;
@@ -15,7 +16,9 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-
+/**
+ * Тесты для проверки работоспособности {@link ValidatorCatUserService}
+ */
 @ExtendWith(MockitoExtension.class)
 class ValidatorCatUserServiceTest {
 

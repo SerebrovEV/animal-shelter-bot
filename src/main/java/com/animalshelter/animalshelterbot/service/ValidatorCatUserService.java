@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 /**
  * <i> Сервис для обработки входящих сообщений с контроллеров
- * {@link CatUserController} и  из телеграма
+ * {@link CatUserController} и {@link AdminCatUserController}
  * и подготовки ответного сообщения пользователю</i>
  */
 
@@ -44,7 +44,7 @@ public class ValidatorCatUserService {
     private static final String catButtonText = "Вернуться";
 
     /**
-     * <i> Метод для проверки и обработки входящего сообщения от пользователя.
+     * <i> Метод для проверки и обработки входящего сообщения от усыновителя.
      * <br>
      * Запрос выполняется через метод {@link CatUserController#handleAddCatUser(Message)}. </i>
      *
@@ -74,9 +74,9 @@ public class ValidatorCatUserService {
 
 
     /**
-     * <i> Метод для проверки и обработки входящего сообщения на добавление Id chat от пользователя.
+     * <i> Метод для проверки и обработки входящего сообщения на добавление Id chat от усыновителя.
      * <br>
-     * Запрос выполняется через метод {@link CatUserController#handleAddCatUser(Message)}. </i>
+     * Запрос выполняется через метод {@link CatUserController#handleAddCatUserIDChat(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
