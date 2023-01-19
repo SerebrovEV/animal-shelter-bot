@@ -20,43 +20,46 @@ class GeneralSafetyControllerTest {
     GeneralSafetyController generalSafetyController;
 
     @Mock
-    Message message;
-
-    @Mock
     User user;
 
     @Mock
     CallbackQuery callbackQuery;
 
     private final String generalSafetyInfoText =
-            "Рекоменации по технике безопасности:\n"
+            "Рекомендации по технике безопасности:\n"
                     + "    - удобная обувь с нескользящей подошвой;\n"
                     + "    - одежда закрытого типа;\n"
                     + "    - за ограждения не заходить;\n"
                     + "    - животных с рук не кормить;\n"
-                    + "    - в вальеры c животными руки не сувать.";
+                    + "    - в вольеры c животными руки не совать.";
+
 
     @Test
-    public void handleSafetyMessage() {
-
-        SendMessage expected = new SendMessage(1L, generalSafetyInfoText);
-        when(message.from()).thenReturn(user);
-        when(user.id()).thenReturn(1L);
-        SendMessage actual = generalSafetyController.handleSafetyMessage(message);
-        assertThat(actual.getParameters().get("chat_id")).isEqualTo(1L);
-        assertThat(actual.getParameters().get("text")).isEqualTo(generalSafetyInfoText);
-    }
-
-    @Test
-    public void handleCallbackMessage() {
+    public void handleCallbackSafetyDogRules() {
 
         SendMessage expected = new SendMessage(1L, generalSafetyInfoText);
 
         when(callbackQuery.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
-        SendMessage actual = generalSafetyController.handleCallbackMessage(callbackQuery);
-        assertThat(actual.getParameters().get("chat_id")).isEqualTo(1L);
-        assertThat(actual.getParameters().get("text")).isEqualTo(generalSafetyInfoText);
+
+        SendMessage actual = generalSafetyController.handleCallbackSafetyDogRules(callbackQuery);
+
+        assertThat(actual.getParameters().get("chat_id")).isEqualTo(expected.getParameters().get("chat_id"));
+        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
+    }
+
+    @Test
+    public void handleCallbackSafetyCatRules() {
+
+        SendMessage expected = new SendMessage(1L, generalSafetyInfoText);
+
+        when(callbackQuery.from()).thenReturn(user);
+        when(user.id()).thenReturn(1L);
+
+        SendMessage actual = generalSafetyController.handleCallbackSafetyCatRules(callbackQuery);
+
+        assertThat(actual.getParameters().get("chat_id")).isEqualTo(expected.getParameters().get("chat_id"));
+        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
     }
 
 }
