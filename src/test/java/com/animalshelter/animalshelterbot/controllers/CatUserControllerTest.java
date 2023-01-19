@@ -18,7 +18,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-
+/**
+ * Тесты для проверки работоспособности {@link CatUserController}
+ */
 @ExtendWith(MockitoExtension.class)
 class CatUserControllerTest {
     @InjectMocks
@@ -41,20 +43,8 @@ class CatUserControllerTest {
     @Test
     void handleAddMessage() {
         SendMessage expected = new SendMessage(1L, ADD_MESSAGE);
-        when(message.from()).thenReturn(user);
-        when(user.id()).thenReturn(1L);
-        SendMessage actual = out.handleAddMessage(message);
-
-        assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
-        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
-    }
-
-    @Test
-    void handleAddMessageCat() {
-        SendMessage expected = new SendMessage(1L, ADD_MESSAGE);
         when(callbackQuery.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
-
         SendMessage actual = out.handleAddMessageCat(callbackQuery);
 
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
@@ -71,6 +61,20 @@ class CatUserControllerTest {
         when(validatorCatUserService.validateCatUser(any())).thenReturn(catUser.toStringUser());
 
         SendMessage actual = out.handleAddCatUser(message);
+        assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
+        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
+    }
+
+    @Test
+    void handleAddCatUserIDChat() {
+        CatUser catUser = new CatUser("Test", 89871234567L, 1L);
+        SendMessage expected = new SendMessage(1L, catUser.toStringUser());
+        when(message.from()).thenReturn(user);
+        when(user.id()).thenReturn(1L);
+
+        when(validatorCatUserService.validateCatUserIdChat(any())).thenReturn(catUser.toStringUser());
+
+        SendMessage actual = out.handleAddCatUserIDChat(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
     }

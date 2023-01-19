@@ -42,7 +42,7 @@ public class DogUser {
         return "Усыновитель: " +
                 "id = " + id +
                 ", Имя = '" + userName + '\'' +
-                ", Номер телефона = " + phoneNumber + "\n";
+                ", Номер телефона = " + phoneNumber + ".\n";
     }
 
     public String toStringUser(){
