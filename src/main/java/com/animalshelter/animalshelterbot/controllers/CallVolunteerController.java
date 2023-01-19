@@ -3,11 +3,13 @@ package com.animalshelter.animalshelterbot.controllers;
 import com.animalshelter.animalshelterbot.handler.Callback;
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
+import com.animalshelter.animalshelterbot.organisation.Callbacks;
 import com.animalshelter.animalshelterbot.sender.TelegramBotSender;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.MessageEntity;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.request.SendPhoto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -32,7 +34,7 @@ import java.util.Map;
  *   <li>Команда с именем {@link #STOP_CHAT}, отключает пользователя от волонтеров</li>
  *   <li>Команда с именем {@link #NEW_REQUEST}, Вызывается автоматически, когда канал добавляет обсуждение в группу</li>
  *   <li>Команда с паттерном {@link #PATTERN}, Принимает все сообщения, кроме тех, которые начинаются с "/"</li>
- *   <li>Коллбэк {@link #CALL_VOLUNTEER_CALLBACK}, подключает пользователя к чату волонтеров</li>
+ *   <li>Коллбэк {@link Callbacks#CAT_CALL_VOLUNTEER}, подключает пользователя к чату волонтеров</li>
  *  </ul>
  */
 @Component
@@ -44,8 +46,6 @@ public class CallVolunteerController implements CommandController {
 
     @Value("${telegram.volunteer.chanel.id}")
     private Long VOLUNTEER_CHANEL_ID;
-
-    public static final String CALL_VOLUNTEER_CALLBACK = "call_volunteer";
 
     public static final String STOP_CHAT = "/stopChat";
 
@@ -112,10 +112,15 @@ public class CallVolunteerController implements CommandController {
                 // если внутри канала общаемся
                 return new SendMessage(message.from().id(), "");
             } else {
-                // По threadId ищем комк переслать
+                // По threadId ищем кому переслать
                 int thread = message.replyToMessage().messageThreadId();
                 for (Map.Entry<Long, Integer> entry : volunteerChatEnable.entrySet()) {
                     if (entry.getValue() == thread) {
+                        if (message.photo() != null) {
+                            telegramBotSender.telegramSendPhoto(new SendPhoto(entry.getKey(), message.photo()[0].fileId())
+                                    .caption(message.caption()));
+                            return new SendMessage(entry.getKey(), "");
+                        }
                         return new SendMessage(entry.getKey(), message.text());
                     }
                 }
@@ -124,6 +129,11 @@ public class CallVolunteerController implements CommandController {
             // Передаем сообщение от пользователя в канал
             // Проверяем запрашивал ли пользователь запос в чат
             if (volunteerChatEnable.containsKey(message.chat().id())) {
+                if (message.photo() != null) {
+                    telegramBotSender.telegramSendPhoto(new SendPhoto(VOLUNTEER_CHAT_ID, message.photo()[0].fileId())
+                            .caption(message.caption()).replyToMessageId(volunteerChatEnable.get(message.chat().id())));
+                    return new SendMessage(message.chat().id(), "");
+                }
                 return new SendMessage(VOLUNTEER_CHAT_ID, message.text())
                         .replyToMessageId(volunteerChatEnable.get(message.chat().id()));
             } else {
@@ -133,7 +143,7 @@ public class CallVolunteerController implements CommandController {
         return new SendMessage(message.chat().id(), "");
     }
 
-    @Callback(name = CALL_VOLUNTEER_CALLBACK)
+    @Callback(name = Callbacks.CAT_CALL_VOLUNTEER)
     public SendMessage handleCallbackMessage(CallbackQuery callbackQuery) {
         // Проверяем, был ли запрос ранее, чтобы не создавать новую тему, пока старый не закрыт
         if (volunteerChatEnable.containsKey(callbackQuery.from().id())) {
