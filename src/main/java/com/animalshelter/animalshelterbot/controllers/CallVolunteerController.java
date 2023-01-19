@@ -69,7 +69,7 @@ public class CallVolunteerController implements CommandController {
 
 
     /**
-     * Комманда на прекращение общения с сервисной службой. Может быть выполнена только на стороне сервиса.
+     * Команда на прекращение общения с сервисной службой. Может быть выполнена только на стороне сервиса.
      */
     @Command(name = STOP_CHAT)
     public SendMessage handleStopChat(Message message) {
@@ -127,7 +127,7 @@ public class CallVolunteerController implements CommandController {
             }
         } else {
             // Передаем сообщение от пользователя в канал
-            // Проверяем запрашивал ли пользователь запос в чат
+            // Проверяем, запрашивал ли пользователь запрос в чат
             if (volunteerChatEnable.containsKey(message.chat().id())) {
                 if (message.photo() != null) {
                     telegramBotSender.telegramSendPhoto(new SendPhoto(VOLUNTEER_CHAT_ID, message.photo()[0].fileId())
