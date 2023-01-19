@@ -43,9 +43,6 @@ public class AdminDogUserController implements CommandController {
 
     private static final String FIND_CONTACT_PATTERN = "Найти СП ([\\d]+)";
 
-    //Список id чатов волонтеров для администрирования
-  //  @Value("${telegram.volunteer.chat.id}")
-//    private Long VOLUNTEER_CHAT_ID
 
     /**
      * <i>Метод для получения инструкции по использованию команд администратора.
@@ -56,7 +53,6 @@ public class AdminDogUserController implements CommandController {
      */
     @Command(name = "/infoAboutAdminDogUser")
     public SendMessage handleInfoAboutAdminDogUser(Message message) {
-        //  if(VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
         LOG.warn("Администратор {} запросил инструкцию по использованию бота", idAdmin);
         return new SendMessage(idAdmin, ADMIN_COMMAND);
@@ -73,7 +69,6 @@ public class AdminDogUserController implements CommandController {
      */
     @Command(pattern = SAVE_CONTACT_PATTERN)
     public SendMessage handleCreateDogUser(Message message) {
-        //  if(VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} сохраняет контакт усыновителя в базу данных приюта для собак", idAdmin);
         String answer = validatorDogUserService.validateDogUserFromAdmin(message);
@@ -90,7 +85,6 @@ public class AdminDogUserController implements CommandController {
      */
     @Command(pattern = FIND_CONTACT_PATTERN)
     public SendMessage handleGetDogUser(Message message) {
-        //  if(VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запрашивает контакт усыновителя в базе данных приюта для собак", idAdmin);
         String answer = validatorDogUserService.validateGetDogUserFromAdmin(message);
@@ -107,7 +101,6 @@ public class AdminDogUserController implements CommandController {
      */
     @Command(pattern = DELETE_CONTACT_PATTERN)
     public SendMessage handleDeleteDogUser(Message message) {
-        //  if(VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
         LOG.warn("Администратор {} запросил удаление усыновителя из базы данных приюта для собак", idAdmin);
         String answer = validatorDogUserService.validateDeleteDogUserFromAdmin(message);
@@ -124,7 +117,6 @@ public class AdminDogUserController implements CommandController {
      */
     @Command(pattern = EDIT_CONTACT_PATTERN)
     public SendMessage handleEditDogUser(Message message) {
-        //  if(VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
         LOG.warn("Администратор {} изменяет контакт усыновителя в базе данных приюта для собак", idAdmin);
         String answer = validatorDogUserService.validateEditDogUserFromAdmin(message);
@@ -141,7 +133,6 @@ public class AdminDogUserController implements CommandController {
      */
     @Command(name = "/getAllDogUser")
     public SendMessage handleGetAllDogUser(Message message) {
-        //  if(VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запросил всех пользователей из базы данных приюта для собак", idAdmin);
         List<DogUser> allUsers = dogUserService.getAllDogUser();

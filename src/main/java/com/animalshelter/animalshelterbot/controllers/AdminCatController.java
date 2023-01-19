@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,9 +44,6 @@ public class AdminCatController implements CommandController {
     private static final String RETURN_CAT_PATTERN = "Вернуть к ([\\d]+)";
     private static final String EXTEND_CAT_PATTERN = "Продлить к ([\\d]+) на ([\\d]+)";
 
-    //Список id чатов волонтеров для администрирования
-//    @Value("${telegram.volunteer.chat.id}")
-//    private Long VOLUNTEER_CHAT_ID;
 
     /**
      * <i>Метод для получения инструкции по использованию команд администратора.
@@ -58,7 +54,6 @@ public class AdminCatController implements CommandController {
      */
     @Command(name = "/infoAboutAdminCat")
     public SendMessage handleInfoAboutAdminCat(Message message) {
-        //   if (VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запросил инструкцию по использованию бота", idAdmin);
         return new SendMessage(idAdmin, ADMIN_COMMAND);
@@ -74,7 +69,6 @@ public class AdminCatController implements CommandController {
      */
     @Command(pattern = SAVE_CAT_PATTERN)
     public SendMessage handleCreateCat(Message message) {
-        //  if(VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} сохраняет кошку в базу данных приюта для кошек", idAdmin);
         String answer = validateAdoptedCatService.validateAddCat(message);
@@ -90,7 +84,6 @@ public class AdminCatController implements CommandController {
      */
     @Command(pattern = DELETE_CAT_PATTERN)
     public SendMessage handleDeleteCat(Message message) {
-        //  if(VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
         LOG.warn("Администратор {} удаляет кошку из базы данных приюта для кошек", idAdmin);
         String answer = validateAdoptedCatService.validateDeleteCat(message);
@@ -106,7 +99,6 @@ public class AdminCatController implements CommandController {
      */
     @Command(pattern = FIND_CAT_PATTERN)
     public SendMessage handleGetCat(Message message) {
-        //  if(VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} выполняет поиск кошки в базе данных приюта для кошек", idAdmin);
         String answer = validateAdoptedCatService.validateGetCat(message);
@@ -122,7 +114,6 @@ public class AdminCatController implements CommandController {
      */
     @Command(pattern = EDIT_CAT_PATTERN)
     public SendMessage handleEditCat(Message message) {
-        //  if(VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
         LOG.warn("Администратор {} выполняет изменение кошки в базе данных приюта для кошек", idAdmin);
         String answer = validateAdoptedCatService.validateEditCat(message);
@@ -138,7 +129,6 @@ public class AdminCatController implements CommandController {
      */
     @Command(name = "/getAllCat")
     public List<SendMessage> handleGetAllCat(Message message) {
-        //  if(VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запросил всех кошек в базе данных приюта для кошек", idAdmin);
         List<AdoptedCat> answer = adoptedCatService.getAllCat();
@@ -156,7 +146,6 @@ public class AdminCatController implements CommandController {
      */
     @Command(name = "/getAllFreeCat")
     public List<SendMessage> handleGetAllFreeCat(Message message) {
-        //  if(VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запросил всех свободных кошек в базе данных приюта для кошек", idAdmin);
         List<AdoptedCat> answer = adoptedCatService.getAllFreeCat();
@@ -174,7 +163,6 @@ public class AdminCatController implements CommandController {
      */
     @Command(name = "/getAllBusyCat")
     public List<SendMessage> handleGetAllBusyCat(Message message) {
-        //  if(VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запросил всех усыновленных кошек в базе данных приюта для кошек", idAdmin);
         List<AdoptedCat> answer = adoptedCatService.getAllBusyCat();
@@ -193,7 +181,6 @@ public class AdminCatController implements CommandController {
      */
     @Command(name = "/getAllCatWithEndPeriod")
     public List<SendMessage> handleGetAllCatWithEndPeriod(Message message) {
-        //  if(VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запросил всех усыновленных кошек с окончанием испытательного срока в базе данных приюта для кошек", idAdmin);
         List<AdoptedCat> answer = adoptedCatService.getAllCatWithEndPeriod();
@@ -211,7 +198,6 @@ public class AdminCatController implements CommandController {
      */
     @Command(pattern = TAKE_CAT_PATTERN)
     public SendMessage handleTakeCat(Message message) {
-        //  if(VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} добавляет усыновителя у кошки в базе данных приюта для кошек", idAdmin);
         String answer = validateAdoptedCatService.validateTakeCat(message);
@@ -227,7 +213,6 @@ public class AdminCatController implements CommandController {
      */
     @Command(pattern = RETURN_CAT_PATTERN)
     public SendMessage handleReturnCat(Message message) {
-        //  if(VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} удаляет усыновителя у кошки в базе данных приюта для кошек", idAdmin);
         String answer = validateAdoptedCatService.validateReturnCat(message);
@@ -243,7 +228,6 @@ public class AdminCatController implements CommandController {
      */
     @Command(pattern = EXTEND_CAT_PATTERN)
     public SendMessage handleExtendCat(Message message) {
-        //  if(VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} продлевает срок адаптации для усыновителя в базе данных приюта для кошек", idAdmin);
         String answer = validateAdoptedCatService.validateExtendCat(message);
