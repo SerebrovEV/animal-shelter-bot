@@ -1,5 +1,6 @@
 package com.animalshelter.animalshelterbot.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @Entity
 public class AdoptedDog {
         @Id
@@ -40,7 +42,7 @@ public class AdoptedDog {
 
         @Override
             public String toString () {
-            return "Собака: ID: "+ id + ", имя: " + dogName + ", взята из приюта: " + trialPeriod
+            return "Собака: ID: "+ id + ", имя: " + dogName + ", взята из приюта: " + adoptionDate
             + ", период адаптации: " + trialPeriod + " дней, " + validateDogUser();
             }
         private String validateDogUser() {

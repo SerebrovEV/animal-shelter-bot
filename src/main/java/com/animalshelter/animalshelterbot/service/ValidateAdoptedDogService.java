@@ -55,7 +55,7 @@ public class ValidateAdoptedDogService {
         if (matcher.find()) {
             String name = matcher.group(5);
             AdoptedDog dog = adoptedDogService.addAdoptedDog(new AdoptedDog(name));
-            return "Добавлена запись собаки в базу данных приюта для кошек: " + dog.getDogName();
+            return "Добавлена запись собаки в базу данных приюта для собак: " + dog.getDogName();
         }
         return "Некорректный запрос";
     }
