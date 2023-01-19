@@ -68,16 +68,6 @@ class DogUserControllerTest {
 
     }
 
-//    @Test
-//    void getContactMessage() {
-//        DogUser dogUser = new DogUser("Test", 89871234567L, 1L);
-//        when(validatorDogUserService.м(any())).thenReturn(dogUser.toStringUser());
-//        SendMessage expected = new SendMessage(1L, dogUser.toStringUser());
-//
-//        SendMessage actual = out.getContactMessage(message);
-//        assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
-//        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
-//    }
 
     @Test
     void handleAddDogUser() {
