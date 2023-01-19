@@ -32,6 +32,13 @@ class StartControllerTest {
     TelegramBotSender telegramBotSender;
 
     private static final String startMenuText = "Привет! Данный бот может помочь вам взять и содержать животное из приюта. Для продолжения выберите животное:";
+    private static final String adminMenuText = "Основные команды для администратора:\n" +
+            "/infoAboutAdminCat - команда для вызова меню с информацией о работе с кошками из приюта для кошек;\n" +
+            "/infoAboutAdminDog - команда для вызова меню с информацией о работе с  собаками из приюта для собак;\n" +
+            "/infoAboutAdminCatUser - команда для вызова меню с информацией о работе с усыновителями из приюта для кошек;\n" +
+            "/infoAboutAdminDogUser - команда для вызова меню с информацией о работе с усыновителями из приюта для собак;\n" +
+            "/getCatReports - команда для вызова меню с информацией о работе с отчетами из приюта для кошек;\n" +
+            "/getDogReports - команда для вызова меню с информацией о работе с отчетами из приюта для собак.";
 
     private static final String dogMenuText = "Вы выбрали приют для собак. Для продолжения выберите раздел:";
     private static final String dogShelterInfoText = "В данном разделе можно получить информацию о приюте. Выберите, какую информацию вы хотите получить:";
@@ -140,6 +147,19 @@ class StartControllerTest {
         when(user.id()).thenReturn(1L);
 
         SendMessage actual = startController.catAdoptionInfoMenu(callbackQuery);
+
+        assertThat(actual.getParameters().get("chatId")).isEqualTo(expected.getParameters().get("chatId"));
+        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
+    }
+
+    @Test
+    public void adminHelpMenu() {
+        SendMessage expected = new SendMessage(1L, adminMenuText);
+
+        when(message.from()).thenReturn(user);
+        when(user.id()).thenReturn(1L);
+
+        SendMessage actual = startController.adminHelpMenu(message);
 
         assertThat(actual.getParameters().get("chatId")).isEqualTo(expected.getParameters().get("chatId"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));

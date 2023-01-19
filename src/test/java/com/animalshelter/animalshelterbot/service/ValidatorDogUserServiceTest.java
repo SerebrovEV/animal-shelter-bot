@@ -72,30 +72,6 @@ class ValidatorDogUserServiceTest {
         assertThat(actual).isEqualTo(expected);
     }
 
-//    @Test
-//    void validateGetUser() {
-//        DogUser dogUser = new DogUser("Тест", 89871234567L, 1L);
-//        String expected = dogUser.toStringUser();
-//        when(message.from()).thenReturn(user);
-//        when(user.id()).thenReturn(1L);
-//        when(dogUserService.getDogUserByChatId(1L)).thenReturn(dogUser);
-//        String actual = out.validateGetUser(message);
-//
-//        assertThat(actual).isEqualTo(expected);
-//    }
-//    @Test
-//    void validateGetUserNotFound() {
-//        String expected = "Клиент не найден! Пожалуйста добавьте контакты для обратной связи или" +
-//                " запросите вызов волонтера. Спасибо!";
-//
-//        when(message.from()).thenReturn(user);
-//        when(user.id()).thenReturn(1L);
-//        when(dogUserService.getDogUserByChatId(1L)).thenReturn(null);
-//        String actual = out.validateGetUser(message);
-//
-//        assertThat(actual).isEqualTo(expected);
-//
-//    }
     @Test
     void validateUserFromAdmin(){
         DogUser dogUser = new DogUser("Иван", 89871234567L);

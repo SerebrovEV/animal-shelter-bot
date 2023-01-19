@@ -10,8 +10,13 @@ import java.sql.Date;
 import java.util.Collection;
 import java.util.Optional;
 
+import java.util.List;
+
 @Repository
 public interface AdoptedCatRepository extends JpaRepository<AdoptedCat, Long> {
+    List<AdoptedCat> findAllByCatUserNotNull();
+
+    List<AdoptedCat> findAllByCatUserIsNull();
 
     Optional<AdoptedCat> findAdoptedCatByCatName(String name);
 
