@@ -18,7 +18,17 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class StartController implements CommandController {
+    //    @Value("${telegram.volunteer.chat.id}")
+    //    private Long VOLUNTEER_CHAT_ID;
+
     private static final String startMenuText = "Привет! Данный бот может помочь вам взять и содержать животное из приюта. Для продолжения выберите животное:";
+    private static final String adminMenuText = "Основные команды для администратора:\n" +
+            "/infoAboutAdminCat - команда для вызова меню с информацией о работе с кошками из приюта для кошек;\n" +
+            "/infoAboutAdminDog - команда для вызова меню с информацией о работе с  собаками из приюта для собак;\n" +
+            "/infoAboutAdminCatUser - команда для вызова меню с информацией о работе с усыновителями из приюта для кошек;\n" +
+            "/infoAboutAdminDogUser - команда для вызова меню с информацией о работе с усыновителями из приюта для собак;\n" +
+            "/getCatReports - команда для вызова меню с информацией о работе с отчетами из приюта для кошек;\n" +
+            "/getDogReports - команда для вызова меню с информацией о работе с отчетами из приюта для собак.";
 
     private static final String dogMenuText = "Вы выбрали приют для собак. Для продолжения выберите раздел:";
     private static final String dogShelterInfoText = "В данном разделе можно получить информацию о приюте. Выберите, какую информацию вы хотите получить:";
@@ -57,9 +67,11 @@ public class StartController implements CommandController {
 
     private static final String START_COMMAND = "/start";
 
+    private static final String HELP_ADMIN_COMMAND = "/adminhelp";
+
     /**
-    * Обработка команды {@value this#START_COMMAND}. Выдаёт стартовое меню
-    */
+     * Обработка команды {@value this#START_COMMAND}. Выдаёт стартовое меню
+     */
     @Command(name = START_COMMAND)
     public SendMessage startMenu(Message message) {
         return new SendMessage(message.from().id(), startMenuText)
@@ -198,4 +210,14 @@ public class StartController implements CommandController {
                         )
                 );
     }
+
+    /**
+     * Обработка команды HELP_ADMIN_COMMAND. Выдаёт меню c информацией, как управлять и пользоваться ботом
+     */
+    @Command(name = HELP_ADMIN_COMMAND)
+    public SendMessage adminHelpMenu(Message message) {
+        //   if (VOLUNTEER_CHAT_ID == message.from().id())
+        return new SendMessage(message.from().id(), adminMenuText);
+    }
+
 }

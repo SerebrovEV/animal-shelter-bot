@@ -23,17 +23,18 @@ public class CatUserService {
         return catUserRepository.save(catUser);
     }
 
-    public CatUser getCatUserByChatId(Long chatId) {
+    public Optional<CatUser> getCatUserByChatId(Long chatId) {
         return catUserRepository.findCatUserByChatId(chatId);
     }
 
-    public CatUser getCatUserByPhoneNumber(Long phoneNumber) {
+    public Optional<CatUser> getCatUserByPhoneNumber(Long phoneNumber) {
         return catUserRepository.findByPhoneNumber(phoneNumber);
     }
 
     public CatUser editCatUser(CatUser catUser) {
         return catUserRepository.save(catUser);
     }
+
     public Optional<CatUser> getCatUser(Long id) {
         Optional<CatUser> findCatUser = catUserRepository.findById(id);
         return findCatUser;

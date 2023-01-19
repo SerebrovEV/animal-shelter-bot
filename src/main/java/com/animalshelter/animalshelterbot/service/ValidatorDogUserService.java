@@ -1,6 +1,7 @@
 package com.animalshelter.animalshelterbot.service;
 
 import com.animalshelter.animalshelterbot.controllers.DogUserController;
+import com.animalshelter.animalshelterbot.controllers.AdminDogUserController;
 import com.animalshelter.animalshelterbot.model.DogUser;
 import com.pengrad.telegrambot.model.Message;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.regex.Pattern;
 
 /**
  * <i> Сервис для обработки входящих сообщений с контроллеров
- * {@link DogUserController} и {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController} из телеграма
+ * {@link DogUserController} и {@link AdminDogUserController} из телеграма
  * и подготовки ответного сообщения пользователю</i>
  */
 
@@ -24,7 +25,7 @@ public class ValidatorDogUserService {
     private final Pattern ADD_PATTERN = Pattern.compile("([\\d]{11})(\\s)([\\W]+)");
     private final Pattern FIND_AND_DELETE_PATTERN = Pattern.compile("([\\d]+)");
     private final Pattern EDIT_PATTERN = Pattern.compile("([\\d]+)(\\s)([\\d]{11})(\\s)([\\W]+)");
-   // private final Pattern DELETE_PATTERN = Pattern.compile("([\\d]+)");
+
 
     /**
      * <i> Метод для проверки и обработки входящего сообщения от пользователя.
@@ -52,27 +53,11 @@ public class ValidatorDogUserService {
         return "Некорректный запрос";
     }
 
-//    /**
-//     * <i>Метод для проверки входящего сообщения от пользователя для проверки контакта.
-//     * <br>
-//     * Запрос выполняется через метод {@link DogUserController#getContactMessage(Message)}.</i>
-//     *
-//     * @param message
-//     * @return String в зависимости от проверки сообщения
-//     */
-//    public String validateGetUser(Message message) {
-//        DogUser dogUser = dogUserService.getDogUserByChatId(message.from().id());
-//        if (dogUser != null) {
-//            return dogUser.toStringUser();
-//        }
-//        return "Клиент не найден! Пожалуйста добавьте контакты для обратной связи или" +
-//                " запросите вызов волонтера. Спасибо!";
-//    }
 
     /**
      * <i> Метод для проверки и обработки входящего сообщения на сохранение контактных данных в БД приюта для собак от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#handleCreateDogUser(Message)}. </i>
+     * Запрос выполняется через метод {@link AdminDogUserController#handleCreateDogUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
@@ -97,7 +82,7 @@ public class ValidatorDogUserService {
     /**
      * <i> Метод для проверки и обработки входящего сообщения на получение контактных данных из БД приюта собак от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#handleGetDogUser(Message)}. </i>
+     * Запрос выполняется через метод {@link AdminDogUserController#handleGetDogUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
@@ -119,7 +104,7 @@ public class ValidatorDogUserService {
     /**
      * <i> Метод для проверки и обработки входящего сообщения на удаление контактных данных в БД приюта собак от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#handleDeleteDogUser(Message)}. </i>
+     * Запрос выполняется через метод {@link AdminDogUserController#handleDeleteDogUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
@@ -141,7 +126,7 @@ public class ValidatorDogUserService {
     /**
      * <i> Метод для проверки и обработки входящего сообщения на изменение контактных данных в БД приюта собак от администратора.
      * <br>
-     * Запрос выполняется через метод {@link com.animalshelter.animalshelterbot.controllers.AdminDogUserController#handleEditDogUser(Message)}. </i>
+     * Запрос выполняется через метод {@link AdminDogUserController#handleEditDogUser(Message)}. </i>
      *
      * @param message
      * @return String в зависимости от результата обработки
