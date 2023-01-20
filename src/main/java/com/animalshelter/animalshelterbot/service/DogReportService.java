@@ -55,7 +55,7 @@ public class DogReportService {
         if (adoptedDog == null) {
             return false;
         }
-        if (adoptedDog.getDogUser().equals(dogUserRepository.findDogUserByChatId(message.from().id()))) {
+        if (adoptedDog.getDogUser().equals(dogUserRepository.findDogUserByChatId(message.from().id()).orElse(null))) {
             return true;
         }
         return false;
