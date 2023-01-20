@@ -196,7 +196,7 @@ class DogReportServiceTest {
         Message message = getMessage(json);
         AdoptedDog adoptedDog = createAdoptedDog();
         when(adoptedDogRepository.findAdoptedDogByDogName(any(String.class))).thenReturn(Optional.of(adoptedDog));
-        when(dogUserRepository.findDogUserByChatId(any(Long.class))).thenReturn(adoptedDog.getDogUser());
+        when(dogUserRepository.findDogUserByChatId(any(Long.class))).thenReturn(Optional.of(adoptedDog.getDogUser()));
         addReportToInquiry();
         SendMessage actual = dogReportService.validateReport(message);
         assertThat(actual.getParameters().get("chat_id")).isEqualTo(message.from().id());
