@@ -1,5 +1,6 @@
 package com.animalshelter.animalshelterbot.controllers;
 
+import com.animalshelter.animalshelterbot.model.CatUser;
 import com.animalshelter.animalshelterbot.model.DogUser;
 import com.animalshelter.animalshelterbot.service.DogUserService;
 import com.animalshelter.animalshelterbot.service.ValidatorDogUserService;
@@ -33,6 +34,7 @@ class AdminDogUserControllerTest {
 
     @Mock
     DogUserService dogUserService;
+    private DogUser DOG_USER;
 
     private final String ADMIN_COMMAND = "Правила использования: \n" +
             "/infoAboutAdminDogUser - команды для использования;\n" +
@@ -40,12 +42,15 @@ class AdminDogUserControllerTest {
             "Найти СП 10 - найти усыновителя с id = 10;\n" +
             "Изменить СП 10 89871234567 Миша - изменить усыновителя с id = 10;\n" +
             "Удалить СП 10 - удалить усыновителя с id = 10;\n" +
+            "Поздравить CП 2 - поздравить усыновителя с id = 2 с окончанием испытательного срока;\n" +
+            "Неудача CП 3 - направить усыновителю с id = 3 сообщение о том, что он не прошел испытательный срок;\n" +
             "/getAllDogUser - получить список всех усыновителей;\n";
 
     @BeforeEach
     public void setOut() {
         when(message.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
+        DOG_USER = new DogUser("Test", 89871234567L);
     }
 
     @Test
@@ -118,6 +123,27 @@ class AdminDogUserControllerTest {
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
 
+    }
+    @Test
+    void handleCongratulationDogUser() {
+        SendMessage expected = new SendMessage(1L, DOG_USER.toString());
+        when(validatorDogUserService.validateCongratulationDogUserFromAdmin(message)).thenReturn(DOG_USER.toString());
+
+        SendMessage actual = out.handleCongratulationDogUser(message);
+
+        assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
+        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
+    }
+
+    @Test
+    void handleReturnDogUser() {
+        SendMessage expected = new SendMessage(1L, DOG_USER.toString());
+        when(validatorDogUserService.validateReturnDogUserFromAdmin(message)).thenReturn(DOG_USER.toString());
+
+        SendMessage actual = out.handleReturnDogUser(message);
+
+        assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
+        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
     }
 
 }

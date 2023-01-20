@@ -1,5 +1,6 @@
 package com.animalshelter.animalshelterbot.controllers;
 
+import com.animalshelter.animalshelterbot.model.CatUser;
 import com.animalshelter.animalshelterbot.model.DogUser;
 import com.animalshelter.animalshelterbot.service.ValidatorDogUserService;
 import com.pengrad.telegrambot.model.CallbackQuery;
@@ -42,19 +43,6 @@ class DogUserControllerTest {
     private final String ADD_MESSAGE = "Для того, чтобы оставить контактные данные для обратной " +
             "связи отправьте сообщение в форме:\n Возьму собаку 89871234567 Иван \n и мы вам перезвоним.";
 
-
-
-    @Test
-    void handleAddMessage() {
-        SendMessage expected = new SendMessage(1L, ADD_MESSAGE);
-        when(message.from()).thenReturn(user);
-        when(user.id()).thenReturn(1L);
-        SendMessage actual = out.handleAddMessage(message);
-
-        assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
-        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
-    }
-
     @Test
     void handleAddMessageDog() {
         SendMessage expected = new SendMessage(1L, ADD_MESSAGE);
@@ -68,7 +56,6 @@ class DogUserControllerTest {
 
     }
 
-
     @Test
     void handleAddDogUser() {
         DogUser dogUser = new DogUser("Test", 89871234567L, 1L);
@@ -79,6 +66,19 @@ class DogUserControllerTest {
         when(validatorDogUserService.validateDogUser(any())).thenReturn(dogUser.toStringUser());
 
         SendMessage actual = out.handleAddDogUser(message);
+        assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
+        assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
+    }
+    @Test
+    void handleAddCatUserIDChat() {
+        DogUser dogUser = new DogUser("Test", 89871234567L, 1L);
+        SendMessage expected = new SendMessage(1L, dogUser.toStringUser());
+        when(message.from()).thenReturn(user);
+        when(user.id()).thenReturn(1L);
+
+        when(validatorDogUserService.validateDogUserIdChat(any())).thenReturn(dogUser.toStringUser());
+
+        SendMessage actual = out.handleAddDogUserIDChat(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
     }

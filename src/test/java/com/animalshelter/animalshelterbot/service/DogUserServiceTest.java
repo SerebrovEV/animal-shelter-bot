@@ -1,5 +1,6 @@
 package com.animalshelter.animalshelterbot.service;
 
+import com.animalshelter.animalshelterbot.model.CatUser;
 import com.animalshelter.animalshelterbot.model.DogUser;
 import com.animalshelter.animalshelterbot.repository.DogUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,17 +71,17 @@ class DogUserServiceTest {
         Long chatId3 = 123456782L;
 
 
-        when(dogUserRepository.findDogUserByChatId(chatId1)).thenReturn(BOT_USER1);
-        when(dogUserRepository.findDogUserByChatId(chatId2)).thenReturn(BOT_USER2);
-        when(dogUserRepository.findDogUserByChatId(chatId3)).thenReturn(BOT_USER3);
+        when(dogUserRepository.findDogUserByChatId(chatId1)).thenReturn(Optional.ofNullable(BOT_USER1));
+        when(dogUserRepository.findDogUserByChatId(chatId2)).thenReturn(Optional.ofNullable(BOT_USER2));
+        when(dogUserRepository.findDogUserByChatId(chatId3)).thenReturn(Optional.ofNullable(BOT_USER3));
 
         DogUser expected = new DogUser("Test", 89871234567L, 123456789L);
         DogUser expected2 = new DogUser("Test2", 89871234568L, 123456781L);
         DogUser expected3 = new DogUser("Test3", 89871234569L, 123456782L);
 
-        DogUser actual = out.getDogUserByChatId(BOT_USER1.getChatId());
-        DogUser actual2 = out.getDogUserByChatId(BOT_USER2.getChatId());
-        DogUser actual3 = out.getDogUserByChatId(BOT_USER3.getChatId());
+        DogUser actual = out.getDogUserByChatId(BOT_USER1.getChatId()).get();
+        DogUser actual2 = out.getDogUserByChatId(BOT_USER2.getChatId()).get();
+        DogUser actual3 = out.getDogUserByChatId(BOT_USER3.getChatId()).get();
 
         verify(dogUserRepository, times(1)).findDogUserByChatId(chatId1);
         verify(dogUserRepository, times(1)).findDogUserByChatId(chatId2);
@@ -93,7 +94,14 @@ class DogUserServiceTest {
         assertThat(actual).isEqualTo(expected);
         assertThat(actual2).isEqualTo(expected2);
         assertThat(actual3).isEqualTo(expected3);
-
+    }
+    @Test
+    void getDogUserByPhoneNumber() {
+        when(dogUserRepository.findDogUserByPhoneNumber(anyLong())).thenReturn(Optional.ofNullable(BOT_USER1));
+        DogUser expected = new DogUser("Test", 89871234567L, 123456789L);
+        DogUser actual = out.getDogUserByPhoneNumber(BOT_USER1.getPhoneNumber()).get();
+        assertThat(actual).isEqualTo(expected);
+        assertThat(actual.toString()).isEqualTo(expected.toString());
     }
 
     @Test
@@ -136,16 +144,6 @@ class DogUserServiceTest {
         verify(dogUserRepository, times(1)).deleteById(botId1);
 
     }
-
-    @Test
-    void getDogUserByPhoneNumber() {
-        when(dogUserRepository.findDogUserByPhoneNumber(anyLong())).thenReturn(BOT_USER1);
-        DogUser expected = new DogUser("Test", 89871234567L, 123456789L);
-        DogUser actual = out.getDogUserByPhoneNumber(BOT_USER1.getPhoneNumber());
-        assertThat(actual).isEqualTo(expected);
-        assertThat(actual.toString()).isEqualTo(expected.toString());
-    }
-
     @Test
     void editDogUser() {
 
