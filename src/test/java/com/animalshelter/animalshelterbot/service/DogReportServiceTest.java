@@ -227,7 +227,7 @@ class DogReportServiceTest {
 
     @Test
     void validateReportWithoutMenu() throws URISyntaxException, IOException {
-        String answer = "Если Вы хотите отправить отчет, то сделайте это через меню.";
+        String answer = "";
         String json = Files.readString(Paths.get(DogReportService.class.getResource("animal_report_photo_message.json").toURI()));
         Message message = getMessage(json);
         AdoptedDog adoptedDog = createAdoptedDog();

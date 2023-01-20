@@ -55,7 +55,7 @@ public class CatReportService {
         if (adoptedCat == null) {
             return false;
         }
-        if (adoptedCat.getCatUser().equals(catUserRepository.findCatUserByChatId(message.from().id()))) {
+        if (adoptedCat.getCatUser().equals(catUserRepository.findCatUserByChatId(message.from().id()).orElse(null))) {
             return true;
         }
         return false;
@@ -213,7 +213,9 @@ public class CatReportService {
                                 new InlineKeyboardButton("Отправлю позже").callbackData(Callbacks.CAT_ADD_REPORT_NO.name())
                         ));
         } else if (!reportTemp.containsKey(message.from().id())) {
-            return new SendMessage(message.from().id(), "Если Вы хотите отправить отчет, то сделайте это через меню.");
+            // TODO Если пользователь отправил фото, но не через меню
+            //return new SendMessage(message.from().id(), "Если Вы хотите отправить отчет, то сделайте это через меню.");
+            return new SendMessage(message.from().id(), "");
         } else {
             return new SendMessage(message.from().id(), "");
         }

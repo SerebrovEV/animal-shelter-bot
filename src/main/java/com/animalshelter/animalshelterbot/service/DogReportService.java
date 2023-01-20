@@ -213,7 +213,9 @@ public class DogReportService {
                             new InlineKeyboardButton("Отправлю позже").callbackData(Callbacks.DOG_ADD_REPORT_NO.name())
                     ));
         } else if (!reportTemp.containsKey(message.from().id())) {
-            return new SendMessage(message.from().id(), "Если Вы хотите отправить отчет, то сделайте это через меню.");
+            // TODO Если пользователь отправил фото, но не через меню
+//            return new SendMessage(message.from().id(), "Если Вы хотите отправить отчет, то сделайте это через меню.");
+            return new SendMessage(message.from().id(), "");
         } else {
             return new SendMessage(message.from().id(), "");
         }

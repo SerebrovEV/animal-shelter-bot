@@ -195,7 +195,7 @@ class CatReportServiceTest {
         Message message = getMessage(json);
         AdoptedCat adoptedCat = createAdoptedCat();
         when(adoptedCatRepository.findAdoptedCatByCatName(any(String.class))).thenReturn(Optional.of(adoptedCat));
-        when(catUserRepository.findCatUserByChatId(any(Long.class))).thenReturn(adoptedCat.getCatUser());
+        when(catUserRepository.findCatUserByChatId(any(Long.class))).thenReturn(Optional.of(adoptedCat.getCatUser()));
         addReportToInquiry();
         SendMessage actual = catReportService.validateReport(message);
         assertThat(actual.getParameters().get("chat_id")).isEqualTo(message.from().id());
@@ -226,7 +226,7 @@ class CatReportServiceTest {
 
     @Test
     void validateReportWithoutMenu() throws URISyntaxException, IOException {
-        String answer = "Если Вы хотите отправить отчет, то сделайте это через меню.";
+        String answer = "";
         String json = Files.readString(Paths.get(CatReportService.class.getResource("animal_report_photo_message.json").toURI()));
         Message message = getMessage(json);
         AdoptedCat adoptedCat = createAdoptedCat();

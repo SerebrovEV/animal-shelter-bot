@@ -18,6 +18,6 @@ public interface AdoptedDogRepository extends JpaRepository<AdoptedDog, Long> {
     @Query(value =
             "select ad from AdoptedDog ad " +
                     "left join DogReport dr on ad.id = dr.adoptedDog.id and dr.date = :date " +
-                    "where dr.id is null")
+                    "where dr.id is null and ad.adoptionDate < :date")
     Collection<AdoptedDog> findMissingReportAdoptedDog(@Param("date") Date date);
 }
