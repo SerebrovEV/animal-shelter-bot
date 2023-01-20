@@ -49,7 +49,9 @@ public enum Callbacks {
     CAT_DISABLED_HOUSING_RECOMMENDATION("cat_disabled_housing_recommendation"),
     CAT_DECLINE_CAUSES("cat_cynologist_recommendation"),
     CAT_ADD_REPORT_YES("createReport"),
-    CAT_ADD_REPORT_NO("nothing")
+    CAT_ADD_REPORT_NO("nothing"),
+    DOG_ADD_REPORT_YES("createReport"),
+    DOG_ADD_REPORT_NO("nothing")
     ;
 
     private final String name;

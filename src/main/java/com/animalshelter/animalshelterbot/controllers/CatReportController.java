@@ -27,15 +27,15 @@ public class CatReportController implements CommandController {
     private final String GET_CAT_DATE_REPORT = "/getCatDayReport (\\d{4}-\\d{2}-\\d{2})";
     private final String DELETE_CAT_FROM_REPORT_BY_CAT_ID = "/deleteCatsFromReportById ([\\d]+)";
     private final String DELETE_CAT_FROM_REPORT_BY_ID = "/deleteCatReportId ([\\d]+)";
-    private final String GET_CATS_FROM_BAD_USERS = "/getBadUsers (\\d{4}-\\d{2}-\\d{2})";
-    private final String SEND_WARNING_TO_USER = "/sendWarning (\\d+)";
+    private final String GET_CATS_FROM_BAD_USERS = "/getCatBadUsers (\\d{4}-\\d{2}-\\d{2})";
+    private final String SEND_WARNING_TO_USER = "/sendCatWarning (\\d+)";
     private final String GET_HELP = "/catReportHelp";
     private final String HELP_MESSAGE = "*/getCatReports* - выводит все отчеты из БД\n" +
-            "*/getCatDayReport 2021-01-12* - выводит отчеты из БД за указанную дату\n" +
+            "*/getCatDayReport 2023-01-12* - выводит отчеты из БД за указанную дату\n" +
             "*/deleteCatsFromReportById 1* - удаляет из БД всех кошек по id = 1(adopted_cat)\n" +
             "*/deleteCatReportId 1* - удаляет из БД запись с id = 1\n" +
-            "*/getBadUsers 2021-01-12* - выводит список кошек, у которых нет записи в БД на дату\n" +
-            "*/sendWarning 1* - отправляет предупреждение владельцу по id кошки(adopted_cat)\n";
+            "*/getCatBadUsers 2023-01-12* - выводит список кошек, у которых нет записи в БД на дату\n" +
+            "*/sendCatWarning 1* - отправляет предупреждение владельцу по id кошки(adopted_cat)\n";
 
 
     @Command(name = GET_HELP)
@@ -124,7 +124,7 @@ public class CatReportController implements CommandController {
     }
 
     /**
-     * Выводит список питомце, которые не имеют отчетов в указанную дату.
+     * Выводит список питомцев, которые не имеют отчетов в указанную дату.
      *
      * @return Список питомцев, не имеющих отчет
      */

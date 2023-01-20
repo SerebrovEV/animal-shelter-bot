@@ -23,6 +23,6 @@ public interface AdoptedCatRepository extends JpaRepository<AdoptedCat, Long> {
     @Query(value =
             "select ac from AdoptedCat ac " +
             "left join CatReport cr on ac.id = cr.adoptedCat.id and cr.date = :date " +
-                    "where cr.id is null ")
+                    "where cr.id is null and ac.adoptionDate < :date ")
     Collection<AdoptedCat> findMissingReportAdoptedCat(@Param("date") Date date);
 }
