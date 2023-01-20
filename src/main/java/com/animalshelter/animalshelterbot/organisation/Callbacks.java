@@ -11,12 +11,11 @@ public enum Callbacks {
     DOG_INFO_MENU("dog_info_menu"),
     DOG_ADOPTION_INFO_MENU("dog_adoption_info_menu"),
     DOG_REPORT("dog_report"),
-    DOG_CALL_VOLUNTEER("dog_call_volunteer"),
 
     CAT_INFO_MENU("cat_info_menu"),
     CAT_ADOPTION_INFO_MENU("cat_adoption_info_menu"),
     CAT_REPORT("cat_report"),
-    CAT_CALL_VOLUNTEER("cat_call_volunteer"),
+    CALL_VOLUNTEER("call_volunteer"),
 
     DOG_SHELTER_INFO("dog_shelter_info"),
     DOG_SCHEDULE_INFO("dog_schedule_info"),
@@ -48,6 +47,10 @@ public enum Callbacks {
     CAT_HOUSING_RECOMMENDATION("cat_housing_recommendation"),
     CAT_DISABLED_HOUSING_RECOMMENDATION("cat_disabled_housing_recommendation"),
     CAT_DECLINE_CAUSES("cat_cynologist_recommendation"),
+    CAT_ADD_REPORT_YES("createReport"),
+    CAT_ADD_REPORT_NO("nothing"),
+    DOG_ADD_REPORT_YES("createReport"),
+    DOG_ADD_REPORT_NO("nothing")
     ;
 
     private final String name;

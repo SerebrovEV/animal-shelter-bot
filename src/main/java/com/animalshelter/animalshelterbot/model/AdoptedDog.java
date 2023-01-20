@@ -14,19 +14,19 @@ import java.util.Optional;
 @EqualsAndHashCode
 @Entity
 public class AdoptedDog {
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
-        private String dogName;
-        private Date adoptionDate;
-        private Integer trialPeriod;
-        @ManyToOne
-        @JoinColumn(name = "dog_user_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String dogName;
+    private Date adoptionDate;
+    private Integer trialPeriod;
 
-        private DogUser dogUser;
+    @ManyToOne
+    @JoinColumn(name = "dog_user_id")
+    private DogUser dogUser;
 
-        @OneToMany(mappedBy = "adoptedDog")
-        private Collection<DogReport> dogReports;
+    @OneToMany(mappedBy = "adoptedDog")
+    private Collection<DogReport> dogReports;
 
         public AdoptedDog() {
         }

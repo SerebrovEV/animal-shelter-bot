@@ -24,7 +24,7 @@ import java.util.Map;
  * Для работы контроллера необходимо: <br>
  * <li>Создать группу волонтеров в telegram и подключить бота (админом).</li>
  * <li>Создать канал волонтеров, добавить созданную группу в список обсуждений подключить бота (админом).</li>
- * <li>Получить значения id группы с помощтю бота Get My ID.</li>
+ * <li>Получить значения id группы с помощью бота Get My ID.</li>
  * <li>Опубликовать в канале любое сообщение. Тогда в группе появится информация от @getmyid_bot с id-ками.</li>
  * <li>Удалить @getmyid_bot </li>
  * </ul>
@@ -34,7 +34,7 @@ import java.util.Map;
  *   <li>Команда с именем {@link #STOP_CHAT}, отключает пользователя от волонтеров</li>
  *   <li>Команда с именем {@link #NEW_REQUEST}, Вызывается автоматически, когда канал добавляет обсуждение в группу</li>
  *   <li>Команда с паттерном {@link #PATTERN}, Принимает все сообщения, кроме тех, которые начинаются с "/"</li>
- *   <li>Коллбэк {@link Callbacks#CAT_CALL_VOLUNTEER}, подключает пользователя к чату волонтеров</li>
+ *   <li>Коллбэк {@link Callbacks#CALL_VOLUNTEER}, подключает пользователя к чату волонтеров</li>
  *  </ul>
  */
 @Component
@@ -59,9 +59,9 @@ public class CallVolunteerController implements CommandController {
     private final TelegramBotSender telegramBotSender;
 
     /**
-     * <i>Харнит структуру (id_user, id_thread_message)</i>
+     * <i>Хранит структуру (id_user, id_thread_message)</i>
      * <br>
-     * id_user - id чата, с котроым общаемся
+     * id_user - id чата, с которым общаемся
      * <br>
      * id_thread_message - id сообщения, которое является основным в канале
      */
@@ -143,7 +143,7 @@ public class CallVolunteerController implements CommandController {
         return new SendMessage(message.chat().id(), "");
     }
 
-    @Callback(name = Callbacks.CAT_CALL_VOLUNTEER)
+    @Callback(name = Callbacks.CALL_VOLUNTEER)
     public SendMessage handleCallbackMessage(CallbackQuery callbackQuery) {
         // Проверяем, был ли запрос ранее, чтобы не создавать новую тему, пока старый не закрыт
         if (volunteerChatEnable.containsKey(callbackQuery.from().id())) {
