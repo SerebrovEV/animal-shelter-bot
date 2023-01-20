@@ -34,6 +34,8 @@ public class AdminDogUserController implements CommandController {
             "Найти СП 10 - найти усыновителя с id = 10;\n" +
             "Изменить СП 10 89871234567 Миша - изменить усыновителя с id = 10;\n" +
             "Удалить СП 10 - удалить усыновителя с id = 10;\n" +
+            "Поздравить CП 2 - поздравить усыновителя с id = 2 с окончанием испытательного срока;\n" +
+            "Неудача CП 3 - направить усыновителю с id = 3 сообщение о том, что он не прошел испытательный срок;\n" +
             "/getAllDogUser - получить список всех усыновителей;\n";
 
     private static final String SAVE_CONTACT_PATTERN = "Сохранить СП ([\\d]{11})(\\s)([\\W]+)";
@@ -42,6 +44,8 @@ public class AdminDogUserController implements CommandController {
     private static final String DELETE_CONTACT_PATTERN = "Удалить СП ([\\d]+)";
 
     private static final String FIND_CONTACT_PATTERN = "Найти СП ([\\d]+)";
+    private static final String CONGRATULATION_CONTACT_PATTERN = "Поздравить СП ([\\d]+)";
+    private static final String RETURN_CONTACT_PATTERN = "Неудача СП ([\\d]+)";
 
 
     /**
@@ -137,6 +141,36 @@ public class AdminDogUserController implements CommandController {
         LOG.info("Администратор {} запросил всех пользователей из базы данных приюта для собак", idAdmin);
         List<DogUser> allUsers = dogUserService.getAllDogUser();
         return new SendMessage(idAdmin, allUsers.toString());
+    }
+    /**
+     * <i>Метод для отправки поздравления усыновителю из базы данных приюта для собак администратором
+     * <br>
+     * Используется метод {@link ValidatorDogUserService#validateCongratulationDogUserFromAdmin(Message)} </i>
+     *
+     * @param message
+     * @return {@link SendMessage}
+     */
+    @Command(pattern = CONGRATULATION_CONTACT_PATTERN)
+    public SendMessage handleCongratulationDogUser(Message message) {
+        Long idAdmin = message.from().id();
+        LOG.info("Администратор {} направил поздравление усыновителю из базы данных приюта для собак", idAdmin);
+        String answer = validatorDogUserService.validateCongratulationDogUserFromAdmin(message);
+        return new SendMessage(idAdmin, answer);
+    }
+    /**
+     * <i>Метод для отправки данных усыновителю о неуспешном испытательном сроке из базы данных приюта для собак администратором
+     * <br>
+     * Используется метод {@link ValidatorDogUserService#validateReturnDogUserFromAdmin(Message)} </i>
+     *
+     * @param message
+     * @return {@link SendMessage}
+     */
+    @Command(pattern = RETURN_CONTACT_PATTERN)
+    public SendMessage handleReturnDogUser(Message message) {
+        Long idAdmin = message.from().id();
+        LOG.info("Администратор {} направил уведомление на возврат животного усыновителю из базы данных приюта для собак", idAdmin);
+        String answer = validatorDogUserService.validateReturnDogUserFromAdmin(message);
+        return new SendMessage(idAdmin, answer);
     }
 
 }

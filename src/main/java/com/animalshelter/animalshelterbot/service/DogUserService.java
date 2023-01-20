@@ -23,8 +23,14 @@ public class DogUserService {
         return dogUserRepository.save(dogUser);
     }
 
-    public DogUser getDogUserByChatId(Long chatId) {
+    public Optional <DogUser>  getDogUserByChatId(Long chatId) {
         return dogUserRepository.findDogUserByChatId(chatId);
+    }
+    public Optional <DogUser>  getDogUserByPhoneNumber(Long phoneNumber) {
+        return dogUserRepository.findDogUserByPhoneNumber(phoneNumber);
+    }
+    public DogUser editDogUser(DogUser dogUser) {
+        return dogUserRepository.save(dogUser);
     }
 
     public Optional<DogUser> getDogUser(Long id) {
@@ -36,13 +42,6 @@ public class DogUserService {
         dogUserRepository.deleteById(id);
     }
 
-    public DogUser getDogUserByPhoneNumber(Long phoneNumber) {
-        return dogUserRepository.findDogUserByPhoneNumber(phoneNumber);
-    }
-
-    public DogUser editDogUser(DogUser dogUser) {
-        return dogUserRepository.save(dogUser);
-    }
 
     public List<DogUser> getAllDogUser() {
         return List.copyOf(dogUserRepository.findAll());

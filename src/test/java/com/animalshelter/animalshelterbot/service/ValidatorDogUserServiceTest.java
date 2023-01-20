@@ -1,6 +1,7 @@
 package com.animalshelter.animalshelterbot.service;
 
 import com.animalshelter.animalshelterbot.model.DogUser;
+import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 
@@ -28,15 +30,18 @@ class ValidatorDogUserServiceTest {
 
     @Mock
     Message message;
+    @Mock
+    TelegramBot telegramBot;
 
 
     @Test
-    void validateUser() {
+    void validateDogUser() {
         DogUser dogUser = new DogUser("Тест", 89871234567L, 1L);
         when(message.text()).thenReturn("89871234567 Тест");
         when(message.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
-        when(dogUserService.getDogUserByChatId(1L)).thenReturn(null);
+        when(dogUserService.getDogUserByChatId(1L)).thenReturn(Optional.empty());
+        when(dogUserService.getDogUserByPhoneNumber(89871234567L)).thenReturn(Optional.empty());
         when(dogUserService.addDogUser(dogUser)).thenReturn(dogUser);
 
         String expected = "Добавлена запись контакта: " + dogUser.toStringUser();
@@ -45,7 +50,7 @@ class ValidatorDogUserServiceTest {
     }
 
     @Test
-    void validateUserIncorrectText() {
+    void validateDogUserIncorrectText() {
         when(message.text()).thenReturn("79871234567 Тест");
         String expected = "Некорректный номер телефона";
         String actual = out.validateDogUser(message);
@@ -58,7 +63,7 @@ class ValidatorDogUserServiceTest {
         when(message.text()).thenReturn("89871234567 Тест");
         when(message.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
-        when(dogUserService.getDogUserByChatId(1L)).thenReturn(dogUser);
+        when(dogUserService.getDogUserByChatId(1L)).thenReturn(Optional.of(dogUser));
         String expected = "Данный пользователь уже есть, свяжитесь с волонтером для уточнения информации";
         String actual = out.validateDogUser(message);
         assertThat(actual).isEqualTo(expected);
@@ -71,13 +76,68 @@ class ValidatorDogUserServiceTest {
         String actual = out.validateDogUser(message);
         assertThat(actual).isEqualTo(expected);
     }
+    @Test
+    void validateDogUserIdChat() {
+        DogUser dogUser = new DogUser("Ирина", 89818231899L);
+        String expected = "Обновлена запись контакта: " + dogUser.toStringUser() + ". Спасибо!";
+
+        when(message.text()).thenReturn("Взял собаку 89818231899 Ирина");
+        when(message.from()).thenReturn(user);
+        when(user.id()).thenReturn(1L);
+        when(dogUserService.getDogUserByChatId(1L)).thenReturn(Optional.empty());
+        when(dogUserService.getDogUserByPhoneNumber(anyLong())).thenReturn(Optional.of(dogUser));
+
+        String actual = out.validateDogUserIdChat(message);
+        assertThat(actual).isEqualTo(expected);
+    }
+    @Test
+    void validateDogUserIdChatIncorrectNumber(){
+        String expected = "Некорректный номер телефона";
+
+        when(message.text()).thenReturn("Взял собаку 79818231899 Ирина");
+        String actual = out.validateDogUserIdChat(message);
+        assertThat(actual).isEqualTo(expected);
+    }
+    @Test
+    void validateDogUserIdChatIsPresent() {
+        DogUser dogUser = new DogUser("Тест", 89871234567L, 1L);
+        String expected = "Обновить запись не удалось, свяжитесь с волонтером для уточнения информации";
+        when(message.text()).thenReturn("Взял собаку 89818231899 Ирина");
+        when(message.from()).thenReturn(user);
+        when(user.id()).thenReturn(1L);
+        when(dogUserService.getDogUserByChatId(1L)).thenReturn(Optional.of(dogUser));
+        String actual = out.validateDogUserIdChat(message);
+        assertThat(actual).isEqualTo(expected);
+    }
 
     @Test
-    void validateUserFromAdmin(){
+    void validateDogUserIdNumberIsNull() {
+        DogUser dogUser = new DogUser("Тест", 89871234567L, 1L);
+        String expected = "Телефон не найден, свяжитесь с волонтером для уточнения информации";
+
+        when(message.text()).thenReturn("Взял собаку 89818231899 Миша");
+        when(message.from()).thenReturn(user);
+        when(user.id()).thenReturn(1L);
+        when(dogUserService.getDogUserByChatId(1L)).thenReturn(Optional.empty());
+        when(dogUserService.getDogUserByPhoneNumber(anyLong())).thenReturn(Optional.empty());
+
+        String actual = out.validateDogUserIdChat(message);
+        assertThat(actual).isEqualTo(expected);
+    }
+    @Test
+    void validateDogUserIdChatIncorrectMatcher() {
+        String expected = "Некорректный запрос";
+        when(message.text()).thenReturn("Найти и");
+        String actual = out.validateDogUser(message);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void validateUserAddFromAdmin(){
         DogUser dogUser = new DogUser("Иван", 89871234567L);
 
         when(message.text()).thenReturn("Сохранить 89871234567 Иван");
-        when(dogUserService.getDogUserByPhoneNumber(89871234567L)).thenReturn(null);
+        when(dogUserService.getDogUserByPhoneNumber(89871234567L)).thenReturn(Optional.empty());
         when(dogUserService.addDogUser(dogUser)).thenReturn(dogUser);
 
         String expected = "Добавлена запись контакта: " + dogUser + " в базу данных приюта для собак";
@@ -86,11 +146,11 @@ class ValidatorDogUserServiceTest {
     }
 
     @Test
-    void validateUserFromAdminExistingUser(){
+    void validateAddUserFromAdminExistingUser(){
         DogUser dogUser = new DogUser("Иван", 89871234567L);
 
         when(message.text()).thenReturn("Сохранить 89871234567 Иван");
-        when(dogUserService.getDogUserByPhoneNumber(89871234567L)).thenReturn(dogUser);
+        when(dogUserService.getDogUserByPhoneNumber(89871234567L)).thenReturn(Optional.of(dogUser));
 
         String expected = "Данный усыновитель уже есть в базе данных приюта для собак";
         String actual = out.validateDogUserFromAdmin(message);
@@ -98,14 +158,14 @@ class ValidatorDogUserServiceTest {
     }
 
     @Test
-    void validateUserFromAdminIncorrectNumber(){
+    void validateAddUserFromAdminIncorrectNumber(){
         when(message.text()).thenReturn("Сохранить 79871234567 Иван");
         String expected = "Некорректный номер телефона";
         String actual = out.validateDogUserFromAdmin(message);
         assertThat(actual).isEqualTo(expected);
     }
     @Test
-    void validateUserFromAdminIncorrectMatcher(){
+    void validateAddUserFromAdminIncorrectMatcher(){
         String expected = "Некорректный запрос";
         when(message.text()).thenReturn("Найти и");
         String actual = out.validateDogUserFromAdmin(message);
@@ -201,7 +261,82 @@ class ValidatorDogUserServiceTest {
         String actual = out.validateEditDogUserFromAdmin(message);
         assertThat(actual).isEqualTo(expected);
     }
+    @Test
+    void validateCongratulationDogUserFromAdmin(){
+        DogUser dogUser = new DogUser("Тест", 89871234567L);
+        dogUser.setId(2L);
+        dogUser.setChatId(12L);
+        String expected = dogUser + " направлено поздравление.";
+        when(message.text()).thenReturn("Поздравить СП 2");
+        when(dogUserService.getDogUser(2L)).thenReturn(Optional.of(dogUser));
+        String actual = out.validateCongratulationDogUserFromAdmin(message);
+        assertThat(actual).isEqualTo(expected);
+    }
 
+    @Test
+    void validateCongratulationDogUserFromAdminNotFound(){
+        String expected = "Усыновитель не найден в базе данных приюта для собак, проверьте правильность введения id.";
+        when(message.text()).thenReturn("Поздравить СП 2");
+        when(dogUserService.getDogUser(2L)).thenReturn(Optional.empty());
+        String actual = out.validateCongratulationDogUserFromAdmin(message);
+        assertThat(actual).isEqualTo(expected);
+    }
+    @Test
+    void validateCongratulationDogUserFromAdminIncorrectId(){
+        DogUser dogUser = new DogUser("Тест", 89871234567L);
+        dogUser.setId(2L);
+        String expected = "Команда не выполнена! Для корректной работы необходимо попросить усыновителя добавить" +
+                " контактные данные через телеграм-бота прописав сообщение:\n Взял собаку 89817885244 Иван";
+        when(message.text()).thenReturn("Поздравить СП 2");
+        when(dogUserService.getDogUser(2L)).thenReturn(Optional.of(dogUser));
+        String actual = out.validateCongratulationDogUserFromAdmin(message);
+        assertThat(actual).isEqualTo(expected);
+    }
+    @Test
+    void validateCongratulationDogUserFromAdminIncorrectMatcher(){
+        String expected = "Некорректный запрос";
+        when(message.text()).thenReturn("Изменить и");
+        String actual = out.validateCongratulationDogUserFromAdmin(message);
+        assertThat(actual).isEqualTo(expected);
+    }
 
+    @Test
+    void validateReturnDogUserFromAdmin(){
+        DogUser dogUser = new DogUser("Тест", 89871234567L);
+        dogUser.setId(3L);
+        dogUser.setChatId(12L);
+        String expected = dogUser + " направлено уведомление.";
+        when(message.text()).thenReturn("Неудача СП 3");
+        when(dogUserService.getDogUser(3L)).thenReturn(Optional.of(dogUser));
+        String actual = out.validateReturnDogUserFromAdmin(message);
+        assertThat(actual).isEqualTo(expected);
+    }
+    @Test
+    void validateReturnDogUserFromAdminNotFound(){
+        String expected = "Усыновитель не найден в базе данных приюта для собак, проверьте правильность введения id.";
+        when(message.text()).thenReturn("Неудача КП 3");
+        when(dogUserService.getDogUser(3L)).thenReturn(Optional.empty());
+        String actual = out.validateReturnDogUserFromAdmin(message);
+        assertThat(actual).isEqualTo(expected);
+    }
+    @Test
+    void validateReturnDogUserFromAdminIncorrectId(){
+        DogUser dogUser = new DogUser("Тест", 89871234567L);
+        dogUser.setId(2L);
+        String expected = "Команда не выполнена! Для корректной работы необходимо попросить усыновителя добавить" +
+                " контактные данные через телеграм-бота прописав сообщение:\n Взял собаку 89817885244 Иван";
+        when(message.text()).thenReturn("Неудача СП 3");
+        when(dogUserService.getDogUser(3L)).thenReturn(Optional.of(dogUser));
+        String actual = out.validateReturnDogUserFromAdmin(message);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void validateReturnDogUserFromAdminIncorrectMatcher(){
+        String expected = "Некорректный запрос";
+        when(message.text()).thenReturn("Изменить и");
+        String actual = out.validateReturnDogUserFromAdmin(message);
+        assertThat(actual).isEqualTo(expected);
+    }
 
 }
