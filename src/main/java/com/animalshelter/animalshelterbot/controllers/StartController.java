@@ -100,13 +100,13 @@ public class StartController implements CommandController {
     public SendMessage dogMenu(CallbackQuery callbackQuery) {
         return new SendMessage(callbackQuery.from().id(), dogMenuText)
                 .replyMarkup(new InlineKeyboardMarkup()
-                        .addRow(new InlineKeyboardButton(shelterCommonInfoButtonText).callbackData(Callbacks.DOG_INFO_MENU.name()))
-                        .addRow(new InlineKeyboardButton(adoptionInfoButtonText).callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name()))
-                        .addRow(new InlineKeyboardButton(keepingPetButtonText).callbackData(Callbacks.DOG_REPORT.name()))
-                        .addRow(
-                                new InlineKeyboardButton(callVolunteerButtonText).callbackData(Callbacks.DOG_CALL_VOLUNTEER.name()),
-                                new InlineKeyboardButton(backButtonText).callbackData(Callbacks.START_MENU.name())
-                        )
+                    .addRow(new InlineKeyboardButton(shelterCommonInfoButtonText).callbackData(Callbacks.DOG_INFO_MENU.name()))
+                    .addRow(new InlineKeyboardButton(adoptionInfoButtonText).callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name()))
+                    .addRow(new InlineKeyboardButton(keepingPetButtonText).callbackData(Callbacks.DOG_REPORT.name()))
+                    .addRow(
+                            new InlineKeyboardButton(callVolunteerButtonText).callbackData(Callbacks.CALL_VOLUNTEER.name()),
+                            new InlineKeyboardButton(backButtonText).callbackData(Callbacks.START_MENU.name())
+                    )
                 );
     }
 
@@ -121,7 +121,7 @@ public class StartController implements CommandController {
                         .addRow(new InlineKeyboardButton(adoptionInfoButtonText).callbackData(Callbacks.CAT_ADOPTION_INFO_MENU.name()))
                         .addRow(new InlineKeyboardButton(keepingPetButtonText).callbackData(Callbacks.CAT_REPORT.name()))
                         .addRow(
-                                new InlineKeyboardButton(callVolunteerButtonText).callbackData(Callbacks.CAT_CALL_VOLUNTEER.name()),
+                                new InlineKeyboardButton(callVolunteerButtonText).callbackData(Callbacks.CALL_VOLUNTEER.name()),
                                 new InlineKeyboardButton(backButtonText).callbackData(Callbacks.START_MENU.name())
                         )
                 );
@@ -134,15 +134,15 @@ public class StartController implements CommandController {
     public SendMessage dogInfoMenu(CallbackQuery callbackQuery) {
         return new SendMessage(callbackQuery.from().id(), dogShelterInfoText)
                 .replyMarkup(new InlineKeyboardMarkup()
-                        .addRow(new InlineKeyboardButton(shelterInfoButtonText).callbackData(Callbacks.DOG_SHELTER_INFO.name()))
-                        .addRow(new InlineKeyboardButton(scheduleButtonText).callbackData(Callbacks.DOG_SCHEDULE_INFO.name()))
-                        .addRow(new InlineKeyboardButton(carButtonText).callbackData(Callbacks.DOG_CAR_INFO.name()))
-                        .addRow(new InlineKeyboardButton(safetyInfoButtonText).callbackData(Callbacks.DOG_SHELTER_SAFETY_INFO.name()))
-                        .addRow(new InlineKeyboardButton(getContactsButtonText).callbackData(Callbacks.DOG_CONTACT_INFO.name()))
-                        .addRow(
-                                new InlineKeyboardButton(callVolunteerButtonText).callbackData(Callbacks.DOG_CALL_VOLUNTEER.name()),
-                                new InlineKeyboardButton(backButtonText).callbackData(Callbacks.DOG_MENU.name())
-                        )
+                    .addRow(new InlineKeyboardButton(shelterInfoButtonText).callbackData(Callbacks.DOG_SHELTER_INFO.name()))
+                    .addRow(new InlineKeyboardButton(scheduleButtonText).callbackData(Callbacks.DOG_SCHEDULE_INFO.name()))
+                    .addRow(new InlineKeyboardButton(carButtonText).callbackData(Callbacks.DOG_CAR_INFO.name()))
+                    .addRow(new InlineKeyboardButton(safetyInfoButtonText).callbackData(Callbacks.DOG_SHELTER_SAFETY_INFO.name()))
+                    .addRow(new InlineKeyboardButton(getContactsButtonText).callbackData(Callbacks.DOG_CONTACT_INFO.name()))
+                    .addRow(
+                            new InlineKeyboardButton(callVolunteerButtonText).callbackData(Callbacks.CALL_VOLUNTEER.name()),
+                            new InlineKeyboardButton(backButtonText).callbackData(Callbacks.DOG_MENU.name())
+                    )
                 );
     }
 
@@ -159,7 +159,7 @@ public class StartController implements CommandController {
                         .addRow(new InlineKeyboardButton(safetyInfoButtonText).callbackData(Callbacks.CAT_SHELTER_SAFETY_INFO.name()))
                         .addRow(new InlineKeyboardButton(getContactsButtonText).callbackData(Callbacks.CAT_CONTACT_INFO.name()))
                         .addRow(
-                                new InlineKeyboardButton(callVolunteerButtonText).callbackData(Callbacks.CAT_CALL_VOLUNTEER.name()),
+                                new InlineKeyboardButton(callVolunteerButtonText).callbackData(Callbacks.CALL_VOLUNTEER.name()),
                                 new InlineKeyboardButton(backButtonText).callbackData(Callbacks.CAT_MENU.name())
                         )
                 );
@@ -183,7 +183,7 @@ public class StartController implements CommandController {
                         .addRow(new InlineKeyboardButton(cynologistRecommendationsButtonText).callbackData(Callbacks.DOG_CYNOLOGIST_RECOMMENDATION.name()))
                         .addRow(new InlineKeyboardButton(getContactsButtonText).callbackData(Callbacks.DOG_CONTACT_INFO.name()))
                         .addRow(
-                                new InlineKeyboardButton(callVolunteerButtonText).callbackData(Callbacks.DOG_CALL_VOLUNTEER.name()),
+                                new InlineKeyboardButton(callVolunteerButtonText).callbackData(Callbacks.CALL_VOLUNTEER.name()),
                                 new InlineKeyboardButton(backButtonText).callbackData(Callbacks.DOG_MENU.name())
                         )
                 );
@@ -205,7 +205,7 @@ public class StartController implements CommandController {
                         .addRow(new InlineKeyboardButton(declineCausesButtonText).callbackData(Callbacks.CAT_DECLINE_CAUSES.name()))
                         .addRow(new InlineKeyboardButton(getContactsButtonText).callbackData(Callbacks.CAT_CONTACT_INFO.name()))
                         .addRow(
-                                new InlineKeyboardButton(callVolunteerButtonText).callbackData(Callbacks.CAT_CALL_VOLUNTEER.name()),
+                                new InlineKeyboardButton(callVolunteerButtonText).callbackData(Callbacks.CALL_VOLUNTEER.name()),
                                 new InlineKeyboardButton(backButtonText).callbackData(Callbacks.CAT_MENU.name())
                         )
                 );
