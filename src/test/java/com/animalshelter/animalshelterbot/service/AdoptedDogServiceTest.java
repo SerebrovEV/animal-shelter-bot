@@ -145,9 +145,9 @@ class AdoptedDogServiceTest {
     @Test
     void getAllDogWithEndPeriod() {
 
-        D1.setAdoptionDate(Date.valueOf(LocalDate.of(2023, 1, 18)));
-        D2.setAdoptionDate(Date.valueOf(LocalDate.of(2023, 1, 18)));
-        D3.setAdoptionDate(Date.valueOf(LocalDate.of(2023, 1, 18)));
+        D1.setAdoptionDate(Date.valueOf(LocalDate.of(2022, 1, 18)));
+        D2.setAdoptionDate(Date.valueOf(LocalDate.of(2022, 1, 18)));
+        D3.setAdoptionDate(Date.valueOf(LocalDate.of(2022, 1, 18)));
 
         D1.setTrialPeriod(30);
         D2.setTrialPeriod(30);
