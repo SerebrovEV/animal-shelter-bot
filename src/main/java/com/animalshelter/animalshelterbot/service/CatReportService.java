@@ -2,7 +2,7 @@ package com.animalshelter.animalshelterbot.service;
 
 import com.animalshelter.animalshelterbot.model.AdoptedCat;
 import com.animalshelter.animalshelterbot.model.CatReport;
-import com.animalshelter.animalshelterbot.organisation.Callbacks;
+import com.animalshelter.animalshelterbot.organisation.Callback;
 import com.animalshelter.animalshelterbot.repository.AdoptedCatRepository;
 import com.animalshelter.animalshelterbot.repository.CatReportRepository;
 import com.animalshelter.animalshelterbot.repository.CatUserRepository;
@@ -209,8 +209,8 @@ public class CatReportService {
                 reportTemp.put(message.from().id(), message);
                 return new SendMessage(message.from().id(), "Вы хотите отправить отчет?")
                         .replyMarkup(new InlineKeyboardMarkup(
-                                new InlineKeyboardButton("Да").callbackData(Callbacks.CAT_ADD_REPORT_YES.name()),
-                                new InlineKeyboardButton("Отправлю позже").callbackData(Callbacks.CAT_ADD_REPORT_NO.name())
+                                new InlineKeyboardButton("Да").callbackData(Callback.CAT_ADD_REPORT_YES.name()),
+                                new InlineKeyboardButton("Отправлю позже").callbackData(Callback.CAT_ADD_REPORT_NO.name())
                         ));
         } else if (!reportTemp.containsKey(message.from().id())) {
             // TODO Если пользователь отправил фото, но не через меню
@@ -252,8 +252,8 @@ public class CatReportService {
         reportTemp.remove(callback.from().id());
         return new SendMessage(callback.from().id(), "Ваш отчет небыл отправлен.")
                 .replyMarkup(new InlineKeyboardMarkup(
-                        new InlineKeyboardButton("Повторить").callbackData(Callbacks.CAT_REPORT.name()),
-                        new InlineKeyboardButton("Назад").callbackData(Callbacks.CAT_MENU.name())
+                        new InlineKeyboardButton("Повторить").callbackData(Callback.CAT_REPORT.name()),
+                        new InlineKeyboardButton("Назад").callbackData(Callback.CAT_MENU.name())
                 ));
     }
 }

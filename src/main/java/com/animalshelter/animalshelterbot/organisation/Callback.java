@@ -1,6 +1,6 @@
 package com.animalshelter.animalshelterbot.organisation;
 
-public enum Callbacks {
+public enum Callback {
     DUMMY("dummy"),
 
     START_MENU("start_menu"),
@@ -55,7 +55,7 @@ public enum Callbacks {
 
     private final String name;
 
-    Callbacks(String name) {
+    Callback(String name) {
         this.name = name;
     }
 }

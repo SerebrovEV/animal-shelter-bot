@@ -1,4 +1,4 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
@@ -25,10 +25,10 @@ import java.util.List;
 public class AdminDogUserController implements CommandController {
     private final DogUserService dogUserService;
     private final ValidatorDogUserService validatorDogUserService;
-    private final Logger LOG = LoggerFactory.getLogger(AdminDogUserController.class);
+    private final Logger logger = LoggerFactory.getLogger(AdminDogUserController.class);
 
 
-    private final String ADMIN_COMMAND = "Правила использования: \n" +
+    private final String adminCommand = "Правила использования: \n" +
             "/infoAboutAdminDogUser - команды для использования;\n" +
             "Сохранить СП 89871234567 Иван - добавить усыновителя;\n" +
             "Найти СП 10 - найти усыновителя с id = 10;\n" +
@@ -58,8 +58,8 @@ public class AdminDogUserController implements CommandController {
     @Command(name = "/infoAboutAdminDogUser")
     public SendMessage handleInfoAboutAdminDogUser(Message message) {
         Long idAdmin = message.from().id();
-        LOG.warn("Администратор {} запросил инструкцию по использованию бота", idAdmin);
-        return new SendMessage(idAdmin, ADMIN_COMMAND);
+        logger.warn("Администратор {} запросил инструкцию по использованию бота", idAdmin);
+        return new SendMessage(idAdmin, adminCommand);
 
     }
 
@@ -74,7 +74,7 @@ public class AdminDogUserController implements CommandController {
     @Command(pattern = SAVE_CONTACT_PATTERN)
     public SendMessage handleCreateDogUser(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} сохраняет контакт усыновителя в базу данных приюта для собак", idAdmin);
+        logger.info("Администратор {} сохраняет контакт усыновителя в базу данных приюта для собак", idAdmin);
         String answer = validatorDogUserService.validateDogUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -90,7 +90,7 @@ public class AdminDogUserController implements CommandController {
     @Command(pattern = FIND_CONTACT_PATTERN)
     public SendMessage handleGetDogUser(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} запрашивает контакт усыновителя в базе данных приюта для собак", idAdmin);
+        logger.info("Администратор {} запрашивает контакт усыновителя в базе данных приюта для собак", idAdmin);
         String answer = validatorDogUserService.validateGetDogUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -106,7 +106,7 @@ public class AdminDogUserController implements CommandController {
     @Command(pattern = DELETE_CONTACT_PATTERN)
     public SendMessage handleDeleteDogUser(Message message) {
         Long idAdmin = message.from().id();
-        LOG.warn("Администратор {} запросил удаление усыновителя из базы данных приюта для собак", idAdmin);
+        logger.warn("Администратор {} запросил удаление усыновителя из базы данных приюта для собак", idAdmin);
         String answer = validatorDogUserService.validateDeleteDogUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -122,7 +122,7 @@ public class AdminDogUserController implements CommandController {
     @Command(pattern = EDIT_CONTACT_PATTERN)
     public SendMessage handleEditDogUser(Message message) {
         Long idAdmin = message.from().id();
-        LOG.warn("Администратор {} изменяет контакт усыновителя в базе данных приюта для собак", idAdmin);
+        logger.warn("Администратор {} изменяет контакт усыновителя в базе данных приюта для собак", idAdmin);
         String answer = validatorDogUserService.validateEditDogUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -138,7 +138,7 @@ public class AdminDogUserController implements CommandController {
     @Command(name = "/getAllDogUser")
     public SendMessage handleGetAllDogUser(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} запросил всех пользователей из базы данных приюта для собак", idAdmin);
+        logger.info("Администратор {} запросил всех пользователей из базы данных приюта для собак", idAdmin);
         List<DogUser> allUsers = dogUserService.getAllDogUser();
         return new SendMessage(idAdmin, allUsers.toString());
     }
@@ -153,7 +153,7 @@ public class AdminDogUserController implements CommandController {
     @Command(pattern = CONGRATULATION_CONTACT_PATTERN)
     public SendMessage handleCongratulationDogUser(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} направил поздравление усыновителю из базы данных приюта для собак", idAdmin);
+        logger.info("Администратор {} направил поздравление усыновителю из базы данных приюта для собак", idAdmin);
         String answer = validatorDogUserService.validateCongratulationDogUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -168,7 +168,7 @@ public class AdminDogUserController implements CommandController {
     @Command(pattern = RETURN_CONTACT_PATTERN)
     public SendMessage handleReturnDogUser(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} направил уведомление на возврат животного усыновителю из базы данных приюта для собак", idAdmin);
+        logger.info("Администратор {} направил уведомление на возврат животного усыновителю из базы данных приюта для собак", idAdmin);
         String answer = validatorDogUserService.validateReturnDogUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }

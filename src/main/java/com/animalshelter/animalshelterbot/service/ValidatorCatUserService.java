@@ -2,9 +2,9 @@ package com.animalshelter.animalshelterbot.service;
 
 
 import com.animalshelter.animalshelterbot.model.CatUser;
-import com.animalshelter.animalshelterbot.controllers.CatUserController;
-import com.animalshelter.animalshelterbot.controllers.AdminCatUserController;
-import com.animalshelter.animalshelterbot.organisation.Callbacks;
+import com.animalshelter.animalshelterbot.controller.CatUserController;
+import com.animalshelter.animalshelterbot.controller.AdminCatUserController;
+import com.animalshelter.animalshelterbot.organisation.Callback;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
@@ -30,18 +30,18 @@ public class ValidatorCatUserService {
     private final CatUserService catUserService;
     private final TelegramBot telegramBot;
 
-    private final Pattern ADD_PATTERN = Pattern.compile("([\\d]{11})(\\s)([\\W]+)");
-    private final Pattern NUMBER_PATTERN = Pattern.compile("([\\d]+)");
-    private final Pattern EDIT_PATTERN = Pattern.compile("([\\d]+)(\\s)([\\d]{11})(\\s)([\\W]+)");
+    private final Pattern addPattern = Pattern.compile("([\\d]{11})(\\s)([\\W]+)");
+    private final Pattern numberPattern = Pattern.compile("([\\d]+)");
+    private final Pattern editPattern = Pattern.compile("([\\d]+)(\\s)([\\d]{11})(\\s)([\\W]+)");
 
-    private final String CONGRATULATION_MESSAGE = "Поздравляем, вы прошли испытательный срок. Продолжайте и" +
+    private final String congratulationMessage = "Поздравляем, вы прошли испытательный срок. Продолжайте и" +
             " впредь заботится о своем новом любимце и он ответит вам любовью ответ:)";
 
-    private final String RETURN_MESSAGE = "К сожалению, вы не прошли испытательный срок. Вам требуется вернуть животное " +
+    private final String returnMessage = "К сожалению, вы не прошли испытательный срок. Вам требуется вернуть животное " +
             "в приют. Если вы не можете к нам приехать, мы можем направить к вам волонтера для возврата животного. Для " +
             "этого свяжитесь с нами.";
 
-    private static final String catButtonText = "Вернуться";
+    private static final String CAT_BUTTON_TEXT = "Вернуться";
 
     /**
      * <i> Метод для проверки и обработки входящего сообщения от усыновителя.
@@ -52,7 +52,7 @@ public class ValidatorCatUserService {
      * @return String в зависимости от результата обработки
      */
     public String validateCatUser(Message message) {
-        Matcher matcher = ADD_PATTERN.matcher(message.text());
+        Matcher matcher = addPattern.matcher(message.text());
         if (matcher.find()) {
             String name = matcher.group(3);
 
@@ -82,7 +82,7 @@ public class ValidatorCatUserService {
      * @return String в зависимости от результата обработки
      */
     public String validateCatUserIdChat(Message message) {
-        Matcher matcher = ADD_PATTERN.matcher(message.text());
+        Matcher matcher = addPattern.matcher(message.text());
         if (matcher.find()) {
             String name = matcher.group(3);
             if (!matcher.group(1).startsWith("8")) {
@@ -118,7 +118,7 @@ public class ValidatorCatUserService {
      * @return String в зависимости от результата обработки
      */
     public String validateCatUserFromAdmin(Message message) {
-        Matcher matcher = ADD_PATTERN.matcher(message.text());
+        Matcher matcher = addPattern.matcher(message.text());
         if (matcher.find()) {
             String name = matcher.group(3);
             if (!matcher.group(1).startsWith("8")) {
@@ -143,7 +143,7 @@ public class ValidatorCatUserService {
      * @return String в зависимости от результата обработки
      */
     public String validateGetCatUserFromAdmin(Message message) {
-        Matcher matcher = NUMBER_PATTERN.matcher(message.text());
+        Matcher matcher = numberPattern.matcher(message.text());
         if (matcher.find()) {
             Long id = Long.valueOf(matcher.group(1));
             Optional<CatUser> findCatUser = catUserService.getCatUser(id);
@@ -164,7 +164,7 @@ public class ValidatorCatUserService {
      * @return String в зависимости от результата обработки
      */
     public String validateDeleteCatUserFromAdmin(Message message) {
-        Matcher matcher = NUMBER_PATTERN.matcher(message.text());
+        Matcher matcher = numberPattern.matcher(message.text());
         if (matcher.find()) {
             Long id = Long.valueOf(matcher.group(1));
             Optional<CatUser> deleteCatUser = catUserService.getCatUser(id);
@@ -186,7 +186,7 @@ public class ValidatorCatUserService {
      * @return String в зависимости от результата обработки
      */
     public String validateEditCatUserFromAdmin(Message message) {
-        Matcher matcher = EDIT_PATTERN.matcher(message.text());
+        Matcher matcher = editPattern.matcher(message.text());
         if (matcher.find()) {
             if (!matcher.group(3).startsWith("8")) {
                 return "Некорректный номер телефона";
@@ -214,7 +214,7 @@ public class ValidatorCatUserService {
      * @return String в зависимости от результата обработки
      */
     public String validateCongratulationCatUserFromAdmin(Message message) {
-        Matcher matcher = NUMBER_PATTERN.matcher(message.text());
+        Matcher matcher = numberPattern.matcher(message.text());
         if (matcher.find()) {
             Long id = Long.valueOf(matcher.group(1));
             Optional<CatUser> findCatUser = catUserService.getCatUser(id);
@@ -226,7 +226,7 @@ public class ValidatorCatUserService {
                 return "Команда не выполнена! Для корректной работы необходимо попросить усыновителя добавить" +
                         " контактные данные через телеграм-бота прописав сообщение:\n Взял кота 89817885244 Иван";
             }
-            telegramBot.execute(new SendMessage(chatIdUser, CONGRATULATION_MESSAGE));
+            telegramBot.execute(new SendMessage(chatIdUser, congratulationMessage));
             return findCatUser.get() + " направлено поздравление.";
         }
         return "Некорректный запрос";
@@ -241,7 +241,7 @@ public class ValidatorCatUserService {
      * @return String в зависимости от результата обработки
      */
     public String validateReturnCatUserFromAdmin(Message message) {
-        Matcher matcher = NUMBER_PATTERN.matcher(message.text());
+        Matcher matcher = numberPattern.matcher(message.text());
         if (matcher.find()) {
             Long id = Long.valueOf(matcher.group(1));
             Optional<CatUser> findCatUser = catUserService.getCatUser(id);
@@ -253,9 +253,9 @@ public class ValidatorCatUserService {
                 return "Команда не выполнена! Для корректной работы необходимо попросить усыновителя добавить" +
                         " контактные данные через телеграм-бота прописав сообщение:\n Взял кота 89817885244 Иван";
             }
-            telegramBot.execute(new SendMessage(chatIdUser, RETURN_MESSAGE)
+            telegramBot.execute(new SendMessage(chatIdUser, returnMessage)
                     .replyMarkup(new InlineKeyboardMarkup(
-                            new InlineKeyboardButton(catButtonText).callbackData(Callbacks.CAT_MENU.name())
+                            new InlineKeyboardButton(CAT_BUTTON_TEXT).callbackData(Callback.CAT_MENU.name())
                     )));
             return findCatUser.get() + " направлено уведомление.";
         }

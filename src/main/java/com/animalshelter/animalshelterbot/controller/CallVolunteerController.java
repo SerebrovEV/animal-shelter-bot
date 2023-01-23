@@ -1,9 +1,8 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
-import com.animalshelter.animalshelterbot.handler.Callback;
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
-import com.animalshelter.animalshelterbot.organisation.Callbacks;
+import com.animalshelter.animalshelterbot.organisation.Callback;
 import com.animalshelter.animalshelterbot.sender.TelegramBotSender;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
@@ -34,7 +33,7 @@ import java.util.Map;
  *   <li>Команда с именем {@link #STOP_CHAT}, отключает пользователя от волонтеров</li>
  *   <li>Команда с именем {@link #NEW_REQUEST}, Вызывается автоматически, когда канал добавляет обсуждение в группу</li>
  *   <li>Команда с паттерном {@link #PATTERN}, Принимает все сообщения, кроме тех, которые начинаются с "/"</li>
- *   <li>Коллбэк {@link Callbacks#CALL_VOLUNTEER}, подключает пользователя к чату волонтеров</li>
+ *   <li>Коллбэк {@link Callback#CALL_VOLUNTEER}, подключает пользователя к чату волонтеров</li>
  *  </ul>
  */
 @Component
@@ -42,10 +41,10 @@ import java.util.Map;
 public class CallVolunteerController implements CommandController {
 
     @Value("${telegram.volunteer.chat.id}")
-    private Long VOLUNTEER_CHAT_ID;
+    private Long volunteerChatId;
 
     @Value("${telegram.volunteer.chanel.id}")
-    private Long VOLUNTEER_CHANEL_ID;
+    private Long volunteerChanelId;
 
     public static final String STOP_CHAT = "/stopChat";
 
@@ -83,7 +82,7 @@ public class CallVolunteerController implements CommandController {
         }
         if (id != -1) {
             volunteerChatEnable.remove(id);
-            return new SendMessage(VOLUNTEER_CHAT_ID, "Вопрос закрыт")
+            return new SendMessage(volunteerChatId, "Вопрос закрыт")
                     .replyToMessageId(message.messageThreadId());
         }
 
@@ -130,11 +129,11 @@ public class CallVolunteerController implements CommandController {
             // Проверяем, запрашивал ли пользователь запрос в чат
             if (volunteerChatEnable.containsKey(message.chat().id())) {
                 if (message.photo() != null) {
-                    telegramBotSender.telegramSendPhoto(new SendPhoto(VOLUNTEER_CHAT_ID, message.photo()[0].fileId())
+                    telegramBotSender.telegramSendPhoto(new SendPhoto(volunteerChatId, message.photo()[0].fileId())
                             .caption(message.caption()).replyToMessageId(volunteerChatEnable.get(message.chat().id())));
                     return new SendMessage(message.chat().id(), "");
                 }
-                return new SendMessage(VOLUNTEER_CHAT_ID, message.text())
+                return new SendMessage(volunteerChatId, message.text())
                         .replyToMessageId(volunteerChatEnable.get(message.chat().id()));
             } else {
                 return new SendMessage(message.chat().id(), "");
@@ -143,7 +142,7 @@ public class CallVolunteerController implements CommandController {
         return new SendMessage(message.chat().id(), "");
     }
 
-    @Callback(name = Callbacks.CALL_VOLUNTEER)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callback.CALL_VOLUNTEER)
     public SendMessage handleCallbackMessage(CallbackQuery callbackQuery) {
         // Проверяем, был ли запрос ранее, чтобы не создавать новую тему, пока старый не закрыт
         if (volunteerChatEnable.containsKey(callbackQuery.from().id())) {
@@ -153,7 +152,7 @@ public class CallVolunteerController implements CommandController {
 
         MessageEntity messageEntity = new MessageEntity(MessageEntity.Type.text_mention, 0, requestString.length())
                 .user(callbackQuery.from());
-        SendMessage sendMessage = new SendMessage(VOLUNTEER_CHANEL_ID, requestString)
+        SendMessage sendMessage = new SendMessage(volunteerChanelId, requestString)
                 .entities(messageEntity);
         telegramBotSender.sendMessage(sendMessage);
 

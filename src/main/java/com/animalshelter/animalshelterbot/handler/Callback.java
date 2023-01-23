@@ -1,6 +1,5 @@
 package com.animalshelter.animalshelterbot.handler;
 
-import com.animalshelter.animalshelterbot.organisation.Callbacks;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -21,7 +20,7 @@ public @interface Callback {
     /**
      * Значение {@link CallbackQuery#data()}, при котором будет вызван метод, помеченный аннотацией
      * */
-    Callbacks name();
+    com.animalshelter.animalshelterbot.organisation.Callback name();
     /**
      * ID чата {@link Message#chat()#chatId()}, при котором будет вызван метод, помеченный аннотацией
      * */

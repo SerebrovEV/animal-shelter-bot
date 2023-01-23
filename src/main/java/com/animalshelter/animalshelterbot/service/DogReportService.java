@@ -2,7 +2,7 @@ package com.animalshelter.animalshelterbot.service;
 
 import com.animalshelter.animalshelterbot.model.AdoptedDog;
 import com.animalshelter.animalshelterbot.model.DogReport;
-import com.animalshelter.animalshelterbot.organisation.Callbacks;
+import com.animalshelter.animalshelterbot.organisation.Callback;
 import com.animalshelter.animalshelterbot.repository.AdoptedDogRepository;
 import com.animalshelter.animalshelterbot.repository.DogReportRepository;
 import com.animalshelter.animalshelterbot.repository.DogUserRepository;
@@ -209,8 +209,8 @@ public class DogReportService {
             reportTemp.put(message.from().id(), message);
             return new SendMessage(message.from().id(), "Вы хотите отправить отчет?")
                     .replyMarkup(new InlineKeyboardMarkup(
-                            new InlineKeyboardButton("Да").callbackData(Callbacks.DOG_ADD_REPORT_YES.name()),
-                            new InlineKeyboardButton("Отправлю позже").callbackData(Callbacks.DOG_ADD_REPORT_NO.name())
+                            new InlineKeyboardButton("Да").callbackData(Callback.DOG_ADD_REPORT_YES.name()),
+                            new InlineKeyboardButton("Отправлю позже").callbackData(Callback.DOG_ADD_REPORT_NO.name())
                     ));
         } else if (!reportTemp.containsKey(message.from().id())) {
             // TODO Если пользователь отправил фото, но не через меню
@@ -253,8 +253,8 @@ public class DogReportService {
         reportTemp.remove(callback.from().id());
         return new SendMessage(callback.from().id(), "Ваш отчет небыл отправлен.")
                 .replyMarkup(new InlineKeyboardMarkup(
-                        new InlineKeyboardButton("Повторить").callbackData(Callbacks.DOG_REPORT.name()),
-                        new InlineKeyboardButton("Назад").callbackData(Callbacks.DOG_MENU.name())
+                        new InlineKeyboardButton("Повторить").callbackData(Callback.DOG_REPORT.name()),
+                        new InlineKeyboardButton("Назад").callbackData(Callback.DOG_MENU.name())
                 ));
     }
 }

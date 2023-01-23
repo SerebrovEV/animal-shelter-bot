@@ -1,9 +1,9 @@
 package com.animalshelter.animalshelterbot.service;
 
-import com.animalshelter.animalshelterbot.controllers.AdminDogController;
+import com.animalshelter.animalshelterbot.controller.AdminDogController;
 import com.animalshelter.animalshelterbot.model.AdoptedDog;
 import com.animalshelter.animalshelterbot.model.DogUser;
-import com.animalshelter.animalshelterbot.organisation.Callbacks;
+import com.animalshelter.animalshelterbot.organisation.Callback;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
@@ -29,18 +29,18 @@ public class ValidateAdoptedDogService {
     private final AdoptedDogService adoptedDogService;
     private final DogUserService dogUserService;
     private final TelegramBot telegramBot;
-    private final Pattern ADD_PATTERN = Pattern.compile("([\\W]{9})(\\s)([\\W]{1})(\\s)([\\W]+)");
-    private final Pattern FIND_AND_DELETE_PATTERN = Pattern.compile("([\\d]+)");
+    private final Pattern addPattern = Pattern.compile("([\\W]{9})(\\s)([\\W]{1})(\\s)([\\W]+)");
+    private final Pattern findAndDeletePattern = Pattern.compile("([\\d]+)");
 
-    private final Pattern EDIT_PATTERN = Pattern.compile("([\\d]+)(\\s)([\\W]+)");
-    private final Pattern TAKE_PATTERN = Pattern.compile("([\\W]{9})(\\s)([\\d]+)(\\s)([\\W]{1})(\\s)([\\d]+)");
-    private final Pattern RETURN_PATTERN = Pattern.compile("([\\d]+)");
-    private final Pattern EXTEND_PATTERN = Pattern.compile("([\\d]+)(\\s)([\\W]{2})(\\s)([\\d]+)");
+    private final Pattern editPattern = Pattern.compile("([\\d]+)(\\s)([\\W]+)");
+    private final Pattern takePattern = Pattern.compile("([\\W]{9})(\\s)([\\d]+)(\\s)([\\W]{1})(\\s)([\\d]+)");
+    private final Pattern returnPattern = Pattern.compile("([\\d]+)");
+    private final Pattern extendPattern = Pattern.compile("([\\d]+)(\\s)([\\W]{2})(\\s)([\\d]+)");
 
-    private final String ATTENTION_MESSAGE = "Добрый день! Вам было назначено дополнительное время испытательного срока," +
+    private final String attentionMessage = "Добрый день! Вам было назначено дополнительное время испытательного срока," +
             " новых дней: + ";
 
-    private static final String dogButtonText = "Вернуться";
+    private static final String DOG_BUTTON_TEXT = "Вернуться";
 
     /**
      * <i> Метод для проверки и обработки входящего сообщения на сохранение данных о собаке от администратора.
@@ -51,7 +51,7 @@ public class ValidateAdoptedDogService {
      * @return String в зависимости от результата обработки
      */
     public String validateAddDog(Message message) {
-        Matcher matcher = ADD_PATTERN.matcher(message.text());
+        Matcher matcher = addPattern.matcher(message.text());
         if (matcher.find()) {
             String name = matcher.group(5);
             AdoptedDog dog = adoptedDogService.addAdoptedDog(new AdoptedDog(name));
@@ -68,7 +68,7 @@ public class ValidateAdoptedDogService {
      * @return String в зависимости от результата обработки
      */
     public String validateDeleteDog(Message message) {
-        Matcher matcher = FIND_AND_DELETE_PATTERN.matcher(message.text());
+        Matcher matcher = findAndDeletePattern.matcher(message.text());
         if (matcher.find()) {
             Long dogId = Long.valueOf(matcher.group(1));
             Optional<AdoptedDog> deleteDog = adoptedDogService.getAdoptedDog(dogId);
@@ -89,7 +89,7 @@ public class ValidateAdoptedDogService {
      * @return String в зависимости от результата обработки
      */
     public String validateGetDog(Message message) {
-        Matcher matcher = FIND_AND_DELETE_PATTERN.matcher(message.text());
+        Matcher matcher = findAndDeletePattern.matcher(message.text());
         if (matcher.find()) {
             Long id = Long.valueOf(matcher.group(1));
             Optional<AdoptedDog> findDog = adoptedDogService.getAdoptedDog(id);
@@ -109,7 +109,7 @@ public class ValidateAdoptedDogService {
      * @return String в зависимости от результата обработки
      */
     public String validateEditDog(Message message) {
-        Matcher matcher = EDIT_PATTERN.matcher(message.text());
+        Matcher matcher = editPattern.matcher(message.text());
         if (matcher.find()) {
             Long id = Long.valueOf(matcher.group(1));
             Optional<AdoptedDog> editDog = adoptedDogService.getAdoptedDog(id);
@@ -132,7 +132,7 @@ public class ValidateAdoptedDogService {
      * @return String в зависимости от результата обработки
      */
     public String validateTakeDog(Message message) {
-        Matcher matcher = TAKE_PATTERN.matcher(message.text());
+        Matcher matcher = takePattern.matcher(message.text());
         if (matcher.find()) {
             Long idDog = Long.valueOf(matcher.group(3));
             Optional<AdoptedDog> editDog = adoptedDogService.getAdoptedDog(idDog);
@@ -162,7 +162,7 @@ public class ValidateAdoptedDogService {
      * @return String в зависимости от результата обработки
      */
     public String validateReturnDog(Message message) {
-        Matcher matcher = RETURN_PATTERN.matcher(message.text());
+        Matcher matcher = returnPattern.matcher(message.text());
         if (matcher.find()) {
             Long idDog = Long.valueOf(matcher.group(1));
             Optional<AdoptedDog> editDog = adoptedDogService.getAdoptedDog(idDog);
@@ -187,7 +187,7 @@ public class ValidateAdoptedDogService {
      * @return String в зависимости от результата обработки
      */
     public String validateExtendDog(Message message) {
-        Matcher matcher = EXTEND_PATTERN.matcher(message.text());
+        Matcher matcher = extendPattern.matcher(message.text());
         if (matcher.find()) {
             Long idDog = Long.valueOf(matcher.group(1));
             Optional<AdoptedDog> editDog = adoptedDogService.getAdoptedDog(idDog);
@@ -205,9 +205,9 @@ public class ValidateAdoptedDogService {
             if (newPeriod == 14 || newPeriod == 30) {
                 newDog.setTrialPeriod(editDog.get().getTrialPeriod()+ newPeriod);
                 adoptedDogService.editAdoptedDog(newDog);
-                telegramBot.execute(new SendMessage(chatIdUser, ATTENTION_MESSAGE + newPeriod)
+                telegramBot.execute(new SendMessage(chatIdUser, attentionMessage + newPeriod)
                         .replyMarkup(new InlineKeyboardMarkup(
-                                new InlineKeyboardButton(dogButtonText).callbackData(Callbacks.DOG_MENU.name())
+                                new InlineKeyboardButton(DOG_BUTTON_TEXT).callbackData(Callback.DOG_MENU.name())
                         )));
                 return newDog + " изменен в базе данных приюта для собак.";
             }

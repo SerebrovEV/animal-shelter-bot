@@ -1,9 +1,8 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
-import com.animalshelter.animalshelterbot.handler.Callback;
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
-import com.animalshelter.animalshelterbot.organisation.Callbacks;
+import com.animalshelter.animalshelterbot.organisation.Callback;
 import com.animalshelter.animalshelterbot.service.DogReportService;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
@@ -20,17 +19,17 @@ public class DogReportController implements CommandController {
 
     private final DogReportService dogReportService;
 
-    private final String PHOTO_PATTERN = "(?U)(\\w+)(\\.)(.+)";
+    private final String photoPattern = "(?U)(\\w+)(\\.)(.+)";
 
-    private final String GET_ALL_DOG_REPORTS = "/getDogReports";
+    private final String getAllDogReports = "/getDogReports";
 
-    private final String GET_DOG_DATE_REPORT = "/getDogDayReport (\\d{4}-\\d{2}-\\d{2})";
-    private final String DELETE_DOG_FROM_REPORT_BY_DOG_ID = "/deleteDogsFromReportById ([\\d]+)";
-    private final String DELETE_DOG_FROM_REPORT_BY_ID = "/deleteDogReportId ([\\d]+)";
-    private final String GET_DOGS_FROM_BAD_USERS = "/getDogBadUsers (\\d{4}-\\d{2}-\\d{2})";
-    private final String SEND_WARNING_TO_USER = "/sendDogWarning (\\d+)";
-    private final String GET_HELP = "/dogReportHelp";
-    private final String HELP_MESSAGE = "*/getDogReports* - выводит все отчеты из БД\n" +
+    private final String getDogDateReport = "/getDogDayReport (\\d{4}-\\d{2}-\\d{2})";
+    private final String deleteDogFromReportByDogId = "/deleteDogsFromReportById ([\\d]+)";
+    private final String deleteDogFromReportById = "/deleteDogReportId ([\\d]+)";
+    private final String getDogsFromBadUsers = "/getDogBadUsers (\\d{4}-\\d{2}-\\d{2})";
+    private final String sendWarningToUser = "/sendDogWarning (\\d+)";
+    private final String getHelp = "/dogReportHelp";
+    private final String helpMessage = "*/getDogReports* - выводит все отчеты из БД\n" +
             "*/getDogDayReport 2023-01-12* - выводит отчеты из БД за указанную дату\n" +
             "*/deleteDogsFromReportById 1* - удаляет из БД всех собак по id = 1(adopted_dog)\n" +
             "*/deleteDogReportId 1* - удаляет из БД запись с id = 1\n" +
@@ -38,9 +37,9 @@ public class DogReportController implements CommandController {
             "*/sendDogWarning 1* - отправляет предупреждение владельцу по id собаки(adopted_dog)\n";
 
 
-    @Command(name = GET_HELP)
+    @Command(name = getHelp)
     public SendMessage getHelp(Message message) {
-        return new SendMessage(message.from().id(), HELP_MESSAGE).parseMode(ParseMode.Markdown);
+        return new SendMessage(message.from().id(), helpMessage).parseMode(ParseMode.Markdown);
     }
 
     /**
@@ -48,7 +47,7 @@ public class DogReportController implements CommandController {
      *
      * @return Пример отчета
      */
-    @Callback(name = Callbacks.DOG_REPORT)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callback.DOG_REPORT)
     public SendMessage addReportDogCallback(CallbackQuery callback) {
         return dogReportService.addInquiryDogReport(callback);
     }
@@ -58,7 +57,7 @@ public class DogReportController implements CommandController {
      *
      * @return {@link SendMessage}
      */
-    @Callback(name = Callbacks.DOG_ADD_REPORT_NO)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callback.DOG_ADD_REPORT_NO)
     public SendMessage deleteUserFromTempReport(CallbackQuery callback) {
         return dogReportService.closeInquiryDogReport(callback);
     }
@@ -68,7 +67,7 @@ public class DogReportController implements CommandController {
      *
      * @return {@link SendMessage}
      */
-    @Callback(name = Callbacks.DOG_ADD_REPORT_YES)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callback.DOG_ADD_REPORT_YES)
     public SendMessage createReport(CallbackQuery callback) {
         return dogReportService.addReport(callback);
     }
@@ -78,7 +77,7 @@ public class DogReportController implements CommandController {
      *
      * @return {@link SendMessage}
      */
-    @Command(pattern = PHOTO_PATTERN)
+    @Command(pattern = photoPattern)
     public SendMessage cacheReport(Message message) {
         return dogReportService.validateReport(message);
     }
@@ -88,7 +87,7 @@ public class DogReportController implements CommandController {
      *
      * @return {@link SendMessage}
      */
-    @Command(name = GET_ALL_DOG_REPORTS)
+    @Command(name = getAllDogReports)
     public SendMessage getReportByToday(Message message) {
         return dogReportService.getAllDogReports(message);
     }
@@ -98,7 +97,7 @@ public class DogReportController implements CommandController {
      *
      * @return {@link SendMessage}
      */
-    @Command(pattern = GET_DOG_DATE_REPORT)
+    @Command(pattern = getDogDateReport)
     public SendMessage getReportByDay(Message message) {
         return dogReportService.getDogReportByDay(message);
     }
@@ -108,7 +107,7 @@ public class DogReportController implements CommandController {
      *
      * @return {@link SendMessage}
      */
-    @Command(pattern = DELETE_DOG_FROM_REPORT_BY_DOG_ID)
+    @Command(pattern = deleteDogFromReportByDogId)
     public SendMessage deleteDogsFromReportById(Message message) {
         return dogReportService.deleteDogsFromReportByDogId(message);
     }
@@ -118,7 +117,7 @@ public class DogReportController implements CommandController {
      *
      * @return {@link SendMessage}
      */
-    @Command(pattern = DELETE_DOG_FROM_REPORT_BY_ID)
+    @Command(pattern = deleteDogFromReportById)
     public SendMessage deleteDogReport(Message message) {
         return dogReportService.deleteDogReport(message);
     }
@@ -128,7 +127,7 @@ public class DogReportController implements CommandController {
      *
      * @return Список питомцев, не имеющих отчет
      */
-    @Command(pattern = GET_DOGS_FROM_BAD_USERS)
+    @Command(pattern = getDogsFromBadUsers)
     public List<SendMessage> getDogsWithoutReport(Message message) {
         return dogReportService.getMissingReports(message);
     }
@@ -139,7 +138,7 @@ public class DogReportController implements CommandController {
      * @param message хранит id усыновленного питомца
      * @return Список {@link SendMessage}
      */
-    @Command(pattern = SEND_WARNING_TO_USER)
+    @Command(pattern = sendWarningToUser)
     public List<SendMessage> sendWarningToUser(Message message) {
         return dogReportService.sendWarning(message);
     }

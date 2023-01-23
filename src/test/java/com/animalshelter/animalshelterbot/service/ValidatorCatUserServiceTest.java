@@ -1,6 +1,5 @@
 package com.animalshelter.animalshelterbot.service;
 
-import com.animalshelter.animalshelterbot.controllers.AdminCatController;
 import com.animalshelter.animalshelterbot.model.CatUser;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Message;
