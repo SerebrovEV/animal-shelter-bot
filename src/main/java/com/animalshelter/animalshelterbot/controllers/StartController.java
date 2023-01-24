@@ -216,8 +216,7 @@ public class StartController implements CommandController {
      */
     @Command(name = HELP_ADMIN_COMMAND)
     public SendMessage adminHelpMenu(Message message) {
-        //   if (VOLUNTEER_CHAT_ID == message.from().id())
-        return new SendMessage(message.from().id(), adminMenuText);
+         return new SendMessage(message.from().id(), adminMenuText);
     }
 
 }

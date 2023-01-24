@@ -7,6 +7,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.sql.Date;
 
+/**
+ * Модель для отчетов усыновителей приюта для кошек.
+ */
 @Setter
 @Getter
 @EqualsAndHashCode

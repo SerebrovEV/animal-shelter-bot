@@ -21,6 +21,10 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ * Сервис для добавления, получения, редактирования и удаления отчетов усыновителей DogUser
+ * в/из базы данных приюта для собак.
+ */
 @Service
 @RequiredArgsConstructor
 public class DogReportService {

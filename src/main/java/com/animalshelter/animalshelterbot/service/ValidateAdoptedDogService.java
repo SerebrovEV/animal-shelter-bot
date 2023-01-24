@@ -19,8 +19,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * <i> Сервис для обработки входящих сообщений с контроллеров
- * {@link AdminDogController } и  из телеграма
+ * <i> Сервис для обработки входящих сообщений от контроллера
+ * {@link AdminDogController }
  * и подготовки ответного сообщения пользователю</i>
  */
 @Service
