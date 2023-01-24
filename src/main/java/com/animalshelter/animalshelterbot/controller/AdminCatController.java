@@ -1,4 +1,4 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
@@ -28,8 +28,8 @@ public class AdminCatController implements CommandController {
 
     private final AdoptedCatService adoptedCatService;
     private final ValidateAdoptedCatService validateAdoptedCatService;
-    private final Logger LOG = LoggerFactory.getLogger(AdminCatUserController.class);
-    private final String ADMIN_COMMAND = "Команды для работы с кошками: \n" +
+    private final Logger logger = LoggerFactory.getLogger(AdminCatUserController.class);
+    private final String adminCommand = "Команды для работы с кошками: \n" +
             "/infoAboutAdminCat - команды для использования;\n" +
             "Сохранить к Мурзик - добавить кошку в базу данных приюта;\n" +
             "Найти к 10 - найти кошку с id = 10;\n" +
@@ -40,8 +40,8 @@ public class AdminCatController implements CommandController {
             "Продлить к 2 на 14 (30) - продлить период адаптации кошке с id=2 на 14 дней(или на 30 дней) для плохого усыновителя;\n" +
             "/getAllCat - получить список всех кошек;\n" +
             "/getAllFreeCat - получить список всех свободных кошек в приюте;\n" +
-            "/getAllBusyCat  - получить список всех кошек на испытательном периоде."+
-            "/getAllCatWithEndPeriod - получить список всех кошек с окончаниям испытательного срока;\n";
+            "/getAllBusyCat  - получить список всех кошек на испытательном периоде;\n"+
+            "/getAllCatWithEndPeriod - получить список всех кошек с окончаниям испытательного срока.";
 
     private static final String SAVE_CAT_PATTERN = "Сохранить к ([\\W]+)";
     private static final String EDIT_CAT_PATTERN = "Изменить к ([\\d]+)(\\s)([\\W]+)";
@@ -62,8 +62,8 @@ public class AdminCatController implements CommandController {
     @Command(name = "/infoAboutAdminCat")
     public SendMessage handleInfoAboutAdminCat(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} запросил инструкцию по использованию бота", idAdmin);
-        return new SendMessage(idAdmin, ADMIN_COMMAND);
+        logger.info("Администратор {} запросил инструкцию по использованию бота", idAdmin);
+        return new SendMessage(idAdmin, adminCommand);
 
     }
 
@@ -77,7 +77,7 @@ public class AdminCatController implements CommandController {
     @Command(pattern = SAVE_CAT_PATTERN)
     public SendMessage handleCreateCat(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} сохраняет кошку в базу данных приюта для кошек", idAdmin);
+        logger.info("Администратор {} сохраняет кошку в базу данных приюта для кошек", idAdmin);
         String answer = validateAdoptedCatService.validateAddCat(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -92,7 +92,7 @@ public class AdminCatController implements CommandController {
     @Command(pattern = DELETE_CAT_PATTERN)
     public SendMessage handleDeleteCat(Message message) {
         Long idAdmin = message.from().id();
-        LOG.warn("Администратор {} удаляет кошку из базы данных приюта для кошек", idAdmin);
+        logger.warn("Администратор {} удаляет кошку из базы данных приюта для кошек", idAdmin);
         String answer = validateAdoptedCatService.validateDeleteCat(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -107,7 +107,7 @@ public class AdminCatController implements CommandController {
     @Command(pattern = FIND_CAT_PATTERN)
     public SendMessage handleGetCat(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} выполняет поиск кошки в базе данных приюта для кошек", idAdmin);
+        logger.info("Администратор {} выполняет поиск кошки в базе данных приюта для кошек", idAdmin);
         String answer = validateAdoptedCatService.validateGetCat(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -122,7 +122,7 @@ public class AdminCatController implements CommandController {
     @Command(pattern = EDIT_CAT_PATTERN)
     public SendMessage handleEditCat(Message message) {
         Long idAdmin = message.from().id();
-        LOG.warn("Администратор {} выполняет изменение кошки в базе данных приюта для кошек", idAdmin);
+        logger.warn("Администратор {} выполняет изменение кошки в базе данных приюта для кошек", idAdmin);
         String answer = validateAdoptedCatService.validateEditCat(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -137,7 +137,7 @@ public class AdminCatController implements CommandController {
     @Command(name = "/getAllCat")
     public List<SendMessage> handleGetAllCat(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} запросил всех кошек в базе данных приюта для кошек", idAdmin);
+        logger.info("Администратор {} запросил всех кошек в базе данных приюта для кошек", idAdmin);
         List<AdoptedCat> answer = adoptedCatService.getAllCat();
         return answer.stream()
                 .map(s -> new SendMessage(idAdmin, s.toString()))
@@ -154,7 +154,7 @@ public class AdminCatController implements CommandController {
     @Command(name = "/getAllFreeCat")
     public List<SendMessage> handleGetAllFreeCat(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} запросил всех свободных кошек в базе данных приюта для кошек", idAdmin);
+        logger.info("Администратор {} запросил всех свободных кошек в базе данных приюта для кошек", idAdmin);
         List<AdoptedCat> answer = adoptedCatService.getAllFreeCat();
         return answer.stream()
                 .map(s -> new SendMessage(idAdmin, s.toString()))
@@ -171,7 +171,7 @@ public class AdminCatController implements CommandController {
     @Command(name = "/getAllBusyCat")
     public List<SendMessage> handleGetAllBusyCat(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} запросил всех усыновленных кошек в базе данных приюта для кошек", idAdmin);
+        logger.info("Администратор {} запросил всех усыновленных кошек в базе данных приюта для кошек", idAdmin);
         List<AdoptedCat> answer = adoptedCatService.getAllBusyCat();
         return answer.stream()
                 .map(s -> new SendMessage(idAdmin, s.toString()))
@@ -189,7 +189,7 @@ public class AdminCatController implements CommandController {
     @Command(name = "/getAllCatWithEndPeriod")
     public List<SendMessage> handleGetAllCatWithEndPeriod(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} запросил всех усыновленных кошек с окончанием испытательного срока в базе данных приюта для кошек", idAdmin);
+        logger.info("Администратор {} запросил всех усыновленных кошек с окончанием испытательного срока в базе данных приюта для кошек", idAdmin);
         List<AdoptedCat> answer = adoptedCatService.getAllCatWithEndPeriod();
         return answer.stream()
                 .map(s -> new SendMessage(idAdmin, s.toString()))
@@ -206,7 +206,7 @@ public class AdminCatController implements CommandController {
     @Command(pattern = TAKE_CAT_PATTERN)
     public SendMessage handleTakeCat(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} добавляет усыновителя у кошки в базе данных приюта для кошек", idAdmin);
+        logger.info("Администратор {} добавляет усыновителя у кошки в базе данных приюта для кошек", idAdmin);
         String answer = validateAdoptedCatService.validateTakeCat(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -221,7 +221,7 @@ public class AdminCatController implements CommandController {
     @Command(pattern = RETURN_CAT_PATTERN)
     public SendMessage handleReturnCat(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} удаляет усыновителя у кошки в базе данных приюта для кошек", idAdmin);
+        logger.info("Администратор {} удаляет усыновителя у кошки в базе данных приюта для кошек", idAdmin);
         String answer = validateAdoptedCatService.validateReturnCat(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -236,7 +236,7 @@ public class AdminCatController implements CommandController {
     @Command(pattern = EXTEND_CAT_PATTERN)
     public SendMessage handleExtendCat(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} продлевает срок адаптации для усыновителя в базе данных приюта для кошек", idAdmin);
+        logger.info("Администратор {} продлевает срок адаптации для усыновителя в базе данных приюта для кошек", idAdmin);
         String answer = validateAdoptedCatService.validateExtendCat(message);
         return new SendMessage(idAdmin, answer);
     }

@@ -1,4 +1,4 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.handler.Callback;
 import com.animalshelter.animalshelterbot.handler.Command;
@@ -42,10 +42,10 @@ import java.util.Map;
 public class CallVolunteerController implements CommandController {
 
     @Value("${telegram.volunteer.chat.id}")
-    private Long VOLUNTEER_CHAT_ID;
+    private Long volunteerChatId;
 
     @Value("${telegram.volunteer.chanel.id}")
-    private Long VOLUNTEER_CHANEL_ID;
+    private Long volunteerChanelId;
 
     public static final String STOP_CHAT = "/stopChat";
 
@@ -83,7 +83,7 @@ public class CallVolunteerController implements CommandController {
         }
         if (id != -1) {
             volunteerChatEnable.remove(id);
-            return new SendMessage(VOLUNTEER_CHAT_ID, "Вопрос закрыт")
+            return new SendMessage(volunteerChatId, "Вопрос закрыт")
                     .replyToMessageId(message.messageThreadId());
         }
 
@@ -130,11 +130,11 @@ public class CallVolunteerController implements CommandController {
             // Проверяем, запрашивал ли пользователь запрос в чат
             if (volunteerChatEnable.containsKey(message.chat().id())) {
                 if (message.photo() != null) {
-                    telegramBotSender.telegramSendPhoto(new SendPhoto(VOLUNTEER_CHAT_ID, message.photo()[0].fileId())
+                    telegramBotSender.telegramSendPhoto(new SendPhoto(volunteerChatId, message.photo()[0].fileId())
                             .caption(message.caption()).replyToMessageId(volunteerChatEnable.get(message.chat().id())));
                     return new SendMessage(message.chat().id(), "");
                 }
-                return new SendMessage(VOLUNTEER_CHAT_ID, message.text())
+                return new SendMessage(volunteerChatId, message.text())
                         .replyToMessageId(volunteerChatEnable.get(message.chat().id()));
             } else {
                 return new SendMessage(message.chat().id(), "");
@@ -153,7 +153,7 @@ public class CallVolunteerController implements CommandController {
 
         MessageEntity messageEntity = new MessageEntity(MessageEntity.Type.text_mention, 0, requestString.length())
                 .user(callbackQuery.from());
-        SendMessage sendMessage = new SendMessage(VOLUNTEER_CHANEL_ID, requestString)
+        SendMessage sendMessage = new SendMessage(volunteerChanelId, requestString)
                 .entities(messageEntity);
         telegramBotSender.sendMessage(sendMessage);
 

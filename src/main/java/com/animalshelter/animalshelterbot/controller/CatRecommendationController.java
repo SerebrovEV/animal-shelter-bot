@@ -1,4 +1,4 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.handler.Callback;
 import com.animalshelter.animalshelterbot.handler.CommandController;
@@ -28,7 +28,7 @@ public class CatRecommendationController implements CommandController {
 
     private final TelegramBotSender telegramBotSender;
 
-    private static final String backButtonText = "Назад";
+    private static final String BACK_BUTTON_TEXT = "Назад";
 
     private final String pathToFileCatRecommendation = "src/main/resources/textinfo/cat_dating_rules_recommendation.txt";
     private final String pathToFileKittyHousingRecommendation = "src/main/resources/textinfo/kitty_housing_recommendations.txt";
@@ -130,7 +130,7 @@ public class CatRecommendationController implements CommandController {
         return new SendMessage(id, text)
                 .parseMode(ParseMode.Markdown)
                 .replyMarkup(new InlineKeyboardMarkup().addRow(
-                        new InlineKeyboardButton(backButtonText)
+                        new InlineKeyboardButton(BACK_BUTTON_TEXT)
                                 .callbackData(Callbacks.CAT_ADOPTION_INFO_MENU.name())
                 ));
     }

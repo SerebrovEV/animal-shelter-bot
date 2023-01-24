@@ -1,4 +1,4 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
@@ -29,8 +29,8 @@ public class AdminDogController implements CommandController {
 
     private final ValidateAdoptedDogService validateAdoptedDogService;
     private final AdoptedDogService adoptedDogService;
-    private final Logger LOG = LoggerFactory.getLogger(AdminDogController.class);
-    private final String ADMIN_COMMAND = "Правила по работе с БД приюта для собак: \n" +
+    private final Logger logger = LoggerFactory.getLogger(AdminDogController.class);
+    private final String adminCommand = "Правила по работе с БД приюта для собак: \n" +
             "/infoAboutAdminDog - команды для использования;\n" +
             "Сохранить c Белка - добавить собаку в базу данных приюта;\n" +
             "Найти с 10 - найти собаку с id = 10;\n" +
@@ -41,8 +41,8 @@ public class AdminDogController implements CommandController {
             "Продлить с 2 на 14 (30) - продлить период адаптации собаки с id=2 на 14 дней(или на 30 дней) для плохого усыновителя;\n" +
             "/getAllDog - получить список всех собак;\n" +
             "/getAllFreeDog - получить список всех свободных собак в приюте;\n" +
-            "/getAllDogOnTrialPeriod  - получить список всех собак на испытательном периоде." +
-            "/getAllDogWithEndPeriod - получить список всех собак с окончаниям испытательного срока;\n";
+            "/getAllDogOnTrialPeriod  - получить список всех собак на испытательном периоде$;\n" +
+            "/getAllDogWithEndPeriod - получить список всех собак с окончаниям испытательного срока.";
 
     private static final String SAVE_DOG_PATTERN = "Сохранить с ([\\W]+)";
     private static final String EDIT_DOG_PATTERN = "Изменить с ([\\d]+)(\\s)([\\W]+)";
@@ -61,10 +61,9 @@ public class AdminDogController implements CommandController {
      */
     @Command(name = "/infoAboutAdminDog")
     public SendMessage handleInfoAboutAdminDog(Message message) {
-        //  if(VOLUNTEER_CHAT_ID == message.from().id())
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} запросил инструкцию по использованию бота", idAdmin);
-        return new SendMessage(idAdmin, ADMIN_COMMAND);
+        logger.info("Администратор {} запросил инструкцию по использованию бота", idAdmin);
+        return new SendMessage(idAdmin, adminCommand);
     }
     /**
      * <i>Метод для записи собак в базу данных приюта для собак администратором
@@ -76,7 +75,7 @@ public class AdminDogController implements CommandController {
     @Command (pattern = SAVE_DOG_PATTERN)
     public SendMessage handleCreateDog(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} сохраняет собаку в базу данных приюта для собак", idAdmin);
+        logger.info("Администратор {} сохраняет собаку в базу данных приюта для собак", idAdmin);
         String answer = validateAdoptedDogService.validateAddDog(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -91,7 +90,7 @@ public class AdminDogController implements CommandController {
     public SendMessage handleDeleteDog(Message message) {
 
         Long idAdmin = message.from().id();
-        LOG.warn("Администратор {} удаляет собаку из базы данных приюта для собак", idAdmin);
+        logger.warn("Администратор {} удаляет собаку из базы данных приюта для собак", idAdmin);
         String answer = validateAdoptedDogService.validateDeleteDog(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -106,7 +105,7 @@ public class AdminDogController implements CommandController {
     public SendMessage handleGetDog(Message message) {
 
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} выполняет поиск собаки в базе данных приюта для собак", idAdmin);
+        logger.info("Администратор {} выполняет поиск собаки в базе данных приюта для собак", idAdmin);
         String answer = validateAdoptedDogService.validateGetDog(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -122,7 +121,7 @@ public class AdminDogController implements CommandController {
     public SendMessage handleEditDog(Message message) {
 
         Long idAdmin = message.from().id();
-        LOG.warn("Администратор {} выполняет изменение собаки в базе данных приюта для собак", idAdmin);
+        logger.warn("Администратор {} выполняет изменение собаки в базе данных приюта для собак", idAdmin);
         String answer = validateAdoptedDogService.validateEditDog(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -137,7 +136,7 @@ public class AdminDogController implements CommandController {
     public List<SendMessage> handleGetAllDog(Message message) {
 
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} запросил всех собак в базе данных приюта для собак", idAdmin);
+        logger.info("Администратор {} запросил всех собак в базе данных приюта для собак", idAdmin);
         List<AdoptedDog> answer = adoptedDogService.getAllDog();
         return answer.stream()
                 .map(s -> new SendMessage(idAdmin, s.toString()))
@@ -155,7 +154,7 @@ public class AdminDogController implements CommandController {
     public List<SendMessage> handleGetAllFreeDog(Message message) {
 
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} запросил всех свободных собак в базе данных приюта для собак", idAdmin);
+        logger.info("Администратор {} запросил всех свободных собак в базе данных приюта для собак", idAdmin);
         List<AdoptedDog> answer = adoptedDogService.getAllFreeDog();
         return answer.stream()
                 .map(s -> new SendMessage(idAdmin, s.toString()))
@@ -173,7 +172,7 @@ public class AdminDogController implements CommandController {
     public List<SendMessage> handleGetAllDogOnTrialPeriod(Message message) {
 
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} запросил всех усыновленных собак в базе данных приюта для собак", idAdmin);
+        logger.info("Администратор {} запросил всех усыновленных собак в базе данных приюта для собак", idAdmin);
         List<AdoptedDog> answer = adoptedDogService.getAllDogOnTrialPeriod();
         return answer.stream()
                 .map(s -> new SendMessage(idAdmin, s.toString()))
@@ -190,7 +189,7 @@ public class AdminDogController implements CommandController {
     public List<SendMessage> handleGetAllDogWithEndPeriod(Message message) {
 
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} запросил всех усыновленных собак с окончанием испытательного срока в базе данных приюта для собак", idAdmin);
+        logger.info("Администратор {} запросил всех усыновленных собак с окончанием испытательного срока в базе данных приюта для собак", idAdmin);
         List<AdoptedDog> answer = adoptedDogService.getAllDogWithEndPeriod();
         return answer.stream()
                 .map(s -> new SendMessage(idAdmin, s.toString()))
@@ -207,7 +206,7 @@ public class AdminDogController implements CommandController {
     public SendMessage handleTakeDog(Message message) {
 
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} добавляет усыновителя у собаки в базе данных приюта для собак", idAdmin);
+        logger.info("Администратор {} добавляет усыновителя у собаки в базе данных приюта для собак", idAdmin);
         String answer = validateAdoptedDogService.validateTakeDog(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -222,7 +221,7 @@ public class AdminDogController implements CommandController {
     public SendMessage handleReturnDog(Message message) {
 
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} удаляет усыновителя у собаки в базе данных приюта для собак", idAdmin);
+        logger.info("Администратор {} удаляет усыновителя у собаки в базе данных приюта для собак", idAdmin);
         String answer = validateAdoptedDogService.validateReturnDog(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -237,7 +236,7 @@ public class AdminDogController implements CommandController {
     public SendMessage handleExtendCDog(Message message) {
 
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} продлевает испытательный срок для усыновителя в базе данных приюта для собак", idAdmin);
+        logger.info("Администратор {} продлевает испытательный срок для усыновителя в базе данных приюта для собак", idAdmin);
         String answer = validateAdoptedDogService.validateExtendDog(message);
         return new SendMessage(idAdmin, answer);
     }

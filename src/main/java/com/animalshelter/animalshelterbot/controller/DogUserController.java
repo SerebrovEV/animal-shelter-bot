@@ -1,8 +1,7 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.handler.Callback;
 import com.animalshelter.animalshelterbot.handler.Command;
-import com.animalshelter.animalshelterbot.service.ValidatorCatUserService;
 import com.pengrad.telegrambot.model.Update;
 import com.animalshelter.animalshelterbot.handler.CommandController;
 import com.animalshelter.animalshelterbot.organisation.Callbacks;
@@ -27,22 +26,22 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DogUserController implements CommandController {
 
-    private final Logger LOG = LoggerFactory.getLogger(DogUserController.class);
+    private final Logger logger = LoggerFactory.getLogger(DogUserController.class);
     private final ValidatorDogUserService validatorDogUserService;
     private static final String ADD_CONTACT_PATTERN = "Возьму собаку ([\\d]{11})(\\s)([\\W]+)";
     private static final String ADD_ID_CHAT_PATTERN = "Взял кота ([\\d]{11})(\\s)([\\W]+)";
-    private static final String backButtonText = "Назад";
+    private static final String BACK_BUTTON_TEXT = "Назад";
 
-    private final String ADD_MESSAGE = "Для того, чтобы оставить контактные данные для обратной " +
+    private final String addMessage = "Для того, чтобы оставить контактные данные для обратной " +
             "связи отправьте сообщение в форме:\n Возьму собаку 89871234567 Иван \n и мы вам перезвоним.";
 
     @Callback(name = Callbacks.DOG_CONTACT_INFO)
     public SendMessage handleAddMessageDog(CallbackQuery callbackQuery) {
         long idUser = callbackQuery.from().id();
-        LOG.info("Пользователь {} запросил пример для записи контакта в базу данных приюта для собак", idUser);
-        return new SendMessage(idUser, ADD_MESSAGE)
+        logger.info("Пользователь {} запросил пример для записи контакта в базу данных приюта для собак", idUser);
+        return new SendMessage(idUser, addMessage)
                 .replyMarkup(new InlineKeyboardMarkup().addRow(
-                        new InlineKeyboardButton(backButtonText).callbackData(Callbacks.DOG_MENU.name())
+                        new InlineKeyboardButton(BACK_BUTTON_TEXT).callbackData(Callbacks.DOG_MENU.name())
                 ));
     }
     /**
@@ -56,10 +55,10 @@ public class DogUserController implements CommandController {
     @Command(pattern = ADD_CONTACT_PATTERN)
     public SendMessage handleAddDogUser(Message message) {
         long idUser = message.from().id();
-        LOG.info("Пользователь {} производит запись контактных данных в базу данных приюта для собак", idUser);
+        logger.info("Пользователь {} производит запись контактных данных в базу данных приюта для собак", idUser);
         return new SendMessage(idUser, validatorDogUserService.validateDogUser(message))
                 .replyMarkup(new InlineKeyboardMarkup().addRow(
-                        new InlineKeyboardButton(backButtonText).callbackData(Callbacks.DOG_MENU.name())
+                        new InlineKeyboardButton(BACK_BUTTON_TEXT).callbackData(Callbacks.DOG_MENU.name())
                 ));
     }
     /**
@@ -73,10 +72,10 @@ public class DogUserController implements CommandController {
     @Command(pattern = ADD_ID_CHAT_PATTERN)
     public SendMessage handleAddDogUserIDChat(Message message) {
         long idUser = message.from().id();
-        LOG.info("Пользователь {} производит запись контактных данных в базу данных приюта для собак", idUser);
+        logger.info("Пользователь {} производит запись контактных данных в базу данных приюта для собак", idUser);
         return new SendMessage(idUser, validatorDogUserService.validateDogUserIdChat(message))
                 .replyMarkup(new InlineKeyboardMarkup().addRow(
-                        new InlineKeyboardButton(backButtonText).callbackData(Callbacks.CAT_MENU.name())
+                        new InlineKeyboardButton(BACK_BUTTON_TEXT).callbackData(Callbacks.CAT_MENU.name())
                 ));
     }
 }

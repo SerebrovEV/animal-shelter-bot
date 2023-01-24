@@ -1,6 +1,5 @@
 package com.animalshelter.animalshelterbot.service;
 
-import com.animalshelter.animalshelterbot.controllers.AdminCatController;
 import com.animalshelter.animalshelterbot.model.CatUser;
 import com.animalshelter.animalshelterbot.repository.CatUserRepository;
 import org.junit.jupiter.api.BeforeEach;

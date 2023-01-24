@@ -1,12 +1,10 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.handler.Callback;
-import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
 import com.animalshelter.animalshelterbot.organisation.Callbacks;
 import com.animalshelter.animalshelterbot.sender.TelegramBotSender;
 import com.pengrad.telegrambot.model.CallbackQuery;
-import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.ParseMode;
@@ -30,7 +28,7 @@ public class DogRecommendationController implements CommandController {
 
     private final TelegramBotSender telegramBotSender;
 
-    private static final String backButtonText = "Назад";
+    private static final String BACK_BUTTON_TEXT = "Назад";
     private final String pathToFileRecommendation = "src/main/resources/textinfo/dog_dating_rules_recommendation.txt";
     private final String pathToFileAdvice = "src/main/resources/textinfo/cynologist_advice.txt";
     private final String getPathToFileRecommendationDisabilitiesDog = "src/main/resources/textinfo/recommendations_for_a_dog_with_disabilities.txt";
@@ -52,7 +50,7 @@ public class DogRecommendationController implements CommandController {
         String text = Files.readString(Paths.get(pathToFileRecommendation));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton((backButtonText))
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton((BACK_BUTTON_TEXT))
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
 
@@ -68,7 +66,7 @@ public class DogRecommendationController implements CommandController {
         String text = Files.readString(Paths.get(pathToFileCynologistTeam));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton((backButtonText))
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton((BACK_BUTTON_TEXT))
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
 
@@ -84,7 +82,7 @@ public class DogRecommendationController implements CommandController {
         String text = Files.readString(Paths.get(pathToFileRejectionsReason));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(backButtonText)
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(BACK_BUTTON_TEXT)
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
 
@@ -107,7 +105,7 @@ public class DogRecommendationController implements CommandController {
 
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(backButtonText)
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(BACK_BUTTON_TEXT)
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
     /**
@@ -122,7 +120,7 @@ public class DogRecommendationController implements CommandController {
         String text = Files.readString(Paths.get(pathToFileHousingRecommendation));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(backButtonText)
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(BACK_BUTTON_TEXT)
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
     /**
@@ -137,7 +135,7 @@ public class DogRecommendationController implements CommandController {
         String text = Files.readString(Paths.get(pathToFilePuppyHousingRecommendation));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(backButtonText)
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(BACK_BUTTON_TEXT)
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
     /**
@@ -152,7 +150,7 @@ public class DogRecommendationController implements CommandController {
         String text = Files.readString(Paths.get(pathToFileTransportationRecommendation));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(backButtonText)
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(BACK_BUTTON_TEXT)
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
     /**
@@ -168,7 +166,7 @@ public class DogRecommendationController implements CommandController {
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
                 .replyMarkup(new InlineKeyboardMarkup().addRow(
-                new InlineKeyboardButton(backButtonText)
+                new InlineKeyboardButton(BACK_BUTTON_TEXT)
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())
         ));
     }
@@ -186,7 +184,7 @@ public class DogRecommendationController implements CommandController {
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
                 .replyMarkup(new InlineKeyboardMarkup().addRow(
-                        new InlineKeyboardButton(backButtonText)
+                        new InlineKeyboardButton(BACK_BUTTON_TEXT)
                                 .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())
                 ));
     }

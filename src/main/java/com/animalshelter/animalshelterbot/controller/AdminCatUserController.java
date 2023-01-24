@@ -1,4 +1,4 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
@@ -29,8 +29,8 @@ public class AdminCatUserController implements CommandController {
     private final ValidatorCatUserService validatorCatUserService;
     private final CatUserService catUserService;
 
-    private final Logger LOG = LoggerFactory.getLogger(AdminCatUserController.class);
-    private final String ADMIN_COMMAND = "Команды для работы с усыновителями кошек: \n" +
+    private final Logger logger = LoggerFactory.getLogger(AdminCatUserController.class);
+    private final String adminCommand = "Команды для работы с усыновителями кошек: \n" +
             "/infoAboutAdminCatUser - команды для использования;\n" +
             "Сохранить КП 89871234567 Иван - добавить усыновителя;\n" +
             "Найти КП 10 - найти усыновителя с id = 10;\n" +
@@ -38,7 +38,7 @@ public class AdminCatUserController implements CommandController {
             "Удалить КП 10 - удалить усыновителя с id = 10;\n" +
             "Поздравить КП 2 - поздравить усыновителя с id = 2 с окончанием испытательного срока;\n" +
             "Неудача КП 3 - направить усыновителю с id = 3 сообщение о том, что он не прошел испытательный срок;\n" +
-            "/getAllCatUser - получить список всех усыновителей;\n";
+            "/getAllCatUser - получить список всех усыновителей.";
 
     private static final String SAVE_CONTACT_PATTERN = "Сохранить КП ([\\d]{11})(\\s)([\\W]+)";
     private static final String EDIT_CONTACT_PATTERN = "Изменить КП ([\\d]+)(\\s)([\\d]{11})(\\s)([\\W]+)";
@@ -58,8 +58,8 @@ public class AdminCatUserController implements CommandController {
     @Command(name = "/infoAboutAdminCatUser")
     public SendMessage handleInfoAboutAdminCatUser(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} запросил инструкцию по использованию бота", idAdmin);
-        return new SendMessage(idAdmin, ADMIN_COMMAND);
+        logger.info("Администратор {} запросил инструкцию по использованию бота", idAdmin);
+        return new SendMessage(idAdmin, adminCommand);
 
     }
 
@@ -74,7 +74,7 @@ public class AdminCatUserController implements CommandController {
     @Command(pattern = SAVE_CONTACT_PATTERN)
     public SendMessage handleCreateCatUser(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} сохраняет контакт усыновителя в базу данных", idAdmin);
+        logger.info("Администратор {} сохраняет контакт усыновителя в базу данных", idAdmin);
         String answer = validatorCatUserService.validateCatUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -90,7 +90,7 @@ public class AdminCatUserController implements CommandController {
     @Command(pattern = FIND_CONTACT_PATTERN)
     public SendMessage handleGetCatUser(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} запрашивает контакт усыновителя в базе данных приюта для кошек", idAdmin);
+        logger.info("Администратор {} запрашивает контакт усыновителя в базе данных приюта для кошек", idAdmin);
         String answer = validatorCatUserService.validateGetCatUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -106,7 +106,7 @@ public class AdminCatUserController implements CommandController {
     @Command(pattern = DELETE_CONTACT_PATTERN)
     public SendMessage handleDeleteCatUser(Message message) {
         Long idAdmin = message.from().id();
-        LOG.warn("Администратор {} запросил удаление усыновителя из базы данных", idAdmin);
+        logger.warn("Администратор {} запросил удаление усыновителя из базы данных", idAdmin);
         String answer = validatorCatUserService.validateDeleteCatUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -122,7 +122,7 @@ public class AdminCatUserController implements CommandController {
     @Command(pattern = EDIT_CONTACT_PATTERN)
     public SendMessage handleEditCatUser(Message message) {
         Long idAdmin = message.from().id();
-        LOG.warn("Администратор {} изменяет контакт усыновителя в базе данных приюта для кошек", idAdmin);
+        logger.warn("Администратор {} изменяет контакт усыновителя в базе данных приюта для кошек", idAdmin);
         String answer = validatorCatUserService.validateEditCatUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -138,7 +138,7 @@ public class AdminCatUserController implements CommandController {
     @Command(name = "/getAllCatUser")
     public List<SendMessage> handleGetAllCatUser(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} запросил всех пользователей из базы данных приюта для кошек", idAdmin);
+        logger.info("Администратор {} запросил всех пользователей из базы данных приюта для кошек", idAdmin);
         List<CatUser> answer = catUserService.getAllCatUser();
         return answer.stream()
                 .map(s -> new SendMessage(idAdmin, s.toString()))
@@ -155,7 +155,7 @@ public class AdminCatUserController implements CommandController {
     @Command(pattern = CONGRATULATION_CONTACT_PATTERN)
     public SendMessage handleCongratulationCatUser(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} направил поздравление усыновителю из базы данных приюта для кошек", idAdmin);
+        logger.info("Администратор {} направил поздравление усыновителю из базы данных приюта для кошек", idAdmin);
         String answer = validatorCatUserService.validateCongratulationCatUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
@@ -170,7 +170,7 @@ public class AdminCatUserController implements CommandController {
     @Command(pattern = RETURN_CONTACT_PATTERN)
     public SendMessage handleReturnCatUser(Message message) {
         Long idAdmin = message.from().id();
-        LOG.info("Администратор {} направил возврат животного усыновителю из базы данных приюта для кошек", idAdmin);
+        logger.info("Администратор {} направил возврат животного усыновителю из базы данных приюта для кошек", idAdmin);
        String answer = validatorCatUserService.validateReturnCatUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }

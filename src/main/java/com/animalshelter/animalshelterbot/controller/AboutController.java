@@ -1,4 +1,4 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.handler.Callback;
 import com.animalshelter.animalshelterbot.handler.CommandController;
@@ -54,20 +54,20 @@ public class AboutController implements CommandController {
             "кто уже появился на свет, но ему почему-то досталась нелегкая судьба. Мы поможем вам выбрать животное с учетом ваших пожеланий и предпочтений," +
             " с радостью познакомим со всеми нашими кошками. Все наши питомцы привиты и стерилизованы.";
 
-    private static final String backButtonText = "Назад";
+    private static final String BACK_BUTTON_TEXT = "Назад";
 
     @Callback(name = Callbacks.DOG_SHELTER_INFO)
     public SendMessage handleCallbackDogDescriptionMessage(CallbackQuery callbackQuery) {
         return new SendMessage(callbackQuery.from().id(), aboutDogDescriptionText)
          .replyMarkup(new InlineKeyboardMarkup()
-                .addRow(new InlineKeyboardButton(backButtonText).callbackData(Callbacks.DOG_INFO_MENU.name())));
+                .addRow(new InlineKeyboardButton(BACK_BUTTON_TEXT).callbackData(Callbacks.DOG_INFO_MENU.name())));
 
     }
     @Callback(name = Callbacks.CAT_SHELTER_INFO)
     public SendMessage handleCallbackCatDescriptionMessage(CallbackQuery callbackQuery) {
         return new SendMessage(callbackQuery.from().id(), aboutCatDescriptionText)
          .replyMarkup(new InlineKeyboardMarkup()
-                .addRow(new InlineKeyboardButton(backButtonText).callbackData(Callbacks.CAT_INFO_MENU.name())));
+                .addRow(new InlineKeyboardButton(BACK_BUTTON_TEXT).callbackData(Callbacks.CAT_INFO_MENU.name())));
 
     }
 
@@ -79,7 +79,7 @@ public class AboutController implements CommandController {
         telegramBotSender.telegramSendPhoto(scheme);
         return new SendMessage(callbackQuery.from().id(), "")
         .replyMarkup(new InlineKeyboardMarkup()
-                .addRow(new InlineKeyboardButton(backButtonText).callbackData(Callbacks.DOG_INFO_MENU.name())));
+                .addRow(new InlineKeyboardButton(BACK_BUTTON_TEXT).callbackData(Callbacks.DOG_INFO_MENU.name())));
     }
     @Callback(name = Callbacks.CAT_SCHEDULE_INFO)
     public SendMessage handleCallbackCatAddressAndHoursMessage(CallbackQuery callbackQuery) {
@@ -89,7 +89,7 @@ public class AboutController implements CommandController {
         telegramBotSender.telegramSendPhoto(scheme);
         return new SendMessage(callbackQuery.from().id(), "")
         .replyMarkup(new InlineKeyboardMarkup()
-                .addRow(new InlineKeyboardButton(backButtonText).callbackData(Callbacks.CAT_INFO_MENU.name())));
+                .addRow(new InlineKeyboardButton(BACK_BUTTON_TEXT).callbackData(Callbacks.CAT_INFO_MENU.name())));
     }
 
     @Callback(name = Callbacks.DOG_CAR_INFO)
@@ -98,7 +98,7 @@ public class AboutController implements CommandController {
                 "или службой охраны 88125461234";
         return new SendMessage(callbackQuery.from().id(), contactSecurity)
                 .replyMarkup(new InlineKeyboardMarkup()
-                        .addRow(new InlineKeyboardButton(backButtonText).callbackData(Callbacks.DOG_INFO_MENU.name())));
+                        .addRow(new InlineKeyboardButton(BACK_BUTTON_TEXT).callbackData(Callbacks.DOG_INFO_MENU.name())));
 
     }
 
@@ -108,7 +108,7 @@ public class AboutController implements CommandController {
                 "или службой охраны 88145461234";
         return new SendMessage(callbackQuery.from().id(), contactSecurity)
                 .replyMarkup(new InlineKeyboardMarkup()
-                        .addRow(new InlineKeyboardButton(backButtonText).callbackData(Callbacks.CAT_INFO_MENU.name())));
+                        .addRow(new InlineKeyboardButton(BACK_BUTTON_TEXT).callbackData(Callbacks.CAT_INFO_MENU.name())));
 
     }
 }

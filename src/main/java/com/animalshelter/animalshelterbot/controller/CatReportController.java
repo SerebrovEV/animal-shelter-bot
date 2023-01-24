@@ -1,4 +1,4 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.handler.Callback;
 import com.animalshelter.animalshelterbot.handler.Command;
@@ -23,17 +23,17 @@ public class CatReportController implements CommandController {
 
     private final CatReportService catReportService;
 
-    private final String PHOTO_PATTERN = "(?U)(\\w+)(\\.)(.+)";
+    private final String photoPattern = "(?U)(\\w+)(\\.)(.+)";
 
-    private final String GET_ALL_CAT_REPORTS = "/getCatReports";
+    private final String getAllCatReports = "/getCatReports";
 
-    private final String GET_CAT_DATE_REPORT = "/getCatDayReport (\\d{4}-\\d{2}-\\d{2})";
-    private final String DELETE_CAT_FROM_REPORT_BY_CAT_ID = "/deleteCatsFromReportById ([\\d]+)";
-    private final String DELETE_CAT_FROM_REPORT_BY_ID = "/deleteCatReportId ([\\d]+)";
-    private final String GET_CATS_FROM_BAD_USERS = "/getCatBadUsers (\\d{4}-\\d{2}-\\d{2})";
-    private final String SEND_WARNING_TO_USER = "/sendCatWarning (\\d+)";
-    private final String GET_HELP = "/catReportHelp";
-    private final String HELP_MESSAGE = "*/getCatReports* - выводит все отчеты из БД\n" +
+    private final String getCatDateReport = "/getCatDayReport (\\d{4}-\\d{2}-\\d{2})";
+    private final String deleteCatFromReportByCatId = "/deleteCatsFromReportById ([\\d]+)";
+    private final String deleteCatFromReportById = "/deleteCatReportId ([\\d]+)";
+    private final String getCatsFromBadUsers = "/getCatBadUsers (\\d{4}-\\d{2}-\\d{2})";
+    private final String sendWarningToUser = "/sendCatWarning (\\d+)";
+    private final String getHelp = "/catReportHelp";
+    private final String helpMessage = "*/getCatReports* - выводит все отчеты из БД\n" +
             "*/getCatDayReport 2023-01-12* - выводит отчеты из БД за указанную дату\n" +
             "*/deleteCatsFromReportById 1* - удаляет из БД всех кошек по id = 1(adopted_cat)\n" +
             "*/deleteCatReportId 1* - удаляет из БД запись с id = 1\n" +
@@ -41,9 +41,9 @@ public class CatReportController implements CommandController {
             "*/sendCatWarning 1* - отправляет предупреждение владельцу по id кошки(adopted_cat)\n";
 
 
-    @Command(name = GET_HELP)
+    @Command(name = getHelp)
     public SendMessage getHelp(Message message) {
-        return new SendMessage(message.from().id(), HELP_MESSAGE).parseMode(ParseMode.Markdown);
+        return new SendMessage(message.from().id(), helpMessage).parseMode(ParseMode.Markdown);
     }
 
     /**
@@ -81,7 +81,7 @@ public class CatReportController implements CommandController {
      *
      * @return {@link SendMessage}
      */
-    @Command(pattern = PHOTO_PATTERN)
+    @Command(pattern = photoPattern)
     public SendMessage cacheReport(Message message) {
         return catReportService.validateReport(message);
     }
@@ -91,7 +91,7 @@ public class CatReportController implements CommandController {
      *
      * @return {@link SendMessage}
      */
-    @Command(name = GET_ALL_CAT_REPORTS)
+    @Command(name = getAllCatReports)
     public SendMessage getReportByToday(Message message) {
         return catReportService.getAllCatReports(message);
     }
@@ -101,7 +101,7 @@ public class CatReportController implements CommandController {
      *
      * @return {@link SendMessage}
      */
-    @Command(pattern = GET_CAT_DATE_REPORT)
+    @Command(pattern = getCatDateReport)
     public SendMessage getReportByDay(Message message) {
         return catReportService.getCatReportByDay(message);
     }
@@ -111,7 +111,7 @@ public class CatReportController implements CommandController {
      *
      * @return {@link SendMessage}
      */
-    @Command(pattern = DELETE_CAT_FROM_REPORT_BY_CAT_ID)
+    @Command(pattern = deleteCatFromReportByCatId)
     public SendMessage deleteCatsFromReportById(Message message) {
         return catReportService.deleteCatsFromReportByCatId(message);
     }
@@ -121,7 +121,7 @@ public class CatReportController implements CommandController {
      *
      * @return {@link SendMessage}
      */
-    @Command(pattern = DELETE_CAT_FROM_REPORT_BY_ID)
+    @Command(pattern = deleteCatFromReportById)
     public SendMessage deleteCatReport(Message message) {
         return catReportService.deleteCatReport(message);
     }
@@ -131,7 +131,7 @@ public class CatReportController implements CommandController {
      *
      * @return Список питомцев, не имеющих отчет
      */
-    @Command(pattern = GET_CATS_FROM_BAD_USERS)
+    @Command(pattern = getCatsFromBadUsers)
     public List<SendMessage> getCatsWithoutReport(Message message) {
         return catReportService.getMissingReports(message);
     }
@@ -142,7 +142,7 @@ public class CatReportController implements CommandController {
      * @param message хранит id усыновленного питомца
      * @return Список {@link SendMessage}
      */
-    @Command(pattern = SEND_WARNING_TO_USER)
+    @Command(pattern = sendWarningToUser)
     public List<SendMessage> sendWarningToUser(Message message) {
         return catReportService.sendWarning(message);
     }
