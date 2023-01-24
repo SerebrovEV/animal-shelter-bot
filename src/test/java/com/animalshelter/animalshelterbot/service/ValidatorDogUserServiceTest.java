@@ -128,7 +128,7 @@ class ValidatorDogUserServiceTest {
     void validateDogUserIdChatIncorrectMatcher() {
         String expected = "Некорректный запрос";
         when(message.text()).thenReturn("Найти и");
-        String actual = out.validateDogUser(message);
+        String actual = out.validateDogUserIdChat(message);
         assertThat(actual).isEqualTo(expected);
     }
 

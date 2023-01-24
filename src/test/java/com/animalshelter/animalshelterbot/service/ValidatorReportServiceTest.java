@@ -26,11 +26,33 @@ class ValidatorReportServiceTest {
     }
 
     @Test
+    void getIdFromMessageBadPattern() throws URISyntaxException, IOException {
+        String json = Files.readString(Paths.get(CatReportService.class.getResource("animal_report_message_bad_id.json").toURI()));
+        Message message = getMessage(json);
+        Long expected = null;
+        assertThat(validatorCatReportService.getIdFromMessage(message)).isNull();
+    }
+
+    @Test
     void getDateFromMessage() throws URISyntaxException, IOException {
         String json = Files.readString(Paths.get(CatReportService.class.getResource("animal_report_message.json").toURI()));
         Message message = getMessage(json);
         Date expected = Date.valueOf("2023-01-12");
         assertThat(expected).isEqualTo(validatorCatReportService.getDateFromMessage(message));
+    }
+
+    @Test
+    void getDateFromMessageBadPattern() throws URISyntaxException, IOException {
+        String json = Files.readString(Paths.get(CatReportService.class.getResource("animal_report_message_id.json").toURI()));
+        Message message = getMessage(json);
+        assertThat(validatorCatReportService.getDateFromMessage(message)).isNull();
+    }
+
+    @Test
+    void getDateFromMessageBadDate() throws URISyntaxException, IOException {
+        String json = Files.readString(Paths.get(CatReportService.class.getResource("animal_report_message_bad_date.json").toURI()));
+        Message message = getMessage(json);
+        assertThat(validatorCatReportService.getDateFromMessage(message)).isNull();
     }
 
     private Message getMessage(String json) {

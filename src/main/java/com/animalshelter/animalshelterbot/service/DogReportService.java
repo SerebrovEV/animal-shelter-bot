@@ -46,11 +46,7 @@ public class DogReportService {
      */
     private boolean isAdoptedDogBelongsToUser(Message message) {
         String name;
-        try {
-            name = message.caption().split("\\.")[0];
-        } catch (RuntimeException e) {
-            return false;
-        }
+        name = message.caption().split("\\.")[0];
         AdoptedDog adoptedDog = adoptedDogRepository.findAdoptedDogByDogName(name).orElse(null);
         if (adoptedDog == null) {
             return false;
@@ -251,7 +247,7 @@ public class DogReportService {
 
     public SendMessage closeInquiryDogReport(CallbackQuery callback) {
         reportTemp.remove(callback.from().id());
-        return new SendMessage(callback.from().id(), "Ваш отчет небыл отправлен.")
+        return new SendMessage(callback.from().id(), "Ваш отчет не был отправлен.")
                 .replyMarkup(new InlineKeyboardMarkup(
                         new InlineKeyboardButton("Повторить").callbackData(Callbacks.DOG_REPORT.name()),
                         new InlineKeyboardButton("Назад").callbackData(Callbacks.DOG_MENU.name())

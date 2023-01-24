@@ -107,6 +107,19 @@ class CatReportServiceTest {
     }
 
     @Test
+    void deleteCatReportWrongId() throws URISyntaxException, IOException {
+        String answer = "Неверный запрос";
+        String json = Files.readString(Paths.get(CatReportService.class.getResource("animal_report_message.json").toURI()));
+        Message message = getMessage(json);
+        when(validatorCatReportService.getIdFromMessage(any(Message.class))).thenReturn(null);
+//        doNothing().when(catReportRepository).deleteById(any(Long.class));
+        SendMessage actual = catReportService.deleteCatReport(message);
+//        verify(catReportRepository).deleteById(1L);
+        assertThat(actual.getParameters().get("chat_id")).isEqualTo(message.from().id());
+        assertThat(actual.getParameters().get("text")).isEqualTo(answer);
+    }
+
+    @Test
     void deleteCatsFromReportByCatId() throws URISyntaxException, IOException {
         String answer = "Все отчеты с кошкой с id = 1 были удалены.";
         String json = Files.readString(Paths.get(CatReportService.class.getResource("animal_report_message.json").toURI()));
@@ -119,6 +132,18 @@ class CatReportServiceTest {
 
         SendMessage actual = catReportService.deleteCatsFromReportByCatId(message);
         verify(catReportRepository).deleteAll(anyCollection());
+        assertThat(actual.getParameters().get("chat_id")).isEqualTo(message.from().id());
+        assertThat(actual.getParameters().get("text")).isEqualTo(answer);
+    }
+
+    @Test
+    void deleteCatsFromReportByCatWrongId() throws URISyntaxException, IOException {
+        String answer = "Неверный запрос";
+        String json = Files.readString(Paths.get(CatReportService.class.getResource("animal_report_message.json").toURI()));
+        Message message = getMessage(json);
+        when(validatorCatReportService.getIdFromMessage(any(Message.class))).thenReturn(null);
+
+        SendMessage actual = catReportService.deleteCatsFromReportByCatId(message);
         assertThat(actual.getParameters().get("chat_id")).isEqualTo(message.from().id());
         assertThat(actual.getParameters().get("text")).isEqualTo(answer);
     }
@@ -189,6 +214,20 @@ class CatReportServiceTest {
     }
 
     @Test
+    void sendWarningCantFindCat() throws URISyntaxException, IOException {
+        String answer = "Кошки с таким id не найдено";
+        String json = Files.readString(Paths.get(CatReportService.class.getResource("animal_report_message.json").toURI()));
+        Message message = getMessage(json);
+        when(validatorCatReportService.getIdFromMessage(any(Message.class))).thenReturn(1L);
+        when(adoptedCatRepository.findById(any(Long.class))).thenReturn(Optional.empty());
+        List<SendMessage> actual = catReportService.sendWarning(message);
+        actual.forEach(s -> {
+            assertThat(s.getParameters().get("chat_id")).isEqualTo(message.from().id());
+            assertThat(s.getParameters().get("text")).isEqualTo(answer);
+        });
+    }
+
+    @Test
     void validateReportPositive() throws URISyntaxException, IOException {
         String answer = "Вы хотите отправить отчет?";
         String json = Files.readString(Paths.get(CatReportService.class.getResource("animal_report_photo_message.json").toURI()));
@@ -207,6 +246,32 @@ class CatReportServiceTest {
         String answer = "Мы не нашли усыновленную Вами кошку с таким именем!";
         String json = Files.readString(Paths.get(CatReportService.class.getResource("animal_report_photo_message.json").toURI()));
         Message message = getMessage(json);
+        addReportToInquiry();
+        SendMessage actual = catReportService.validateReport(message);
+        assertThat(actual.getParameters().get("chat_id")).isEqualTo(message.from().id());
+        assertThat(actual.getParameters().get("text")).isEqualTo(answer);
+    }
+
+    @Test
+    void validateReportWrongName() throws URISyntaxException, IOException {
+        String answer = "Мы не нашли усыновленную Вами кошку с таким именем!";
+        String json = Files.readString(Paths.get(CatReportService.class.getResource("animal_report_photo_message_no_name.json").toURI()));
+        Message message = getMessage(json);
+        when(adoptedCatRepository.findAdoptedCatByCatName(any(String.class))).thenReturn(Optional.ofNullable(null));
+        addReportToInquiry();
+        SendMessage actual = catReportService.validateReport(message);
+        assertThat(actual.getParameters().get("chat_id")).isEqualTo(message.from().id());
+        assertThat(actual.getParameters().get("text")).isEqualTo(answer);
+    }
+
+    @Test
+    void validateReportFindNameNotBelongsToUser() throws URISyntaxException, IOException {
+        String answer = "Мы не нашли усыновленную Вами кошку с таким именем!";
+        String json = Files.readString(Paths.get(CatReportService.class.getResource("animal_report_photo_message_no_name.json").toURI()));
+        Message message = getMessage(json);
+        AdoptedCat adoptedCat = createAdoptedCat();
+        adoptedCat.setCatName("testName");
+        when(adoptedCatRepository.findAdoptedCatByCatName(any(String.class))).thenReturn(Optional.of(adoptedCat));
         addReportToInquiry();
         SendMessage actual = catReportService.validateReport(message);
         assertThat(actual.getParameters().get("chat_id")).isEqualTo(message.from().id());
@@ -236,6 +301,18 @@ class CatReportServiceTest {
     }
 
     @Test
+    void validateReportWithMenuAndNoPhoto() throws URISyntaxException, IOException {
+        String answer = "";
+        String json = Files.readString(Paths.get(CatReportService.class.getResource("animal_report_message.json").toURI()));
+        Message message = getMessage(json);
+        AdoptedCat adoptedCat = createAdoptedCat();
+        addReportToInquiry();
+        SendMessage actual = catReportService.validateReport(message);
+        assertThat(actual.getParameters().get("chat_id")).isEqualTo(message.from().id());
+        assertThat(actual.getParameters().get("text")).isEqualTo(answer);
+    }
+
+    @Test
     void addInquiryCatReport() throws URISyntaxException, IOException {
         SendMessage actual = addReportToInquiry();
         Long expected = 123L;
@@ -244,7 +321,13 @@ class CatReportServiceTest {
     }
 
     @Test
-    void closeInquiryCatReport() {
+    void closeInquiryCatReport() throws URISyntaxException, IOException {
+        String answer = "Ваш отчет не был отправлен.";
+        String json = Files.readString(Paths.get(CatReportService.class.getResource("animal_report_callback.json").toURI()));
+        CallbackQuery callbackQuery = getCallback(json);
+        SendMessage actual = catReportService.closeInquiryCatReport(callbackQuery);
+        assertThat(actual.getParameters().get("chat_id")).isEqualTo(callbackQuery.from().id());
+        assertThat(actual.getParameters().get("text")).isEqualTo(answer);
     }
 
     private CallbackQuery getCallback(String json) {

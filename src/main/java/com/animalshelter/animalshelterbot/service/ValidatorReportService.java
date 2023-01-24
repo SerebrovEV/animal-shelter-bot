@@ -29,7 +29,7 @@ public class ValidatorReportService {
             try {
                 return Date.valueOf(matcher.group(0));
             } catch (RuntimeException e) {
-                e.printStackTrace();
+                return null;
             }
         }
         return null;
