@@ -8,6 +8,9 @@ import java.sql.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * <i> Сервис для обработки входящих сообщений с контроллеров {@link DogReportService} и {@link CatReportService}<i>
+ */
 @Service
 @RequiredArgsConstructor
 public class ValidatorReportService {

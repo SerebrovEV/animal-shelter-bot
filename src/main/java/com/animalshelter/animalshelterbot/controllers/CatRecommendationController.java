@@ -65,7 +65,7 @@ public class CatRecommendationController implements CommandController {
      * Получение информации о необходимых документах для усыновления животного<br>
      * Запрос осуществляется по значению  {@link Callbacks#CAT_DOCUMENT_LIST}
      *
-     * @return Спсок документов.
+     * @return Список документов.
      * @throws IOException
      */
     @Callback(name = Callbacks.CAT_DOCUMENT_LIST)

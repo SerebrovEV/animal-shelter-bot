@@ -14,6 +14,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * Контроллер для работы с отчетами приюта для кошек.
+ */
 @Component
 @RequiredArgsConstructor
 public class CatReportController implements CommandController {

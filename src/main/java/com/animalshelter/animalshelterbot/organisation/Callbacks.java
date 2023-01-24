@@ -1,5 +1,8 @@
 package com.animalshelter.animalshelterbot.organisation;
 
+/**
+ * Enum для работы меню телеграм-бота.
+ */
 public enum Callbacks {
     DUMMY("dummy"),
 

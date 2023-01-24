@@ -21,6 +21,10 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ * Сервис для добавления, получения, редактирования и удаления отчетов усыновителей CatUser
+ * в/из базы данных приюта для кошек.
+ */
 @Service
 @RequiredArgsConstructor
 public class CatReportService {
