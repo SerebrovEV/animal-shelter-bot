@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
- * Класс отвечающий за отправку фото {@link #telegramSendPhoto(SendPhoto)}.
+ * Класс отвечающий за отправку фото {@link #telegramSendPhoto(SendPhoto)}, документов {@link #sendDocument(SendDocument)}
+ * или сообщений {@link #sendMessage(SendMessage)}.
  */
 @Service
 @RequiredArgsConstructor

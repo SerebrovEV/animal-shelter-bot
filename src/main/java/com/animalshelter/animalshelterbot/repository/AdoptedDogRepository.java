@@ -16,10 +16,9 @@ import java.util.Optional;
 
 @Repository
 public interface AdoptedDogRepository extends JpaRepository<AdoptedDog, Long> {
-    Optional<AdoptedDog> findAdoptedDogByDogUserId(Long dogUserid);
-    Optional<AdoptedDog> findAdoptedDogByAdoptionDate(Date adoptionDate);
+
     List<AdoptedDog> findAllByDogUserIsNull();
-   // List<AdoptedDog> findAllByTrialPeriodIsNotNull();
+
    List<AdoptedDog> findAllByDogUserIsNotNull();
 
     Optional<AdoptedDog> findAdoptedDogByDogName(String name);

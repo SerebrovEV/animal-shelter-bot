@@ -92,7 +92,7 @@ public class DogRecommendationController implements CommandController {
      * Запрос осуществляется по значению  {@link Callbacks#DOG_DOCUMENT_LIST}
      *
      * @return Спсок документов.
-     * @throws IOException TODO Можно использовать и для кошек. Но с Callbacks.CAT_DOCUMENT_LIST и "Назад" в соотв-ее меню
+     * @throws IOException
      */
     @Callback(name = Callbacks.DOG_DOCUMENT_LIST)
     public SendMessage handleDogDocListCallbackMessage(CallbackQuery callbackQuery) throws IOException {
@@ -180,7 +180,7 @@ public class DogRecommendationController implements CommandController {
     }
 
     /**
-     * Получение советов по обустройству дома для собаки с с ограниченными возможностями.  <br>
+     * Получение советов по обустройству дома для собаки с ограниченными возможностями.  <br>
      * Запрос осуществляется по значению  {@link Callbacks#DOG_DISABLED_HOUSING_RECOMMENDATION}
      *
      * @return Рекомендации по обустройству дома

@@ -5,6 +5,7 @@ import com.animalshelter.animalshelterbot.handler.CommandController;
 import com.animalshelter.animalshelterbot.model.CatUser;
 import com.animalshelter.animalshelterbot.service.CatUserService;
 import com.animalshelter.animalshelterbot.service.ValidatorCatUserService;
+import com.animalshelter.animalshelterbot.service.ValidatorDogUserService;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * <i>Контроллер для добавления, редактирования, проверки наличия и получения
- * всех {@link CatUser} в/из базы данных приюта для кошек администратором. Обычный пользователь не имеет доступа к данным командам.
+ * <i>Контроллер для добавления, редактирования, поиска, удаления, получения всех {@link CatUser} (хозяев) в/из базы
+ * данных приюта для кошек администратором. А также отправки поздравления администратором об успешном окончании
+ * испытательного срока и уведомлении о неуспешности адаптационного периода.
+ * Обычный пользователь не имеет доступа к данным командам.
  * </i>
  */
 @Component
@@ -141,7 +144,14 @@ public class AdminCatUserController implements CommandController {
                 .map(s -> new SendMessage(idAdmin, s.toString()))
                 .collect(Collectors.toList());
     }
-
+    /**
+     * <i>Метод для отправки поздравления усыновителю из базы данных приюта для кошек администратором
+     * <br>
+     * Используется метод {@link ValidatorCatUserService#validateCongratulationCatUserFromAdmin(Message)} </i>
+     *
+     * @param message
+     * @return {@link SendMessage}
+     */
     @Command(pattern = CONGRATULATION_CONTACT_PATTERN)
     public SendMessage handleCongratulationCatUser(Message message) {
         Long idAdmin = message.from().id();
@@ -149,7 +159,14 @@ public class AdminCatUserController implements CommandController {
         String answer = validatorCatUserService.validateCongratulationCatUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
-
+    /**
+     * <i>Метод для отправки данных усыновителю о неуспешном испытательном сроке из базы данных приюта для собак администратором
+     * <br>
+     * Используется метод {@link ValidatorDogUserService#validateReturnDogUserFromAdmin(Message)} </i>
+     *
+     * @param message
+     * @return {@link SendMessage}
+     */
     @Command(pattern = RETURN_CONTACT_PATTERN)
     public SendMessage handleReturnCatUser(Message message) {
         Long idAdmin = message.from().id();
@@ -157,7 +174,5 @@ public class AdminCatUserController implements CommandController {
        String answer = validatorCatUserService.validateReturnCatUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
-
-
 
 }

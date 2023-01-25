@@ -19,7 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * <i> Сервис для обработки входящих сообщений с контроллерf
+ * <i> Сервис для обработки входящих сообщений от контроллера
  * {@link AdminCatController}
  * и подготовки ответного сообщения пользователю</i>
  */

@@ -9,6 +9,9 @@ import java.sql.Date;
 import java.util.Collection;
 import java.util.Optional;
 
+/**
+ * Модель для собак из приюта для собак.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode

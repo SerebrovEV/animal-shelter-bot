@@ -15,6 +15,13 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Контроллер для добавления, редактирования, получения, удаления, назначения/удаления хозяина, продления периода адаптации или
+ * получения всех AdoptedCat (кошек), а также списка всех неусыновленных кошек, питомцев
+ * находящихся у хозяев с испытательном сроком и списка кошек, у которых период адаптации закончился в/из базы
+ * данных приюта для кошек администратором.
+ * Обычный пользователь не имеет доступа к данным командам.
+ */
 @Component
 @RequiredArgsConstructor
 public class AdminCatController implements CommandController {

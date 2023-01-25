@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 /**
  * Интерфейс-аннотация, указвающая на функцию ответа на {@link Message} <br>
- * Прменима к методам <br>
+ * Применима к методам <br>
  * Метод должен принимать {@link Message} и возвращать {@link SendMessage} <br>
  * В качестве аргумента в аннотацию необходимо передать либо название команды {@link Command#name()}, либо паттрен команды {@link Command#pattern()} и id чата {@link Command#chatId()}
  * */
