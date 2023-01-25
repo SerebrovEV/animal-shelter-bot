@@ -107,6 +107,22 @@ class CallVolunteerControllerTest {
     }
 
     @Test
+    void handleAllMessagesAnswerInGroupWithoutAddingChat() {
+        when(message.replyToMessage()).thenReturn(message);
+        when(message.from()).thenReturn(user);
+        when(user.id()).thenReturn(chat_id);
+        when(user.isBot()).thenReturn(true);
+        when(message.messageThreadId()).thenReturn(thread_id + 1);
+       // when(message.text()).thenReturn("test");
+        addVolunteerChat();
+
+        SendMessage actual = callVolunteerController.handleAllMessages(message);
+
+        assertThat(actual.getParameters().get("chat_id")).isEqualTo(chat_id);
+        assertThat(actual.getParameters().get("text")).isEqualTo("");
+    }
+
+    @Test
     void handleAllMessagesAnswerInGroupWithPhoto() throws URISyntaxException, IOException {
         String json = Files.readString(Paths.get(DogReportController.class.getResource("send_photo_volunteer.json").toURI()));
         Message message = getMessage(json);
