@@ -1,0 +1,7 @@
+{
+  "callback_query": {
+    "from": {
+      "chat_id" : 1
+    }
+  }
+}
