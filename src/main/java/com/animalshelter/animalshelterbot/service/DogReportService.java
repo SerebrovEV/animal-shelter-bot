@@ -45,6 +45,7 @@ public class DogReportService {
                     "В противном случае волонтеры приюта будут обязаны самолично проверять условия содержания животного";
 
 
+    private final String backButtonText = "Назад";
     /**
      * Проверяет, является ли, отправленное в отчете, имя питомца в списке усыновленных собак
      */
@@ -237,7 +238,9 @@ public class DogReportService {
     public SendMessage addInquiryDogReport(CallbackQuery callback) {
         reportTemp.put(callback.from().id(), null);
         telegramBotSender.telegramSendPhoto(examplePhoto(photoFile, callback.from().id()));
-        return new SendMessage(callback.from().id(), exampleText);
+        return new SendMessage(callback.from().id(), exampleText)
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(backButtonText)
+                        .callbackData(Callbacks.DOG_MENU.name())));
     }
 
     /**
