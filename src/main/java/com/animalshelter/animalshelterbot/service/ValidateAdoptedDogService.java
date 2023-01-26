@@ -1,6 +1,6 @@
 package com.animalshelter.animalshelterbot.service;
 
-import com.animalshelter.animalshelterbot.controllers.AdminDogController;
+import com.animalshelter.animalshelterbot.controller.AdminDogController;
 import com.animalshelter.animalshelterbot.model.AdoptedDog;
 import com.animalshelter.animalshelterbot.model.DogUser;
 import com.animalshelter.animalshelterbot.organisation.Callbacks;

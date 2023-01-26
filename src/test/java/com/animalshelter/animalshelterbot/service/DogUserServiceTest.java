@@ -1,6 +1,5 @@
 package com.animalshelter.animalshelterbot.service;
 
-import com.animalshelter.animalshelterbot.model.CatUser;
 import com.animalshelter.animalshelterbot.model.DogUser;
 import com.animalshelter.animalshelterbot.repository.DogUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,31 +28,31 @@ class DogUserServiceTest {
     @Mock
     DogUserRepository dogUserRepository;
 
-    private DogUser BOT_USER1;
-    private DogUser BOT_USER2;
-    private DogUser BOT_USER3;
+    private DogUser botUser1;
+    private DogUser botUser2;
+    private DogUser botUser3;
 
     @BeforeEach
     public void setOut() {
-        BOT_USER1 = new DogUser("Test", 89871234567L, 123456789L);
-        BOT_USER2 = new DogUser("Test2", 89871234568L, 123456781L);
-        BOT_USER3 = new DogUser("Test3", 89871234569L, 123456782L);
+        botUser1 = new DogUser("Test", 89871234567L, 123456789L);
+        botUser2 = new DogUser("Test2", 89871234568L, 123456781L);
+        botUser3 = new DogUser("Test3", 89871234569L, 123456782L);
     }
 
     @Test
     void addDogUser() {
 
-        when(dogUserRepository.save(BOT_USER1)).thenReturn(BOT_USER1);
-        when(dogUserRepository.save(BOT_USER2)).thenReturn(BOT_USER2);
-        when(dogUserRepository.save(BOT_USER3)).thenReturn(BOT_USER3);
+        when(dogUserRepository.save(botUser1)).thenReturn(botUser1);
+        when(dogUserRepository.save(botUser2)).thenReturn(botUser2);
+        when(dogUserRepository.save(botUser3)).thenReturn(botUser3);
 
         DogUser expected = new DogUser("Test", 89871234567L, 123456789L);
         DogUser expected2 = new DogUser("Test2", 89871234568L, 123456781L);
         DogUser expected3 = new DogUser("Test3", 89871234569L, 123456782L);
 
-        DogUser actual = out.addDogUser(BOT_USER1);
-        DogUser actual2 = out.addDogUser(BOT_USER2);
-        DogUser actual3 = out.addDogUser(BOT_USER3);
+        DogUser actual = out.addDogUser(botUser1);
+        DogUser actual2 = out.addDogUser(botUser2);
+        DogUser actual3 = out.addDogUser(botUser3);
 
         assertThat(actual.toString()).isEqualTo(expected.toString());
         assertThat(actual2.toString()).isEqualTo(expected2.toString());
@@ -71,17 +70,17 @@ class DogUserServiceTest {
         Long chatId3 = 123456782L;
 
 
-        when(dogUserRepository.findDogUserByChatId(chatId1)).thenReturn(Optional.ofNullable(BOT_USER1));
-        when(dogUserRepository.findDogUserByChatId(chatId2)).thenReturn(Optional.ofNullable(BOT_USER2));
-        when(dogUserRepository.findDogUserByChatId(chatId3)).thenReturn(Optional.ofNullable(BOT_USER3));
+        when(dogUserRepository.findDogUserByChatId(chatId1)).thenReturn(Optional.ofNullable(botUser1));
+        when(dogUserRepository.findDogUserByChatId(chatId2)).thenReturn(Optional.ofNullable(botUser2));
+        when(dogUserRepository.findDogUserByChatId(chatId3)).thenReturn(Optional.ofNullable(botUser3));
 
         DogUser expected = new DogUser("Test", 89871234567L, 123456789L);
         DogUser expected2 = new DogUser("Test2", 89871234568L, 123456781L);
         DogUser expected3 = new DogUser("Test3", 89871234569L, 123456782L);
 
-        DogUser actual = out.getDogUserByChatId(BOT_USER1.getChatId()).get();
-        DogUser actual2 = out.getDogUserByChatId(BOT_USER2.getChatId()).get();
-        DogUser actual3 = out.getDogUserByChatId(BOT_USER3.getChatId()).get();
+        DogUser actual = out.getDogUserByChatId(botUser1.getChatId()).get();
+        DogUser actual2 = out.getDogUserByChatId(botUser2.getChatId()).get();
+        DogUser actual3 = out.getDogUserByChatId(botUser3.getChatId()).get();
 
         verify(dogUserRepository, times(1)).findDogUserByChatId(chatId1);
         verify(dogUserRepository, times(1)).findDogUserByChatId(chatId2);
@@ -97,9 +96,9 @@ class DogUserServiceTest {
     }
     @Test
     void getDogUserByPhoneNumber() {
-        when(dogUserRepository.findDogUserByPhoneNumber(anyLong())).thenReturn(Optional.ofNullable(BOT_USER1));
+        when(dogUserRepository.findDogUserByPhoneNumber(anyLong())).thenReturn(Optional.ofNullable(botUser1));
         DogUser expected = new DogUser("Test", 89871234567L, 123456789L);
-        DogUser actual = out.getDogUserByPhoneNumber(BOT_USER1.getPhoneNumber()).get();
+        DogUser actual = out.getDogUserByPhoneNumber(botUser1.getPhoneNumber()).get();
         assertThat(actual).isEqualTo(expected);
         assertThat(actual.toString()).isEqualTo(expected.toString());
     }
@@ -110,9 +109,9 @@ class DogUserServiceTest {
         Long botId2 = 2L;
         Long botId3 = 3L;
 
-        when(dogUserRepository.findById(botId1)).thenReturn(Optional.ofNullable(BOT_USER1));
-        when(dogUserRepository.findById(botId2)).thenReturn(Optional.ofNullable(BOT_USER2));
-        when(dogUserRepository.findById(botId3)).thenReturn(Optional.ofNullable(BOT_USER3));
+        when(dogUserRepository.findById(botId1)).thenReturn(Optional.ofNullable(botUser1));
+        when(dogUserRepository.findById(botId2)).thenReturn(Optional.ofNullable(botUser2));
+        when(dogUserRepository.findById(botId3)).thenReturn(Optional.ofNullable(botUser3));
 
 
         DogUser expected = new DogUser("Test", 89871234567L, 123456789L);
@@ -147,9 +146,9 @@ class DogUserServiceTest {
     @Test
     void editDogUser() {
 
-        when(dogUserRepository.save(BOT_USER1)).thenReturn(BOT_USER1);
+        when(dogUserRepository.save(botUser1)).thenReturn(botUser1);
         DogUser expected = new DogUser("Test", 89871234567L, 123456789L);
-        DogUser actual = out.editDogUser(BOT_USER1);
+        DogUser actual = out.editDogUser(botUser1);
         assertThat(actual.toString()).isEqualTo(expected.toString());
         assertThat(actual).isEqualTo(expected);
     }
@@ -157,9 +156,9 @@ class DogUserServiceTest {
     @Test
     void getAllDogUser() {
         when(dogUserRepository.findAll()).thenReturn(new ArrayList<>(List.of(
-                BOT_USER1,
-                BOT_USER2,
-                BOT_USER3)));
+                botUser1,
+                botUser2,
+                botUser3)));
         List<DogUser> expected = new ArrayList<>(List.of(
                 new DogUser("Test", 89871234567L, 123456789L),
                 new DogUser("Test2", 89871234568L, 123456781L),

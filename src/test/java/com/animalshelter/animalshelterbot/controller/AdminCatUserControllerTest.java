@@ -1,4 +1,4 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.model.CatUser;
 import com.animalshelter.animalshelterbot.service.CatUserService;
@@ -46,7 +46,7 @@ class AdminCatUserControllerTest {
             "Удалить КП 10 - удалить усыновителя с id = 10;\n" +
             "Поздравить КП 2 - поздравить усыновителя с id = 2 с окончанием испытательного срока;\n" +
             "Неудача КП 3 - направить усыновителю с id = 3 сообщение о том, что он не прошел испытательный срок;\n" +
-            "/getAllCatUser - получить список всех усыновителей;\n";
+            "/getAllCatUser - получить список всех усыновителей.";
 
     @BeforeEach
     public void setOut() {

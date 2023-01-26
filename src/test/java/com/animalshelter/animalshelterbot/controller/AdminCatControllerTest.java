@@ -1,4 +1,4 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.model.AdoptedCat;
 import com.animalshelter.animalshelterbot.service.AdoptedCatService;
@@ -49,8 +49,8 @@ class AdminCatControllerTest {
             "Продлить к 2 на 14 (30) - продлить период адаптации кошке с id=2 на 14 дней(или на 30 дней) для плохого усыновителя;\n" +
             "/getAllCat - получить список всех кошек;\n" +
             "/getAllFreeCat - получить список всех свободных кошек в приюте;\n" +
-            "/getAllBusyCat  - получить список всех кошек на испытательном периоде."+
-            "/getAllCatWithEndPeriod - получить список всех кошек с окончаниям испытательного срока;\n";
+            "/getAllBusyCat  - получить список всех кошек на испытательном периоде;\n"+
+            "/getAllCatWithEndPeriod - получить список всех кошек с окончаниям испытательного срока.";
 
     @BeforeEach
     public void setOut() {

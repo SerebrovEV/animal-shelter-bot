@@ -1,4 +1,4 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.model.AdoptedDog;
 import com.animalshelter.animalshelterbot.service.AdoptedDogService;
@@ -43,8 +43,8 @@ class AdminDogControllerTest {
             "Продлить с 2 на 14 (30) - продлить период адаптации собаки с id=2 на 14 дней(или на 30 дней) для плохого усыновителя;\n" +
             "/getAllDog - получить список всех собак;\n" +
             "/getAllFreeDog - получить список всех свободных собак в приюте;\n" +
-            "/getAllDogOnTrialPeriod  - получить список всех собак на испытательном периоде." +
-            "/getAllDogWithEndPeriod - получить список всех собак с окончаниям испытательного срока;\n";
+            "/getAllDogOnTrialPeriod  - получить список всех собак на испытательном периоде;\n" +
+            "/getAllDogWithEndPeriod - получить список всех собак с окончаниям испытательного срока.";
 
     @BeforeEach
     void setUp() {

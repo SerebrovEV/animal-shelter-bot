@@ -1,6 +1,5 @@
 package com.animalshelter.animalshelterbot.service;
 
-import com.animalshelter.animalshelterbot.controllers.AdminCatController;
 import com.animalshelter.animalshelterbot.model.CatUser;
 import com.animalshelter.animalshelterbot.repository.CatUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,30 +27,30 @@ class CatUserServiceTest {
     @Mock
     CatUserRepository catUserRepository;
 
-    private CatUser BOT_USER1;
-    private CatUser BOT_USER2;
-    private CatUser BOT_USER3;
+    private CatUser botUser1;
+    private CatUser botUser2;
+    private CatUser botUser3;
 
     @BeforeEach
     public void setOut() {
-        BOT_USER1 = new CatUser("Test", 89871234567L, 123456789L);
-        BOT_USER2 = new CatUser("Test2", 89871234568L, 123456781L);
-        BOT_USER3 = new CatUser("Test3", 89871234569L, 123456782L);
+        botUser1 = new CatUser("Test", 89871234567L, 123456789L);
+        botUser2 = new CatUser("Test2", 89871234568L, 123456781L);
+        botUser3 = new CatUser("Test3", 89871234569L, 123456782L);
     }
 
     @Test
     void addCatUser() {
-        when(catUserRepository.save(BOT_USER1)).thenReturn(BOT_USER1);
-        when(catUserRepository.save(BOT_USER2)).thenReturn(BOT_USER2);
-        when(catUserRepository.save(BOT_USER3)).thenReturn(BOT_USER3);
+        when(catUserRepository.save(botUser1)).thenReturn(botUser1);
+        when(catUserRepository.save(botUser2)).thenReturn(botUser2);
+        when(catUserRepository.save(botUser3)).thenReturn(botUser3);
 
         CatUser expected = new CatUser("Test", 89871234567L, 123456789L);
         CatUser expected2 = new CatUser("Test2", 89871234568L, 123456781L);
         CatUser expected3 = new CatUser("Test3", 89871234569L, 123456782L);
 
-        CatUser actual = out.addCatUser(BOT_USER1);
-        CatUser actual2 = out.addCatUser(BOT_USER2);
-        CatUser actual3 = out.addCatUser(BOT_USER3);
+        CatUser actual = out.addCatUser(botUser1);
+        CatUser actual2 = out.addCatUser(botUser2);
+        CatUser actual3 = out.addCatUser(botUser3);
 
         assertThat(actual.toString()).isEqualTo(expected.toString());
         assertThat(actual2.toString()).isEqualTo(expected2.toString());
@@ -69,17 +68,17 @@ class CatUserServiceTest {
         Long chatId3 = 123456782L;
 
 
-        when(catUserRepository.findCatUserByChatId(chatId1)).thenReturn(Optional.ofNullable(BOT_USER1));
-        when(catUserRepository.findCatUserByChatId(chatId2)).thenReturn(Optional.ofNullable(BOT_USER2));
-        when(catUserRepository.findCatUserByChatId(chatId3)).thenReturn(Optional.ofNullable(BOT_USER3));
+        when(catUserRepository.findCatUserByChatId(chatId1)).thenReturn(Optional.ofNullable(botUser1));
+        when(catUserRepository.findCatUserByChatId(chatId2)).thenReturn(Optional.ofNullable(botUser2));
+        when(catUserRepository.findCatUserByChatId(chatId3)).thenReturn(Optional.ofNullable(botUser3));
 
         CatUser expected = new CatUser("Test", 89871234567L, 123456789L);
         CatUser expected2 = new CatUser("Test2", 89871234568L, 123456781L);
         CatUser expected3 = new CatUser("Test3", 89871234569L, 123456782L);
 
-        CatUser actual = out.getCatUserByChatId(BOT_USER1.getChatId()).get();
-        CatUser actual2 = out.getCatUserByChatId(BOT_USER2.getChatId()).get();
-        CatUser actual3 = out.getCatUserByChatId(BOT_USER3.getChatId()).get();
+        CatUser actual = out.getCatUserByChatId(botUser1.getChatId()).get();
+        CatUser actual2 = out.getCatUserByChatId(botUser2.getChatId()).get();
+        CatUser actual3 = out.getCatUserByChatId(botUser3.getChatId()).get();
 
         verify(catUserRepository, times(1)).findCatUserByChatId(chatId1);
         verify(catUserRepository, times(1)).findCatUserByChatId(chatId2);
@@ -96,18 +95,18 @@ class CatUserServiceTest {
 
     @Test
     void getCatUserByPhoneNumber() {
-        when(catUserRepository.findByPhoneNumber(anyLong())).thenReturn(Optional.ofNullable(BOT_USER1));
+        when(catUserRepository.findByPhoneNumber(anyLong())).thenReturn(Optional.ofNullable(botUser1));
         CatUser expected = new CatUser("Test", 89871234567L, 123456789L);
-        CatUser actual = out.getCatUserByPhoneNumber(BOT_USER1.getPhoneNumber()).get();
+        CatUser actual = out.getCatUserByPhoneNumber(botUser1.getPhoneNumber()).get();
         assertThat(actual).isEqualTo(expected);
         assertThat(actual.toString()).isEqualTo(expected.toString());
     }
 
     @Test
     void editCatUser() {
-        when(catUserRepository.save(BOT_USER1)).thenReturn(BOT_USER1);
+        when(catUserRepository.save(botUser1)).thenReturn(botUser1);
         CatUser expected = new CatUser("Test", 89871234567L, 123456789L);
-        CatUser actual = out.editCatUser(BOT_USER1);
+        CatUser actual = out.editCatUser(botUser1);
         assertThat(actual.toString()).isEqualTo(expected.toString());
         assertThat(actual).isEqualTo(expected);
     }
@@ -118,9 +117,9 @@ class CatUserServiceTest {
         Long botId2 = 2L;
         Long botId3 = 3L;
 
-        when(catUserRepository.findById(botId1)).thenReturn(Optional.ofNullable(BOT_USER1));
-        when(catUserRepository.findById(botId2)).thenReturn(Optional.ofNullable(BOT_USER2));
-        when(catUserRepository.findById(botId3)).thenReturn(Optional.ofNullable(BOT_USER3));
+        when(catUserRepository.findById(botId1)).thenReturn(Optional.ofNullable(botUser1));
+        when(catUserRepository.findById(botId2)).thenReturn(Optional.ofNullable(botUser2));
+        when(catUserRepository.findById(botId3)).thenReturn(Optional.ofNullable(botUser3));
 
 
         CatUser expected = new CatUser("Test", 89871234567L, 123456789L);
@@ -155,9 +154,9 @@ class CatUserServiceTest {
     @Test
     void getAllCatUser() {
         when(catUserRepository.findAll()).thenReturn(new ArrayList<>(List.of(
-                BOT_USER1,
-                BOT_USER2,
-                BOT_USER3)));
+                botUser1,
+                botUser2,
+                botUser3)));
         List<CatUser> expected = new ArrayList<>(List.of(
                 new CatUser("Test", 89871234567L, 123456789L),
                 new CatUser("Test2", 89871234568L, 123456781L),

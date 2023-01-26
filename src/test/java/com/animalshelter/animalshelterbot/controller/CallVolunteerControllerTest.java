@@ -1,4 +1,4 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.sender.TelegramBotSender;
 import com.pengrad.telegrambot.BotUtils;
@@ -175,7 +175,7 @@ class CallVolunteerControllerTest {
     void handleAllMessagesFromUserToVolunteerWithText() throws URISyntaxException, IOException {
         String json = Files.readString(Paths.get(DogReportController.class.getResource("send_text_volunteer_from_user.json").toURI()));
         Message message = getMessage(json);
-        ReflectionTestUtils.setField(callVolunteerController, "VOLUNTEER_CHAT_ID", 2L);
+        ReflectionTestUtils.setField(callVolunteerController, "volunteerChatId", 2L);
         addVolunteerChat();
 
         SendMessage actual = callVolunteerController.handleAllMessages(message);

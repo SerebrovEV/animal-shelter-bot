@@ -1,14 +1,11 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
-import com.animalshelter.animalshelterbot.model.CatUser;
 import com.animalshelter.animalshelterbot.model.DogUser;
 import com.animalshelter.animalshelterbot.service.ValidatorDogUserService;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

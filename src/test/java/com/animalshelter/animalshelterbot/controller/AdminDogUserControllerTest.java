@@ -1,6 +1,5 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
-import com.animalshelter.animalshelterbot.model.CatUser;
 import com.animalshelter.animalshelterbot.model.DogUser;
 import com.animalshelter.animalshelterbot.service.DogUserService;
 import com.animalshelter.animalshelterbot.service.ValidatorDogUserService;
@@ -34,9 +33,9 @@ class AdminDogUserControllerTest {
 
     @Mock
     DogUserService dogUserService;
-    private DogUser DOG_USER;
+    private DogUser dogUser;
 
-    private final String ADMIN_COMMAND = "Правила использования: \n" +
+    private final String adminCommand = "Правила использования: \n" +
             "/infoAboutAdminDogUser - команды для использования;\n" +
             "Сохранить СП 89871234567 Иван - добавить усыновителя;\n" +
             "Найти СП 10 - найти усыновителя с id = 10;\n" +
@@ -44,18 +43,18 @@ class AdminDogUserControllerTest {
             "Удалить СП 10 - удалить усыновителя с id = 10;\n" +
             "Поздравить CП 2 - поздравить усыновителя с id = 2 с окончанием испытательного срока;\n" +
             "Неудача CП 3 - направить усыновителю с id = 3 сообщение о том, что он не прошел испытательный срок;\n" +
-            "/getAllDogUser - получить список всех усыновителей;\n";
+            "/getAllDogUser - получить список всех усыновителей.";
 
     @BeforeEach
     public void setOut() {
         when(message.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
-        DOG_USER = new DogUser("Test", 89871234567L);
+        dogUser = new DogUser("Test", 89871234567L);
     }
 
     @Test
     void handleInfoAboutAdminDogUser() {
-        SendMessage expected = new SendMessage(1L, ADMIN_COMMAND);
+        SendMessage expected = new SendMessage(1L, adminCommand);
         SendMessage actual = out.handleInfoAboutAdminDogUser(message);
 
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
@@ -126,8 +125,8 @@ class AdminDogUserControllerTest {
     }
     @Test
     void handleCongratulationDogUser() {
-        SendMessage expected = new SendMessage(1L, DOG_USER.toString());
-        when(validatorDogUserService.validateCongratulationDogUserFromAdmin(message)).thenReturn(DOG_USER.toString());
+        SendMessage expected = new SendMessage(1L, dogUser.toString());
+        when(validatorDogUserService.validateCongratulationDogUserFromAdmin(message)).thenReturn(dogUser.toString());
 
         SendMessage actual = out.handleCongratulationDogUser(message);
 
@@ -137,8 +136,8 @@ class AdminDogUserControllerTest {
 
     @Test
     void handleReturnDogUser() {
-        SendMessage expected = new SendMessage(1L, DOG_USER.toString());
-        when(validatorDogUserService.validateReturnDogUserFromAdmin(message)).thenReturn(DOG_USER.toString());
+        SendMessage expected = new SendMessage(1L, dogUser.toString());
+        when(validatorDogUserService.validateReturnDogUserFromAdmin(message)).thenReturn(dogUser.toString());
 
         SendMessage actual = out.handleReturnDogUser(message);
 
