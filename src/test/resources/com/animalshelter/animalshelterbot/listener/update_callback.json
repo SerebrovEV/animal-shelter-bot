@@ -1,7 +1,7 @@
 {
   "callback_query": {
     "from": {
-      "chat_id" : 1
+      "id" : 1
     }
   }
 }
