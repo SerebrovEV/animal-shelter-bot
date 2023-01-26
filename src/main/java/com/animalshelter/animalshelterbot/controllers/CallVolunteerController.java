@@ -128,19 +128,19 @@ public class CallVolunteerController implements CommandController {
         } else {
             // Передаем сообщение от пользователя в канал
             // Проверяем, запрашивал ли пользователь запрос в чат
-            if (volunteerChatEnable.containsKey(message.chat().id())) {
+            if (volunteerChatEnable.containsKey(message.from().id())) {
                 if (message.photo() != null) {
                     telegramBotSender.telegramSendPhoto(new SendPhoto(VOLUNTEER_CHAT_ID, message.photo()[0].fileId())
-                            .caption(message.caption()).replyToMessageId(volunteerChatEnable.get(message.chat().id())));
-                    return new SendMessage(message.chat().id(), "");
+                            .caption(message.caption()).replyToMessageId(volunteerChatEnable.get(message.from().id())));
+                    return new SendMessage(message.from().id(), "");
                 }
                 return new SendMessage(VOLUNTEER_CHAT_ID, message.text())
-                        .replyToMessageId(volunteerChatEnable.get(message.chat().id()));
+                        .replyToMessageId(volunteerChatEnable.get(message.from().id()));
             } else {
-                return new SendMessage(message.chat().id(), "");
+                return new SendMessage(message.from().id(), "");
             }
         }
-        return new SendMessage(message.chat().id(), "");
+        return new SendMessage(message.from().id(), "");
     }
 
     @Callback(name = Callbacks.CALL_VOLUNTEER)

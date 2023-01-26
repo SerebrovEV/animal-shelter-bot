@@ -1,0 +1,14 @@
+{
+  "from": {
+    "id": 1
+  },
+  "caption": "Фото",
+  "photo": [
+    {
+      "file_id": "photoFirst"
+    },
+    {
+      "file_id": "photoSecond"
+    }
+  ]
+}

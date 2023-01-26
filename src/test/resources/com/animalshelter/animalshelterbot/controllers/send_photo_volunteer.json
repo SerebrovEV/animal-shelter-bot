@@ -1,0 +1,20 @@
+{
+  "from": {
+    "id": 1
+  },
+  "caption": "Фото",
+  "photo": [
+    {
+      "file_id": "photoFirst"
+    },
+    {
+      "file_id": "photoSecond"
+    }
+  ],
+  "reply_to_message": {
+    "message_thread_id" : 101,
+    "from": {
+      "is_bot" : true
+    }
+  }
+}

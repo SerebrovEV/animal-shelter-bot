@@ -50,11 +50,7 @@ public class CatReportService {
      */
     private boolean isAdoptedCatBelongsToUser(Message message) {
         String name;
-        try {
-            name = message.caption().split("\\.")[0];
-        } catch (RuntimeException e) {
-            return false;
-        }
+        name = message.caption().split("\\.")[0];
         AdoptedCat adoptedCat = adoptedCatRepository.findAdoptedCatByCatName(name).orElse(null);
         if (adoptedCat == null) {
             return false;
@@ -210,12 +206,12 @@ public class CatReportService {
             }
             // Если ранее был запрос на отправку отчета.
 
-                reportTemp.put(message.from().id(), message);
-                return new SendMessage(message.from().id(), "Вы хотите отправить отчет?")
-                        .replyMarkup(new InlineKeyboardMarkup(
-                                new InlineKeyboardButton("Да").callbackData(Callbacks.CAT_ADD_REPORT_YES.name()),
-                                new InlineKeyboardButton("Отправлю позже").callbackData(Callbacks.CAT_ADD_REPORT_NO.name())
-                        ));
+            reportTemp.put(message.from().id(), message);
+            return new SendMessage(message.from().id(), "Вы хотите отправить отчет?")
+                    .replyMarkup(new InlineKeyboardMarkup(
+                            new InlineKeyboardButton("Да").callbackData(Callbacks.CAT_ADD_REPORT_YES.name()),
+                            new InlineKeyboardButton("Отправлю позже").callbackData(Callbacks.CAT_ADD_REPORT_NO.name())
+                    ));
         } else if (!reportTemp.containsKey(message.from().id())) {
             // TODO Если пользователь отправил фото, но не через меню
             //return new SendMessage(message.from().id(), "Если Вы хотите отправить отчет, то сделайте это через меню.");
@@ -254,7 +250,7 @@ public class CatReportService {
 
     public SendMessage closeInquiryCatReport(CallbackQuery callback) {
         reportTemp.remove(callback.from().id());
-        return new SendMessage(callback.from().id(), "Ваш отчет небыл отправлен.")
+        return new SendMessage(callback.from().id(), "Ваш отчет не был отправлен.")
                 .replyMarkup(new InlineKeyboardMarkup(
                         new InlineKeyboardButton("Повторить").callbackData(Callbacks.CAT_REPORT.name()),
                         new InlineKeyboardButton("Назад").callbackData(Callbacks.CAT_MENU.name())
