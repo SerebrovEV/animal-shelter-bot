@@ -1,0 +1,7 @@
+{
+  "callback_query": {
+    "from": {
+      "id" : 1
+    }
+  }
+}
