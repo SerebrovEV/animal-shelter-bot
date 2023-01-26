@@ -1,6 +1,5 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
-import com.animalshelter.animalshelterbot.handler.Callback;
 import com.animalshelter.animalshelterbot.handler.CommandController;
 import com.animalshelter.animalshelterbot.organisation.Callbacks;
 import com.animalshelter.animalshelterbot.sender.TelegramBotSender;
@@ -28,7 +27,7 @@ public class CatRecommendationController implements CommandController {
 
     private final TelegramBotSender telegramBotSender;
 
-    private static final String backButtonText = "Назад";
+    private static final String BACK_BUTTON_TEXT = "Назад";
 
     private final String pathToFileCatRecommendation = "src/main/resources/textinfo/cat_dating_rules_recommendation.txt";
     private final String pathToFileKittyHousingRecommendation = "src/main/resources/textinfo/kitty_housing_recommendations.txt";
@@ -45,7 +44,7 @@ public class CatRecommendationController implements CommandController {
      * @return Рекомендации для знакомства с кошкой
      * @throws IOException
      */
-    @Callback(name = Callbacks.CAT_MEETING_RULES_INFO)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.CAT_MEETING_RULES_INFO)
     public SendMessage handleMeetingRulesCallbackMessage(CallbackQuery callbackQuery) throws IOException {
         return getInfo(pathToFileCatRecommendation, callbackQuery.from().id());
     }
@@ -56,7 +55,7 @@ public class CatRecommendationController implements CommandController {
      *
      * @return Список причин для отказа.
      */
-    @Callback(name = Callbacks.CAT_DECLINE_CAUSES)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.CAT_DECLINE_CAUSES)
     public SendMessage handleCatDeclineCausesCallbackMessage(CallbackQuery callbackQuery) throws IOException {
         return getInfo(pathToFileRejectionsReason, callbackQuery.from().id());
     }
@@ -68,7 +67,7 @@ public class CatRecommendationController implements CommandController {
      * @return Список документов.
      * @throws IOException
      */
-    @Callback(name = Callbacks.CAT_DOCUMENT_LIST)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.CAT_DOCUMENT_LIST)
     public SendMessage handleCatDocListCallbackMessage(CallbackQuery callbackQuery) throws IOException {
         File petContract = new File("src/main/resources/documents/Договор.doc");
         SendDocument document = new SendDocument(callbackQuery.from().id(), petContract)
@@ -84,7 +83,7 @@ public class CatRecommendationController implements CommandController {
      * @return рекомендации по обустройству дома.
      * @throws IOException
      */
-    @Callback(name = Callbacks.CAT_HOUSING_RECOMMENDATION)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.CAT_HOUSING_RECOMMENDATION)
     public SendMessage handleCatHousingRecommendationCallbackMessage(CallbackQuery callbackQuery) throws IOException {
         return getInfo(pathToFileHousingRecommendation, callbackQuery.from().id());
     }
@@ -96,7 +95,7 @@ public class CatRecommendationController implements CommandController {
      * @return рекомендации по обустройству дома для котенка.
      * @throws IOException
      */
-    @Callback(name = Callbacks.CAT_YOUNG_HOUSING_RECOMMENDATION)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.CAT_YOUNG_HOUSING_RECOMMENDATION)
     public SendMessage handleKittyHousingRecommendationCallbackMessage(CallbackQuery callbackQuery) throws IOException {
         return getInfo(pathToFileKittyHousingRecommendation, callbackQuery.from().id());
     }
@@ -108,7 +107,7 @@ public class CatRecommendationController implements CommandController {
      * @return рекомендации по транспортировке питомца.
      * @throws IOException
      */
-    @Callback(name = Callbacks.CAT_TRANSPORTATION_RECOMMENDATION)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.CAT_TRANSPORTATION_RECOMMENDATION)
     public SendMessage handleCatTransportationRecommendationCallbackMessage(CallbackQuery callbackQuery) throws IOException {
         return getInfo(pathToFileTransportationRecommendation, callbackQuery.from().id());
     }
@@ -120,7 +119,7 @@ public class CatRecommendationController implements CommandController {
      * @return Рекомендации по обустройству дома
      * @throws IOException
      */
-    @Callback(name = Callbacks.CAT_DISABLED_HOUSING_RECOMMENDATION)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.CAT_DISABLED_HOUSING_RECOMMENDATION)
     public SendMessage handleCatDisabledHousingCallbackMessage(CallbackQuery callbackQuery) throws IOException {
         return getInfo(getPathToFileRecommendationDisabilitiesCat, callbackQuery.from().id());
     }
@@ -130,7 +129,7 @@ public class CatRecommendationController implements CommandController {
         return new SendMessage(id, text)
                 .parseMode(ParseMode.Markdown)
                 .replyMarkup(new InlineKeyboardMarkup().addRow(
-                        new InlineKeyboardButton(backButtonText)
+                        new InlineKeyboardButton(BACK_BUTTON_TEXT)
                                 .callbackData(Callbacks.CAT_ADOPTION_INFO_MENU.name())
                 ));
     }

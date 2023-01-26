@@ -1,4 +1,4 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
@@ -37,7 +37,7 @@ public class AdminDogUserController implements CommandController {
             "Удалить СП 10 - удалить усыновителя с id = 10;\n" +
             "Поздравить CП 2 - поздравить усыновителя с id = 2 с окончанием испытательного срока;\n" +
             "Неудача CП 3 - направить усыновителю с id = 3 сообщение о том, что он не прошел испытательный срок;\n" +
-            "/getAllDogUser - получить список всех усыновителей;\n";
+            "/getAllDogUser - получить список всех усыновителей.";
 
     private static final String SAVE_CONTACT_PATTERN = "Сохранить СП ([\\d]{11})(\\s)([\\W]+)";
 

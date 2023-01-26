@@ -1,8 +1,8 @@
 package com.animalshelter.animalshelterbot.handler;
 
-import com.animalshelter.animalshelterbot.controllers.CatRecommendationController;
-import com.animalshelter.animalshelterbot.controllers.CatReportController;
-import com.animalshelter.animalshelterbot.controllers.StartController;
+import com.animalshelter.animalshelterbot.controller.CatRecommendationController;
+import com.animalshelter.animalshelterbot.controller.CatReportController;
+import com.animalshelter.animalshelterbot.controller.StartController;
 import com.animalshelter.animalshelterbot.sender.TelegramBotSender;
 import com.animalshelter.animalshelterbot.service.CatReportService;
 import com.pengrad.telegrambot.BotUtils;

@@ -1,6 +1,5 @@
-package com.animalshelter.animalshelterbot.controllers;
+package com.animalshelter.animalshelterbot.controller;
 
-import com.animalshelter.animalshelterbot.handler.Callback;
 import com.animalshelter.animalshelterbot.handler.CommandController;
 import com.animalshelter.animalshelterbot.organisation.Callbacks;
 import com.animalshelter.animalshelterbot.sender.TelegramBotSender;
@@ -28,7 +27,7 @@ public class DogRecommendationController implements CommandController {
 
     private final TelegramBotSender telegramBotSender;
 
-    private static final String backButtonText = "Назад";
+    private static final String BACK_BUTTON_TEXT = "Назад";
     private final String pathToFileRecommendation = "src/main/resources/textinfo/dog_dating_rules_recommendation.txt";
     private final String pathToFileAdvice = "src/main/resources/textinfo/cynologist_advice.txt";
     private final String getPathToFileRecommendationDisabilitiesDog = "src/main/resources/textinfo/recommendations_for_a_dog_with_disabilities.txt";
@@ -46,12 +45,12 @@ public class DogRecommendationController implements CommandController {
      * @return Рекомендации для знакомства с собакой
      * @throws IOException
      */
-    @Callback(name = Callbacks.DOG_MEETING_RULES_INFO)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.DOG_MEETING_RULES_INFO)
     public SendMessage handleMeetingRulesCallbackMessage(CallbackQuery callbackQuery) throws IOException {
         String text = Files.readString(Paths.get(pathToFileRecommendation));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton((backButtonText))
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton((BACK_BUTTON_TEXT))
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
 
@@ -62,12 +61,12 @@ public class DogRecommendationController implements CommandController {
      * @return Рекомендации о проверенных кинологах
      * @throws IOException
      */
-    @Callback(name = Callbacks.DOG_CYNOLOGIST_RECOMMENDATION)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.DOG_CYNOLOGIST_RECOMMENDATION)
     public SendMessage handleCynologistsRecommendationCallbackMessage(CallbackQuery callbackQuery) throws IOException {
         String text = Files.readString(Paths.get(pathToFileCynologistTeam));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton((backButtonText))
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton((BACK_BUTTON_TEXT))
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
 
@@ -78,12 +77,12 @@ public class DogRecommendationController implements CommandController {
      * @return Список причин для отказа.
      * @throws IOException TODO Можно использовать и для кошек. Но с Callbacks.CAT_DECLINE_CAUSES и "Назад" в соотв-ее меню
      */
-    @Callback(name = Callbacks.DOG_DECLINE_CAUSES)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.DOG_DECLINE_CAUSES)
     public SendMessage handleDogDeclineCausesCallbackMessage(CallbackQuery callbackQuery) throws IOException {
         String text = Files.readString(Paths.get(pathToFileRejectionsReason));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(backButtonText)
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(BACK_BUTTON_TEXT)
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
 
@@ -94,7 +93,7 @@ public class DogRecommendationController implements CommandController {
      * @return Спсок документов.
      * @throws IOException
      */
-    @Callback(name = Callbacks.DOG_DOCUMENT_LIST)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.DOG_DOCUMENT_LIST)
     public SendMessage handleDogDocListCallbackMessage(CallbackQuery callbackQuery) throws IOException {
         String text = Files.readString(Paths.get(pathToFileDocList));
         File petContract = new File("src/main/resources/documents/Договор.doc");
@@ -106,7 +105,7 @@ public class DogRecommendationController implements CommandController {
 
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(backButtonText)
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(BACK_BUTTON_TEXT)
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
 
@@ -117,13 +116,13 @@ public class DogRecommendationController implements CommandController {
      * @return рекомендации по обустройству дома.
      * @throws IOException
      */
-    @Callback(name = Callbacks.DOG_HOUSING_RECOMMENDATION)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.DOG_HOUSING_RECOMMENDATION)
     public SendMessage handleDogHousingRecommendationCallbackMessage(CallbackQuery callbackQuery) throws IOException {
         String pathToFileHousingRecommendation = "src/main/resources/textinfo/dog_housing_recommendations.TXT";
         String text = Files.readString(Paths.get(pathToFileHousingRecommendation));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(backButtonText)
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(BACK_BUTTON_TEXT)
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
 
@@ -134,13 +133,13 @@ public class DogRecommendationController implements CommandController {
      * @return рекомендации по обустройству дома для щенка.
      * @throws IOException
      */
-    @Callback(name = Callbacks.DOG_YOUNG_HOUSING_RECOMMENDATION)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.DOG_YOUNG_HOUSING_RECOMMENDATION)
     public SendMessage handlePuppyHousingRecommendationCallbackMessage(CallbackQuery callbackQuery) throws IOException {
         String pathToFilePuppyHousingRecommendation = "src/main/resources/textinfo/puppy_housing_recommendations.TXT";
         String text = Files.readString(Paths.get(pathToFilePuppyHousingRecommendation));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(backButtonText)
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(BACK_BUTTON_TEXT)
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
 
@@ -151,13 +150,13 @@ public class DogRecommendationController implements CommandController {
      * @return рекомендации по транспортировке питомца.
      * @throws IOException
      */
-    @Callback(name = Callbacks.DOG_TRANSPORTATION_RECOMMENDATION)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.DOG_TRANSPORTATION_RECOMMENDATION)
     public SendMessage handleDogTransportationRecommendationCallbackMessage(CallbackQuery callbackQuery) throws IOException {
         String pathToFileTransportationRecommendation = "src/main/resources/textinfo/dog_transportation_recommendations.TXT";
         String text = Files.readString(Paths.get(pathToFileTransportationRecommendation));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
-                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(backButtonText)
+                .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton(BACK_BUTTON_TEXT)
                         .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())));
     }
 
@@ -168,13 +167,13 @@ public class DogRecommendationController implements CommandController {
      * @return Советы от кинолога
      * @throws IOException
      */
-    @Callback(name = Callbacks.DOG_CYNOLOGIST_ADVICES)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.DOG_CYNOLOGIST_ADVICES)
     public SendMessage handleCytologistAdviceCallbackMessage(CallbackQuery callbackQuery) throws IOException {
         String text = Files.readString(Paths.get(pathToFileAdvice));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
                 .replyMarkup(new InlineKeyboardMarkup().addRow(
-                        new InlineKeyboardButton(backButtonText)
+                        new InlineKeyboardButton(BACK_BUTTON_TEXT)
                                 .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())
                 ));
     }
@@ -186,13 +185,13 @@ public class DogRecommendationController implements CommandController {
      * @return Рекомендации по обустройству дома
      * @throws IOException
      */
-    @Callback(name = Callbacks.DOG_DISABLED_HOUSING_RECOMMENDATION)
+    @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.DOG_DISABLED_HOUSING_RECOMMENDATION)
     public SendMessage handleDogDisabledHousingCallbackMessage(CallbackQuery callbackQuery) throws IOException {
         String text = Files.readString(Paths.get(getPathToFileRecommendationDisabilitiesDog));
         return new SendMessage(callbackQuery.from().id(), text)
                 .parseMode(ParseMode.Markdown)
                 .replyMarkup(new InlineKeyboardMarkup().addRow(
-                        new InlineKeyboardButton(backButtonText)
+                        new InlineKeyboardButton(BACK_BUTTON_TEXT)
                                 .callbackData(Callbacks.DOG_ADOPTION_INFO_MENU.name())
                 ));
     }

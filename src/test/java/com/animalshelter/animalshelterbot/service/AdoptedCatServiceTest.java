@@ -1,10 +1,8 @@
 package com.animalshelter.animalshelterbot.service;
 
-import com.animalshelter.animalshelterbot.controllers.AdminCatController;
 import com.animalshelter.animalshelterbot.model.AdoptedCat;
 import com.animalshelter.animalshelterbot.model.CatUser;
 import com.animalshelter.animalshelterbot.repository.AdoptedCatRepository;
-import liquibase.pro.packaged.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 /**
  * Тесты для проверки работоспособности {@link AdoptedCatService}
@@ -32,30 +29,30 @@ class AdoptedCatServiceTest {
     @Mock
     AdoptedCatRepository adoptedCatRepository;
 
-    private AdoptedCat CAT1;
-    private AdoptedCat CAT2;
-    private AdoptedCat CAT3;
+    private AdoptedCat cat;
+    private AdoptedCat cat2;
+    private AdoptedCat cat3;
 
     @BeforeEach
     public void setOut() {
-        CAT1 = new AdoptedCat("Test");
-        CAT2 = new AdoptedCat("Test2");
-        CAT3 = new AdoptedCat("Test3");
+        cat = new AdoptedCat("Test");
+        cat2 = new AdoptedCat("Test2");
+        cat3 = new AdoptedCat("Test3");
     }
 
     @Test
     void addAdoptedCat() {
-        when(adoptedCatRepository.save(CAT1)).thenReturn(CAT1);
-        when(adoptedCatRepository.save(CAT2)).thenReturn(CAT2);
-        when(adoptedCatRepository.save(CAT3)).thenReturn(CAT3);
+        when(adoptedCatRepository.save(cat)).thenReturn(cat);
+        when(adoptedCatRepository.save(cat2)).thenReturn(cat2);
+        when(adoptedCatRepository.save(cat3)).thenReturn(cat3);
 
         AdoptedCat expected = new AdoptedCat("Test");
         AdoptedCat expected2 = new AdoptedCat("Test2");
         AdoptedCat expected3 = new AdoptedCat("Test3");
 
-        AdoptedCat actual = out.addAdoptedCat(CAT1);
-        AdoptedCat actual2 = out.addAdoptedCat(CAT2);
-        AdoptedCat actual3 = out.addAdoptedCat(CAT3);
+        AdoptedCat actual = out.addAdoptedCat(cat);
+        AdoptedCat actual2 = out.addAdoptedCat(cat2);
+        AdoptedCat actual3 = out.addAdoptedCat(cat3);
 
         assertThat(actual.toString()).isEqualTo(expected.toString());
         assertThat(actual2.toString()).isEqualTo(expected2.toString());
@@ -79,9 +76,9 @@ class AdoptedCatServiceTest {
         Long catId2 = 2L;
         Long catId3 = 3L;
 
-        when(adoptedCatRepository.findById(catId1)).thenReturn(Optional.ofNullable(CAT1));
-        when(adoptedCatRepository.findById(catId2)).thenReturn(Optional.ofNullable(CAT2));
-        when(adoptedCatRepository.findById(catId3)).thenReturn(Optional.ofNullable(CAT3));
+        when(adoptedCatRepository.findById(catId1)).thenReturn(Optional.ofNullable(cat));
+        when(adoptedCatRepository.findById(catId2)).thenReturn(Optional.ofNullable(cat2));
+        when(adoptedCatRepository.findById(catId3)).thenReturn(Optional.ofNullable(cat3));
 
 
         AdoptedCat expected = new AdoptedCat("Test");
@@ -107,9 +104,9 @@ class AdoptedCatServiceTest {
 
     @Test
     void editAdoptedCat() {
-        when(adoptedCatRepository.save(CAT1)).thenReturn(CAT1);
+        when(adoptedCatRepository.save(cat)).thenReturn(cat);
         AdoptedCat expected = new AdoptedCat("Test");
-        AdoptedCat actual = out.editAdoptedCat(CAT1);
+        AdoptedCat actual = out.editAdoptedCat(cat);
         assertThat(actual.toString()).isEqualTo(expected.toString());
         assertThat(actual).isEqualTo(expected);
     }
@@ -117,9 +114,9 @@ class AdoptedCatServiceTest {
     @Test
     void getAllCat() {
         when(adoptedCatRepository.findAll()).thenReturn(new ArrayList<>(List.of(
-                CAT1,
-                CAT2,
-                CAT3)));
+                cat,
+                cat2,
+                cat3)));
         List<AdoptedCat> expected = new ArrayList<>(List.of(
                 new AdoptedCat("Test"),
                 new AdoptedCat("Test2"),
@@ -132,9 +129,9 @@ class AdoptedCatServiceTest {
     @Test
     void getAllBusyCat() {
         when(adoptedCatRepository.findAllByCatUserNotNull()).thenReturn(new ArrayList<>(List.of(
-                CAT1,
-                CAT2,
-                CAT3)));
+                cat,
+                cat2,
+                cat3)));
         List<AdoptedCat> expected = new ArrayList<>(List.of(
                 new AdoptedCat("Test"),
                 new AdoptedCat("Test2"),
@@ -147,9 +144,9 @@ class AdoptedCatServiceTest {
     @Test
     void getAllFreeCat() {
         when(adoptedCatRepository.findAllByCatUserIsNull()).thenReturn(new ArrayList<>(List.of(
-                CAT1,
-                CAT2,
-                CAT3)));
+                cat,
+                cat2,
+                cat3)));
         List<AdoptedCat> expected = new ArrayList<>(List.of(
                 new AdoptedCat("Test"),
                 new AdoptedCat("Test2"),
@@ -162,30 +159,30 @@ class AdoptedCatServiceTest {
     @Test
     void getAllCatWithEndPeriod() {
 
-        CAT1.setAdoptionDate(Date.valueOf(LocalDate.of(1990, 8, 1)));
-        CAT2.setAdoptionDate(Date.valueOf(LocalDate.of(1990, 8, 1)));
-        CAT3.setAdoptionDate(Date.valueOf(LocalDate.of(1990, 8, 1)));
+        cat.setAdoptionDate(Date.valueOf(LocalDate.of(1990, 8, 1)));
+        cat2.setAdoptionDate(Date.valueOf(LocalDate.of(1990, 8, 1)));
+        cat3.setAdoptionDate(Date.valueOf(LocalDate.of(1990, 8, 1)));
 
 
-        CAT1.setTrialPeriod(30);
-        CAT2.setTrialPeriod(30);
-        CAT3.setTrialPeriod(30);
+        cat.setTrialPeriod(30);
+        cat2.setTrialPeriod(30);
+        cat3.setTrialPeriod(30);
 
-        CAT1.setCatUser(new CatUser());
-        CAT2.setCatUser(new CatUser());
-        CAT3.setCatUser(new CatUser());
+        cat.setCatUser(new CatUser());
+        cat2.setCatUser(new CatUser());
+        cat3.setCatUser(new CatUser());
 
         List<AdoptedCat> cats = new ArrayList<>(List.of(
-                CAT1,
-                CAT2,
-                CAT3));
+                cat,
+                cat2,
+                cat3));
 
         when(adoptedCatRepository.findAllByCatUserNotNull()).thenReturn(cats);
 
         List<AdoptedCat> expected = new ArrayList<>(List.of(
-                CAT1,
-                CAT2,
-                CAT3));
+                cat,
+                cat2,
+                cat3));
 
         List<AdoptedCat> actual = out.getAllCatWithEndPeriod();
 
