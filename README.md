@@ -12,13 +12,16 @@
 
 ### Язык и окружение:
 
-- Java 11 и выше;
+- Java 11;
 - Spring Boot; 
+- Spring Data JPA; 
 - PostgreSQL 15;
 - Hibernate;
 - Liquibase;
 - Java-telegram-bot-api;
-- Lombok.
+- Lombok;
+- Log4j;
+- Maven.
 
 ### Тестирование
 
