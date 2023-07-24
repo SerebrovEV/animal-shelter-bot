@@ -1,8 +1,10 @@
-package com.animalshelter.animalshelterbot.service;
+package com.animalshelter.animalshelterbot.service.impl;
 
 
 import com.animalshelter.animalshelterbot.model.DogUser;
+import com.animalshelter.animalshelterbot.model.PetUser;
 import com.animalshelter.animalshelterbot.repository.DogUserRepository;
+import com.animalshelter.animalshelterbot.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,34 +18,40 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class DogUserService {
+public class DogUserService implements UserService {
     private final DogUserRepository dogUserRepository;
 
-    public DogUser addDogUser(DogUser dogUser) {
-        return dogUserRepository.save(dogUser);
+    @Override
+    public DogUser addUser(PetUser dogUser) {
+        return dogUserRepository.save((DogUser) dogUser);
     }
 
-    public Optional <DogUser>  getDogUserByChatId(Long chatId) {
+    @Override
+    public Optional<DogUser> getUserByChatId(Long chatId) {
         return dogUserRepository.findDogUserByChatId(chatId);
     }
-    public Optional <DogUser>  getDogUserByPhoneNumber(Long phoneNumber) {
+
+    @Override
+    public Optional<DogUser> getUserByPhoneNumber(Long phoneNumber) {
         return dogUserRepository.findDogUserByPhoneNumber(phoneNumber);
     }
-    public DogUser editDogUser(DogUser dogUser) {
-        return dogUserRepository.save(dogUser);
+
+    public DogUser editUser(PetUser dogUser) {
+        return dogUserRepository.save((DogUser) dogUser);
     }
 
-    public Optional<DogUser> getDogUser(Long id) {
-        Optional<DogUser> findBotUser = dogUserRepository.findById(id);
-        return findBotUser;
+    @Override
+    public Optional<DogUser> getUser(Long id) {
+        return dogUserRepository.findById(id);
     }
 
-    public void deleteDogUser(Long id) {
+    @Override
+    public void deleteUser(Long id) {
         dogUserRepository.deleteById(id);
     }
 
-
-    public List<DogUser> getAllDogUser() {
+    @Override
+    public List<DogUser> getAllUser() {
         return List.copyOf(dogUserRepository.findAll());
     }
 

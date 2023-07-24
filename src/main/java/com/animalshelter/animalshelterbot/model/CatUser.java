@@ -13,7 +13,7 @@ import java.util.Objects;
 @Entity
 @Setter
 @Getter
-public class CatUser {
+public class CatUser extends PetUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

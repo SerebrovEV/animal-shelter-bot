@@ -2,6 +2,7 @@ package com.animalshelter.animalshelterbot.service;
 
 import com.animalshelter.animalshelterbot.model.CatUser;
 import com.animalshelter.animalshelterbot.repository.CatUserRepository;
+import com.animalshelter.animalshelterbot.service.impl.CatUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,9 +49,9 @@ class CatUserServiceTest {
         CatUser expected2 = new CatUser("Test2", 89871234568L, 123456781L);
         CatUser expected3 = new CatUser("Test3", 89871234569L, 123456782L);
 
-        CatUser actual = out.addCatUser(botUser1);
-        CatUser actual2 = out.addCatUser(botUser2);
-        CatUser actual3 = out.addCatUser(botUser3);
+        CatUser actual = out.addUser(botUser1);
+        CatUser actual2 = out.addUser(botUser2);
+        CatUser actual3 = out.addUser(botUser3);
 
         assertThat(actual.toString()).isEqualTo(expected.toString());
         assertThat(actual2.toString()).isEqualTo(expected2.toString());
@@ -76,9 +77,9 @@ class CatUserServiceTest {
         CatUser expected2 = new CatUser("Test2", 89871234568L, 123456781L);
         CatUser expected3 = new CatUser("Test3", 89871234569L, 123456782L);
 
-        CatUser actual = out.getCatUserByChatId(botUser1.getChatId()).get();
-        CatUser actual2 = out.getCatUserByChatId(botUser2.getChatId()).get();
-        CatUser actual3 = out.getCatUserByChatId(botUser3.getChatId()).get();
+        CatUser actual = out.getUserByChatId(botUser1.getChatId()).get();
+        CatUser actual2 = out.getUserByChatId(botUser2.getChatId()).get();
+        CatUser actual3 = out.getUserByChatId(botUser3.getChatId()).get();
 
         verify(catUserRepository, times(1)).findCatUserByChatId(chatId1);
         verify(catUserRepository, times(1)).findCatUserByChatId(chatId2);
@@ -97,7 +98,7 @@ class CatUserServiceTest {
     void getCatUserByPhoneNumber() {
         when(catUserRepository.findByPhoneNumber(anyLong())).thenReturn(Optional.ofNullable(botUser1));
         CatUser expected = new CatUser("Test", 89871234567L, 123456789L);
-        CatUser actual = out.getCatUserByPhoneNumber(botUser1.getPhoneNumber()).get();
+        CatUser actual = out.getUserByPhoneNumber(botUser1.getPhoneNumber()).get();
         assertThat(actual).isEqualTo(expected);
         assertThat(actual.toString()).isEqualTo(expected.toString());
     }
@@ -106,7 +107,7 @@ class CatUserServiceTest {
     void editCatUser() {
         when(catUserRepository.save(botUser1)).thenReturn(botUser1);
         CatUser expected = new CatUser("Test", 89871234567L, 123456789L);
-        CatUser actual = out.editCatUser(botUser1);
+        CatUser actual = out.editUser(botUser1);
         assertThat(actual.toString()).isEqualTo(expected.toString());
         assertThat(actual).isEqualTo(expected);
     }
@@ -126,9 +127,9 @@ class CatUserServiceTest {
         CatUser expected2 = new CatUser("Test2", 89871234568L, 123456781L);
         CatUser expected3 = new CatUser("Test3", 89871234569L, 123456782L);
 
-        CatUser actual = out.getCatUser(botId1).get();
-        CatUser actual2 = out.getCatUser(botId2).get();
-        CatUser actual3 = out.getCatUser(botId3).get();
+        CatUser actual = out.getUser(botId1).get();
+        CatUser actual2 = out.getUser(botId2).get();
+        CatUser actual3 = out.getUser(botId3).get();
 
         verify(catUserRepository, times(1)).findById(botId1);
         verify(catUserRepository, times(1)).findById(botId2);
@@ -146,7 +147,7 @@ class CatUserServiceTest {
     @Test
     void deleteCatUser() {
         Long botId1 = 1L;
-        out.deleteCatUser(botId1);
+        out.deleteUser(botId1);
         verify(catUserRepository, times(1)).deleteById(botId1);
 
     }
@@ -161,7 +162,7 @@ class CatUserServiceTest {
                 new CatUser("Test", 89871234567L, 123456789L),
                 new CatUser("Test2", 89871234568L, 123456781L),
                 new CatUser("Test3", 89871234569L, 123456782L)));
-        List<CatUser> actual = out.getAllCatUser();
+        List<CatUser> actual = out.getAllUser();
 
         assertThat(actual).isEqualTo(expected);
     }

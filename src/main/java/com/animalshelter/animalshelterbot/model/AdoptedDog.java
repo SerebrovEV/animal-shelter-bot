@@ -14,9 +14,9 @@ import java.util.Optional;
  */
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @Entity
-public class AdoptedDog {
+public class AdoptedDog extends Pet{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

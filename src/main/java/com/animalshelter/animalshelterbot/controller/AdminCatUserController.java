@@ -3,14 +3,16 @@ package com.animalshelter.animalshelterbot.controller;
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
 import com.animalshelter.animalshelterbot.model.CatUser;
-import com.animalshelter.animalshelterbot.service.CatUserService;
-import com.animalshelter.animalshelterbot.service.ValidatorCatUserService;
-import com.animalshelter.animalshelterbot.service.ValidatorDogUserService;
+import com.animalshelter.animalshelterbot.service.UserService;
+import com.animalshelter.animalshelterbot.service.ValidateUserService;
+import com.animalshelter.animalshelterbot.service.impl.CatUserService;
+import com.animalshelter.animalshelterbot.service.impl.ValidateCatUserService;
+import com.animalshelter.animalshelterbot.service.impl.ValidateDogUserService;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.request.SendMessage;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -24,10 +26,9 @@ import java.util.stream.Collectors;
  * </i>
  */
 @Component
-@RequiredArgsConstructor
 public class AdminCatUserController implements CommandController {
-    private final ValidatorCatUserService validatorCatUserService;
-    private final CatUserService catUserService;
+    private final ValidateUserService validateUserService;
+    private final UserService userService;
 
     private final Logger logger = LoggerFactory.getLogger(AdminCatUserController.class);
     private final String adminCommand = "Команды для работы с усыновителями кошек: \n" +
@@ -46,6 +47,12 @@ public class AdminCatUserController implements CommandController {
     private static final String FIND_CONTACT_PATTERN = "Найти КП ([\\d]+)";
     private static final String CONGRATULATION_CONTACT_PATTERN = "Поздравить КП ([\\d]+)";
     private static final String RETURN_CONTACT_PATTERN = "Неудача КП ([\\d]+)";
+
+    public AdminCatUserController(@Qualifier("validateCatUserService")ValidateUserService validateUserService,
+                                  @Qualifier("catUserService") UserService userService) {
+        this.validateUserService = validateUserService;
+        this.userService = userService;
+    }
 
 
     /**
@@ -66,7 +73,7 @@ public class AdminCatUserController implements CommandController {
     /**
      * <i>Метод для записи контактных данных усыновителя в базу данных приюта для кошек администратором
      * <br>
-     * Используется метод {@link ValidatorCatUserService#validateCatUserFromAdmin(Message)} </i>
+     * Используется метод {@link ValidateCatUserService#validateUserFromAdmin(Message)} </i>
      *
      * @param message
      * @return {@link SendMessage}
@@ -75,14 +82,14 @@ public class AdminCatUserController implements CommandController {
     public SendMessage handleCreateCatUser(Message message) {
         Long idAdmin = message.from().id();
         logger.info("Администратор {} сохраняет контакт усыновителя в базу данных", idAdmin);
-        String answer = validatorCatUserService.validateCatUserFromAdmin(message);
+        String answer = validateUserService.validateUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
 
     /**
      * <i>Метод для получения контактных данных усыновителя из базы данных приюта для кошек администратором
      * <br>
-     * Используется метод {@link ValidatorCatUserService#validateGetCatUserFromAdmin(Message)} </i>
+     * Используется метод {@link ValidateCatUserService#validateGetUserFromAdmin(Message)} </i>
      *
      * @param message
      * @return {@link SendMessage}
@@ -91,14 +98,14 @@ public class AdminCatUserController implements CommandController {
     public SendMessage handleGetCatUser(Message message) {
         Long idAdmin = message.from().id();
         logger.info("Администратор {} запрашивает контакт усыновителя в базе данных приюта для кошек", idAdmin);
-        String answer = validatorCatUserService.validateGetCatUserFromAdmin(message);
+        String answer = validateUserService.validateGetUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
 
     /**
      * <i>Метод для удаления контактных данных усыновителя из базы данных приюта для кошек администратором
      * <br>
-     * Используется метод {@link ValidatorCatUserService#validateDeleteCatUserFromAdmin(Message)} </i>
+     * Используется метод {@link ValidateCatUserService#validateDeleteUserFromAdmin(Message)} </i>
      *
      * @param message
      * @return {@link SendMessage}
@@ -107,14 +114,14 @@ public class AdminCatUserController implements CommandController {
     public SendMessage handleDeleteCatUser(Message message) {
         Long idAdmin = message.from().id();
         logger.warn("Администратор {} запросил удаление усыновителя из базы данных", idAdmin);
-        String answer = validatorCatUserService.validateDeleteCatUserFromAdmin(message);
+        String answer = validateUserService.validateDeleteUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
 
     /**
      * <i>Метод для редактирования контактных данных усыновителя в базе данных приюта для кошек администратором
      * <br>
-     * Используется метод {@link ValidatorCatUserService#validateEditCatUserFromAdmin(Message)} </i>
+     * Используется метод {@link ValidateCatUserService#validateEditUserFromAdmin(Message)} </i>
      *
      * @param message
      * @return {@link SendMessage}
@@ -123,14 +130,14 @@ public class AdminCatUserController implements CommandController {
     public SendMessage handleEditCatUser(Message message) {
         Long idAdmin = message.from().id();
         logger.warn("Администратор {} изменяет контакт усыновителя в базе данных приюта для кошек", idAdmin);
-        String answer = validatorCatUserService.validateEditCatUserFromAdmin(message);
+        String answer = validateUserService.validateEditUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
 
     /**
      * <i>Метод для получения контактных данных всех усыновителей из базы данных приюта для кошек администратором
      * <br>
-     * Используется метод {@link CatUserService#getAllCatUser()} </i>
+     * Используется метод {@link CatUserService#getAllUser()} </i>
      *
      * @param message
      * @return {@link SendMessage}
@@ -139,7 +146,7 @@ public class AdminCatUserController implements CommandController {
     public List<SendMessage> handleGetAllCatUser(Message message) {
         Long idAdmin = message.from().id();
         logger.info("Администратор {} запросил всех пользователей из базы данных приюта для кошек", idAdmin);
-        List<CatUser> answer = catUserService.getAllCatUser();
+        List<CatUser> answer = userService.getAllUser();
         return answer.stream()
                 .map(s -> new SendMessage(idAdmin, s.toString()))
                 .collect(Collectors.toList());
@@ -147,7 +154,7 @@ public class AdminCatUserController implements CommandController {
     /**
      * <i>Метод для отправки поздравления усыновителю из базы данных приюта для кошек администратором
      * <br>
-     * Используется метод {@link ValidatorCatUserService#validateCongratulationCatUserFromAdmin(Message)} </i>
+     * Используется метод {@link ValidateCatUserService#validateCongratulationUserFromAdmin(Message)} </i>
      *
      * @param message
      * @return {@link SendMessage}
@@ -156,13 +163,13 @@ public class AdminCatUserController implements CommandController {
     public SendMessage handleCongratulationCatUser(Message message) {
         Long idAdmin = message.from().id();
         logger.info("Администратор {} направил поздравление усыновителю из базы данных приюта для кошек", idAdmin);
-        String answer = validatorCatUserService.validateCongratulationCatUserFromAdmin(message);
+        String answer = validateUserService.validateCongratulationUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
     /**
      * <i>Метод для отправки данных усыновителю о неуспешном испытательном сроке из базы данных приюта для собак администратором
      * <br>
-     * Используется метод {@link ValidatorDogUserService#validateReturnDogUserFromAdmin(Message)} </i>
+     * Используется метод {@link ValidateDogUserService#validateReturnUserFromAdmin(Message)} </i>
      *
      * @param message
      * @return {@link SendMessage}
@@ -171,7 +178,7 @@ public class AdminCatUserController implements CommandController {
     public SendMessage handleReturnCatUser(Message message) {
         Long idAdmin = message.from().id();
         logger.info("Администратор {} направил возврат животного усыновителю из базы данных приюта для кошек", idAdmin);
-       String answer = validatorCatUserService.validateReturnCatUserFromAdmin(message);
+       String answer = validateUserService.validateReturnUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
 

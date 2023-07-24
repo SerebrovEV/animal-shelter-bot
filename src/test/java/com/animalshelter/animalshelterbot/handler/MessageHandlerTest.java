@@ -4,7 +4,7 @@ import com.animalshelter.animalshelterbot.controller.CatRecommendationController
 import com.animalshelter.animalshelterbot.controller.CatReportController;
 import com.animalshelter.animalshelterbot.controller.StartController;
 import com.animalshelter.animalshelterbot.sender.TelegramBotSender;
-import com.animalshelter.animalshelterbot.service.CatReportService;
+import com.animalshelter.animalshelterbot.service.impl.CatReportService;
 import com.pengrad.telegrambot.BotUtils;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.CallbackQuery;

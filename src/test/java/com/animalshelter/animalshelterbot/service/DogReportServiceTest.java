@@ -7,6 +7,8 @@ import com.animalshelter.animalshelterbot.repository.AdoptedDogRepository;
 import com.animalshelter.animalshelterbot.repository.DogReportRepository;
 import com.animalshelter.animalshelterbot.repository.DogUserRepository;
 import com.animalshelter.animalshelterbot.sender.TelegramBotSender;
+import com.animalshelter.animalshelterbot.service.impl.CatReportService;
+import com.animalshelter.animalshelterbot.service.impl.DogReportService;
 import com.pengrad.telegrambot.BotUtils;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
@@ -78,7 +80,7 @@ class DogReportServiceTest {
         List<DogReport> dogReports = getDogReports();
         when(dogReportRepository.findAll()).thenReturn(dogReports);
 
-        SendMessage actual = dogReportService.getAllDogReports(message);
+        SendMessage actual = dogReportService.getAllReports(message);
         verify(telegramBotSender, times(dogReports.size())).telegramSendPhoto(any(SendPhoto.class));
     }
 
@@ -89,7 +91,7 @@ class DogReportServiceTest {
         List<DogReport> dogReports = getDogReports();
         when(dogReportRepository.findDogReportByDate(any(Date.class))).thenReturn(dogReports);
         when(validatorDogReportService.getDateFromMessage(any(Message.class))).thenReturn(Date.valueOf("2021-01-12"));
-        SendMessage actual = dogReportService.getDogReportByDay(message);
+        SendMessage actual = dogReportService.getReportByDay(message);
         verify(telegramBotSender, times(dogReports.size())).telegramSendPhoto(any(SendPhoto.class));
     }
 
@@ -100,7 +102,7 @@ class DogReportServiceTest {
         Message message = getMessage(json);
         when(validatorDogReportService.getIdFromMessage(any(Message.class))).thenReturn(1L);
         doNothing().when(dogReportRepository).deleteById(any(Long.class));
-        SendMessage actual = dogReportService.deleteDogReport(message);
+        SendMessage actual = dogReportService.deleteReport(message);
         verify(dogReportRepository).deleteById(1L);
         assertThat(actual.getParameters().get("chat_id")).isEqualTo(message.from().id());
         assertThat(actual.getParameters().get("text")).isEqualTo(answer);
@@ -113,7 +115,7 @@ class DogReportServiceTest {
         Message message = getMessage(json);
         when(validatorDogReportService.getIdFromMessage(any(Message.class))).thenReturn(null);
 //        doNothing().when(catReportRepository).deleteById(any(Long.class));
-        SendMessage actual = dogReportService.deleteDogReport(message);
+        SendMessage actual = dogReportService.deleteReport(message);
 //        verify(catReportRepository).deleteById(1L);
         assertThat(actual.getParameters().get("chat_id")).isEqualTo(message.from().id());
         assertThat(actual.getParameters().get("text")).isEqualTo(answer);
@@ -130,7 +132,7 @@ class DogReportServiceTest {
                 .thenReturn(dogReports);
         doNothing().when(dogReportRepository).deleteAll(anyCollection());
 
-        SendMessage actual = dogReportService.deleteDogsFromReportByDogId(message);
+        SendMessage actual = dogReportService.deletePetsFromReportByPetId(message);
         verify(dogReportRepository).deleteAll(anyCollection());
         assertThat(actual.getParameters().get("chat_id")).isEqualTo(message.from().id());
         assertThat(actual.getParameters().get("text")).isEqualTo(answer);
@@ -143,7 +145,7 @@ class DogReportServiceTest {
         Message message = getMessage(json);
         when(validatorDogReportService.getIdFromMessage(any(Message.class))).thenReturn(null);
 
-        SendMessage actual = dogReportService.deleteDogsFromReportByDogId(message);
+        SendMessage actual = dogReportService.deletePetsFromReportByPetId(message);
         assertThat(actual.getParameters().get("chat_id")).isEqualTo(message.from().id());
         assertThat(actual.getParameters().get("text")).isEqualTo(answer);
     }
@@ -325,7 +327,7 @@ class DogReportServiceTest {
         String answer = "Ваш отчет не был отправлен.";
         String json = Files.readString(Paths.get(CatReportService.class.getResource("animal_report_callback.json").toURI()));
         CallbackQuery callbackQuery = getCallback(json);
-        SendMessage actual = dogReportService.closeInquiryDogReport(callbackQuery);
+        SendMessage actual = dogReportService.closeInquiryReport(callbackQuery);
         assertThat(actual.getParameters().get("chat_id")).isEqualTo(callbackQuery.from().id());
         assertThat(actual.getParameters().get("text")).isEqualTo(answer);
     }
@@ -351,7 +353,7 @@ class DogReportServiceTest {
         CallbackQuery callbackQuery = getCallback(json);
 
         doNothing().when(telegramBotSender).telegramSendPhoto(any(SendPhoto.class));
-        return dogReportService.addInquiryDogReport(callbackQuery);
+        return dogReportService.addInquiryReport(callbackQuery);
     }
 
 

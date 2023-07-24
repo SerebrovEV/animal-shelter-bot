@@ -1,8 +1,8 @@
 package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.model.DogUser;
-import com.animalshelter.animalshelterbot.service.DogUserService;
-import com.animalshelter.animalshelterbot.service.ValidatorDogUserService;
+import com.animalshelter.animalshelterbot.service.impl.DogUserService;
+import com.animalshelter.animalshelterbot.service.impl.ValidateDogUserService;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -25,7 +25,7 @@ class AdminDogUserControllerTest {
     @InjectMocks
     AdminDogUserController out;
     @Mock
-    ValidatorDogUserService validatorDogUserService;
+    ValidateDogUserService validateDogUserService;
     @Mock
     Message message;
     @Mock
@@ -65,7 +65,7 @@ class AdminDogUserControllerTest {
     void handleCreateDogUser() {
         DogUser dogUser = new DogUser("Test", 89871234567L);
         SendMessage expected = new SendMessage(1L, dogUser.toString());
-        when(validatorDogUserService.validateDogUserFromAdmin(message)).thenReturn(dogUser.toString());
+        when(validateDogUserService.validateUserFromAdmin(message)).thenReturn(dogUser.toString());
         SendMessage actual = out.handleCreateDogUser(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
@@ -74,7 +74,7 @@ class AdminDogUserControllerTest {
     @Test
     void handleGetDogUser() {
         DogUser dogUser = new DogUser("Test", 89871234567L);
-        when(validatorDogUserService.validateGetDogUserFromAdmin(any())).thenReturn(dogUser.toString());
+        when(validateDogUserService.validateGetUserFromAdmin(any())).thenReturn(dogUser.toString());
 
         SendMessage expected = new SendMessage(1L, dogUser.toString());
 
@@ -87,7 +87,7 @@ class AdminDogUserControllerTest {
     void handleDeleteDogUser() {
         DogUser dogUser = new DogUser("Test", 89871234567L);
         SendMessage expected = new SendMessage(1L, dogUser.toString());
-        when(validatorDogUserService.validateDeleteDogUserFromAdmin(any())).thenReturn(dogUser.toString());
+        when(validateDogUserService.validateDeleteUserFromAdmin(any())).thenReturn(dogUser.toString());
 
         SendMessage actual = out.handleDeleteDogUser(message);
 
@@ -99,7 +99,7 @@ class AdminDogUserControllerTest {
     void handleEditDogUser() {
         DogUser dogUser = new DogUser("Test", 89871234567L);
         SendMessage expected = new SendMessage(1L, dogUser.toString());
-        when(validatorDogUserService.validateEditDogUserFromAdmin(message)).thenReturn(dogUser.toString());
+        when(validateDogUserService.validateEditUserFromAdmin(message)).thenReturn(dogUser.toString());
 
         SendMessage actual = out.handleEditDogUser(message);
 
@@ -114,7 +114,7 @@ class AdminDogUserControllerTest {
         DogUser dogUser3 = new DogUser("Test3", 89871234569L);
         DogUser dogUser4 = new DogUser("Test4", 89871234561L);
         List<DogUser> dogUsers = List.of(dogUser, dogUser2, dogUser3, dogUser4);
-        when(dogUserService.getAllDogUser()).thenReturn(dogUsers);
+        when(dogUserService.getAllUser()).thenReturn(dogUsers);
 
         SendMessage expected = new SendMessage(1L, List.of(dogUser, dogUser2, dogUser3, dogUser4).toString());
         SendMessage actual = out.handleGetAllDogUser(message);
@@ -126,7 +126,7 @@ class AdminDogUserControllerTest {
     @Test
     void handleCongratulationDogUser() {
         SendMessage expected = new SendMessage(1L, dogUser.toString());
-        when(validatorDogUserService.validateCongratulationDogUserFromAdmin(message)).thenReturn(dogUser.toString());
+        when(validateDogUserService.validateCongratulationUserFromAdmin(message)).thenReturn(dogUser.toString());
 
         SendMessage actual = out.handleCongratulationDogUser(message);
 
@@ -137,7 +137,7 @@ class AdminDogUserControllerTest {
     @Test
     void handleReturnDogUser() {
         SendMessage expected = new SendMessage(1L, dogUser.toString());
-        when(validatorDogUserService.validateReturnDogUserFromAdmin(message)).thenReturn(dogUser.toString());
+        when(validateDogUserService.validateReturnUserFromAdmin(message)).thenReturn(dogUser.toString());
 
         SendMessage actual = out.handleReturnDogUser(message);
 

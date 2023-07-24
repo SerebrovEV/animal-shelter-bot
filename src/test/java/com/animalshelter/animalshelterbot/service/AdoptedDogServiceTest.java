@@ -3,6 +3,7 @@ package com.animalshelter.animalshelterbot.service;
 import com.animalshelter.animalshelterbot.model.AdoptedDog;
 import com.animalshelter.animalshelterbot.model.DogUser;
 import com.animalshelter.animalshelterbot.repository.AdoptedDogRepository;
+import com.animalshelter.animalshelterbot.service.impl.AdoptedDogService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,9 +48,9 @@ class AdoptedDogServiceTest {
         AdoptedDog expected1 = new AdoptedDog("C2");
         AdoptedDog expected2 = new AdoptedDog("C3");
 
-        AdoptedDog actual = adoptedDogService.addAdoptedDog(D1);
-        AdoptedDog actual1 = adoptedDogService.addAdoptedDog(D2);
-        AdoptedDog actual2 = adoptedDogService.addAdoptedDog(D3);
+        AdoptedDog actual = adoptedDogService.addPet(D1);
+        AdoptedDog actual1 = adoptedDogService.addPet(D2);
+        AdoptedDog actual2 = adoptedDogService.addPet(D3);
 
         assertThat(actual.toString()).isEqualTo(expected.toString());
         assertThat(actual1.toString()).isEqualTo(expected1.toString());
@@ -58,7 +59,7 @@ class AdoptedDogServiceTest {
     @Test
     void deleteAdoptedDog() {
         Long dogId1 = 1L;
-        adoptedDogService.deleteAdoptedDog(dogId1);
+        adoptedDogService.deletePet(dogId1);
         verify(adoptedDogRepository, times(1)).deleteById(dogId1);
 
     }
@@ -77,9 +78,9 @@ class AdoptedDogServiceTest {
         AdoptedDog expected1 = new AdoptedDog("C2");
         AdoptedDog expected2 = new AdoptedDog("C3");
 
-        AdoptedDog actual = adoptedDogService.getAdoptedDog(dogId1).get();
-        AdoptedDog actual1 = adoptedDogService.getAdoptedDog(dogId2).get();
-        AdoptedDog actual2 = adoptedDogService.getAdoptedDog(dogId3).get();
+        AdoptedDog actual = adoptedDogService.getPet(dogId1).get();
+        AdoptedDog actual1 = adoptedDogService.getPet(dogId2).get();
+        AdoptedDog actual2 = adoptedDogService.getPet(dogId3).get();
 
         assertThat(actual.toString()).isEqualTo(expected.toString());
         assertThat(actual1.toString()).isEqualTo(expected1.toString());
@@ -94,7 +95,7 @@ class AdoptedDogServiceTest {
     void editAdoptedDog() {
         when(adoptedDogRepository.save(D1)).thenReturn(D1);
         AdoptedDog expected = new AdoptedDog("C1");
-        AdoptedDog actual = adoptedDogService.editAdoptedDog(D1);
+        AdoptedDog actual = adoptedDogService.editPet(D1);
         assertThat(actual.toString()).isEqualTo(expected.toString());
         assertThat(actual).isEqualTo(expected);
     }
@@ -109,7 +110,7 @@ class AdoptedDogServiceTest {
                 new AdoptedDog("C1"),
                 new AdoptedDog("C2"),
                 new AdoptedDog("C3")));
-        List<AdoptedDog> actual = adoptedDogService.getAllDog();
+        List<AdoptedDog> actual = adoptedDogService.getAllPet();
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -123,7 +124,7 @@ class AdoptedDogServiceTest {
                 new AdoptedDog("C1"),
                 new AdoptedDog("C2"),
                 new AdoptedDog("C3")));
-        List<AdoptedDog> actual = adoptedDogService.getAllFreeDog();
+        List<AdoptedDog> actual = adoptedDogService.getAllFreePet();
         assertThat(actual.toString()).isEqualTo(expected.toString());
     }
 
@@ -137,7 +138,7 @@ class AdoptedDogServiceTest {
                 new AdoptedDog("C1"),
                 new AdoptedDog("C2"),
                 new AdoptedDog("C3")));
-        List<AdoptedDog> actual = adoptedDogService.getAllDogOnTrialPeriod();
+        List<AdoptedDog> actual = adoptedDogService.getAllBusyPet();
         assertThat(actual).isEqualTo(expected);
 
     }
@@ -163,7 +164,7 @@ class AdoptedDogServiceTest {
 
         List<AdoptedDog> expected = new ArrayList<>(List.of( D1, D2, D3));
 
-        List<AdoptedDog> actual = adoptedDogService.getAllDogWithEndPeriod();
+        List<AdoptedDog> actual = adoptedDogService.getAllPetWithEndPeriod();
 
         assertThat(actual).isEqualTo(expected);
     }

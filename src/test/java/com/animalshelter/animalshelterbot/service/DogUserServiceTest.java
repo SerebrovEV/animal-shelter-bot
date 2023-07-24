@@ -2,6 +2,7 @@ package com.animalshelter.animalshelterbot.service;
 
 import com.animalshelter.animalshelterbot.model.DogUser;
 import com.animalshelter.animalshelterbot.repository.DogUserRepository;
+import com.animalshelter.animalshelterbot.service.impl.DogUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,9 +51,9 @@ class DogUserServiceTest {
         DogUser expected2 = new DogUser("Test2", 89871234568L, 123456781L);
         DogUser expected3 = new DogUser("Test3", 89871234569L, 123456782L);
 
-        DogUser actual = out.addDogUser(botUser1);
-        DogUser actual2 = out.addDogUser(botUser2);
-        DogUser actual3 = out.addDogUser(botUser3);
+        DogUser actual = out.addUser(botUser1);
+        DogUser actual2 = out.addUser(botUser2);
+        DogUser actual3 = out.addUser(botUser3);
 
         assertThat(actual.toString()).isEqualTo(expected.toString());
         assertThat(actual2.toString()).isEqualTo(expected2.toString());
@@ -78,9 +79,9 @@ class DogUserServiceTest {
         DogUser expected2 = new DogUser("Test2", 89871234568L, 123456781L);
         DogUser expected3 = new DogUser("Test3", 89871234569L, 123456782L);
 
-        DogUser actual = out.getDogUserByChatId(botUser1.getChatId()).get();
-        DogUser actual2 = out.getDogUserByChatId(botUser2.getChatId()).get();
-        DogUser actual3 = out.getDogUserByChatId(botUser3.getChatId()).get();
+        DogUser actual = out.getUserByChatId(botUser1.getChatId()).get();
+        DogUser actual2 = out.getUserByChatId(botUser2.getChatId()).get();
+        DogUser actual3 = out.getUserByChatId(botUser3.getChatId()).get();
 
         verify(dogUserRepository, times(1)).findDogUserByChatId(chatId1);
         verify(dogUserRepository, times(1)).findDogUserByChatId(chatId2);
@@ -98,7 +99,7 @@ class DogUserServiceTest {
     void getDogUserByPhoneNumber() {
         when(dogUserRepository.findDogUserByPhoneNumber(anyLong())).thenReturn(Optional.ofNullable(botUser1));
         DogUser expected = new DogUser("Test", 89871234567L, 123456789L);
-        DogUser actual = out.getDogUserByPhoneNumber(botUser1.getPhoneNumber()).get();
+        DogUser actual = out.getUserByPhoneNumber(botUser1.getPhoneNumber()).get();
         assertThat(actual).isEqualTo(expected);
         assertThat(actual.toString()).isEqualTo(expected.toString());
     }
@@ -118,9 +119,9 @@ class DogUserServiceTest {
         DogUser expected2 = new DogUser("Test2", 89871234568L, 123456781L);
         DogUser expected3 = new DogUser("Test3", 89871234569L, 123456782L);
 
-        DogUser actual = out.getDogUser(botId1).get();
-        DogUser actual2 = out.getDogUser(botId2).get();
-        DogUser actual3 = out.getDogUser(botId3).get();
+        DogUser actual = out.getUser(botId1).get();
+        DogUser actual2 = out.getUser(botId2).get();
+        DogUser actual3 = out.getUser(botId3).get();
 
         verify(dogUserRepository, times(1)).findById(botId1);
         verify(dogUserRepository, times(1)).findById(botId2);
@@ -139,7 +140,7 @@ class DogUserServiceTest {
     @Test
     void deleteDogUser() {
         Long botId1 = 1L;
-        out.deleteDogUser(botId1);
+        out.deleteUser(botId1);
         verify(dogUserRepository, times(1)).deleteById(botId1);
 
     }
@@ -148,7 +149,7 @@ class DogUserServiceTest {
 
         when(dogUserRepository.save(botUser1)).thenReturn(botUser1);
         DogUser expected = new DogUser("Test", 89871234567L, 123456789L);
-        DogUser actual = out.editDogUser(botUser1);
+        DogUser actual = out.editUser(botUser1);
         assertThat(actual.toString()).isEqualTo(expected.toString());
         assertThat(actual).isEqualTo(expected);
     }
@@ -163,7 +164,7 @@ class DogUserServiceTest {
                 new DogUser("Test", 89871234567L, 123456789L),
                 new DogUser("Test2", 89871234568L, 123456781L),
                 new DogUser("Test3", 89871234569L, 123456782L)));
-        List<DogUser> actual = out.getAllDogUser();
+        List<DogUser> actual = out.getAllUser();
 
         assertThat(actual).isEqualTo(expected);
     }

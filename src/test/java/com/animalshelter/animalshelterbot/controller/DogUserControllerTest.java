@@ -1,7 +1,7 @@
 package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.model.DogUser;
-import com.animalshelter.animalshelterbot.service.ValidatorDogUserService;
+import com.animalshelter.animalshelterbot.service.impl.ValidateDogUserService;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
@@ -35,7 +35,7 @@ class DogUserControllerTest {
     User user;
 
     @Mock
-    private ValidatorDogUserService validatorDogUserService;
+    private ValidateDogUserService validateDogUserService;
 
     private final String ADD_MESSAGE = "Для того, чтобы оставить контактные данные для обратной " +
             "связи отправьте сообщение в форме:\n Возьму собаку 89871234567 Иван \n и мы вам перезвоним.";
@@ -60,7 +60,7 @@ class DogUserControllerTest {
         when(message.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
 
-        when(validatorDogUserService.validateDogUser(any())).thenReturn(dogUser.toStringUser());
+        when(validateDogUserService.validateUser(any())).thenReturn(dogUser.toStringUser());
 
         SendMessage actual = out.handleAddDogUser(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
@@ -73,7 +73,7 @@ class DogUserControllerTest {
         when(message.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
 
-        when(validatorDogUserService.validateDogUserIdChat(any())).thenReturn(dogUser.toStringUser());
+        when(validateDogUserService.validateUserIdChat(any())).thenReturn(dogUser.toStringUser());
 
         SendMessage actual = out.handleAddDogUserIDChat(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
