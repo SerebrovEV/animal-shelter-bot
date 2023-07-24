@@ -1,8 +1,10 @@
-package com.animalshelter.animalshelterbot.service;
+package com.animalshelter.animalshelterbot.service.impl;
 
 
 import com.animalshelter.animalshelterbot.model.CatUser;
+import com.animalshelter.animalshelterbot.model.PetUser;
 import com.animalshelter.animalshelterbot.repository.CatUserRepository;
+import com.animalshelter.animalshelterbot.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,35 +18,41 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CatUserService {
+public class CatUserService implements UserService {
     private final CatUserRepository catUserRepository;
 
-    public CatUser addCatUser(CatUser catUser) {
-        return catUserRepository.save(catUser);
+    @Override
+    public CatUser addUser(PetUser catUser) {
+        return catUserRepository.save((CatUser) catUser);
     }
 
-    public Optional<CatUser> getCatUserByChatId(Long chatId) {
+    @Override
+    public Optional<CatUser> getUserByChatId(Long chatId) {
         return catUserRepository.findCatUserByChatId(chatId);
     }
 
-    public Optional<CatUser> getCatUserByPhoneNumber(Long phoneNumber) {
+    @Override
+    public Optional<CatUser> getUserByPhoneNumber(Long phoneNumber) {
         return catUserRepository.findByPhoneNumber(phoneNumber);
     }
 
-    public CatUser editCatUser(CatUser catUser) {
-        return catUserRepository.save(catUser);
+    @Override
+    public CatUser editUser(PetUser catUser) {
+        return catUserRepository.save((CatUser) catUser);
     }
 
-    public Optional<CatUser> getCatUser(Long id) {
-        Optional<CatUser> findCatUser = catUserRepository.findById(id);
-        return findCatUser;
+    @Override
+    public Optional<CatUser> getUser(Long id) {
+        return catUserRepository.findById(id);
     }
 
-    public void deleteCatUser(Long id) {
+    @Override
+    public void deleteUser(Long id) {
         catUserRepository.deleteById(id);
     }
 
-    public List<CatUser> getAllCatUser() {
+    @Override
+    public List<CatUser> getAllUser() {
         return List.copyOf(catUserRepository.findAll());
     }
 

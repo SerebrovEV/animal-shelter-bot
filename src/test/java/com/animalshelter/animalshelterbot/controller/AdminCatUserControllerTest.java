@@ -1,8 +1,8 @@
 package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.model.CatUser;
-import com.animalshelter.animalshelterbot.service.CatUserService;
-import com.animalshelter.animalshelterbot.service.ValidatorCatUserService;
+import com.animalshelter.animalshelterbot.service.impl.CatUserService;
+import com.animalshelter.animalshelterbot.service.impl.ValidateCatUserService;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -27,7 +27,7 @@ class AdminCatUserControllerTest {
     @InjectMocks
     AdminCatUserController out;
     @Mock
-    ValidatorCatUserService validatorCatUserService;
+    ValidateCatUserService validateCatUserService;
     @Mock
     Message message;
     @Mock
@@ -68,7 +68,7 @@ class AdminCatUserControllerTest {
     @Test
     void handleCreateCatUser() {
         SendMessage expected = new SendMessage(1L, CAT_USER.toString());
-        when(validatorCatUserService.validateCatUserFromAdmin(message)).thenReturn(CAT_USER.toString());
+        when(validateCatUserService.validateUserFromAdmin(message)).thenReturn(CAT_USER.toString());
         SendMessage actual = out.handleCreateCatUser(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
@@ -76,7 +76,7 @@ class AdminCatUserControllerTest {
 
     @Test
     void handleGetCatUser() {
-        when(validatorCatUserService.validateGetCatUserFromAdmin(any())).thenReturn(CAT_USER.toString());
+        when(validateCatUserService.validateGetUserFromAdmin(any())).thenReturn(CAT_USER.toString());
 
         SendMessage expected = new SendMessage(1L, CAT_USER.toString());
 
@@ -89,7 +89,7 @@ class AdminCatUserControllerTest {
     void handleDeleteCatUser() {
 
         SendMessage expected = new SendMessage(1L, CAT_USER.toString());
-        when(validatorCatUserService.validateDeleteCatUserFromAdmin(any())).thenReturn(CAT_USER.toString());
+        when(validateCatUserService.validateDeleteUserFromAdmin(any())).thenReturn(CAT_USER.toString());
 
         SendMessage actual = out.handleDeleteCatUser(message);
 
@@ -101,7 +101,7 @@ class AdminCatUserControllerTest {
     void handleEditCatUser() {
 
         SendMessage expected = new SendMessage(1L, CAT_USER.toString());
-        when(validatorCatUserService.validateEditCatUserFromAdmin(message)).thenReturn(CAT_USER.toString());
+        when(validateCatUserService.validateEditUserFromAdmin(message)).thenReturn(CAT_USER.toString());
 
         SendMessage actual = out.handleEditCatUser(message);
 
@@ -115,7 +115,7 @@ class AdminCatUserControllerTest {
         CatUser catUser3 = new CatUser("Test3", 89871234569L);
         CatUser catUser4 = new CatUser("Test4", 89871234561L);
         List<CatUser> catUsers = List.of(CAT_USER, catUser2, catUser3, catUser4);
-        when(catUserService.getAllCatUser()).thenReturn(catUsers);
+        when(catUserService.getAllUser()).thenReturn(catUsers);
 
         List<SendMessage> expected = List.of(
                 new SendMessage(1L, CAT_USER.toString()),
@@ -133,7 +133,7 @@ class AdminCatUserControllerTest {
     @Test
     void handleCongratulationCatUser() {
         SendMessage expected = new SendMessage(1L, CAT_USER.toString());
-        when(validatorCatUserService.validateCongratulationCatUserFromAdmin(message)).thenReturn(CAT_USER.toString());
+        when(validateCatUserService.validateCongratulationUserFromAdmin(message)).thenReturn(CAT_USER.toString());
 
         SendMessage actual = out.handleCongratulationCatUser(message);
 
@@ -144,7 +144,7 @@ class AdminCatUserControllerTest {
     @Test
     void handleReturnCatUser() {
         SendMessage expected = new SendMessage(1L, CAT_USER.toString());
-        when(validatorCatUserService.validateReturnCatUserFromAdmin(message)).thenReturn(CAT_USER.toString());
+        when(validateCatUserService.validateReturnUserFromAdmin(message)).thenReturn(CAT_USER.toString());
 
         SendMessage actual = out.handleReturnCatUser(message);
 

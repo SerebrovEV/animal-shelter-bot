@@ -1,5 +1,6 @@
 package com.animalshelter.animalshelterbot.service;
 
+import com.animalshelter.animalshelterbot.service.impl.CatReportService;
 import com.pengrad.telegrambot.BotUtils;
 import com.pengrad.telegrambot.model.Message;
 import org.junit.jupiter.api.Test;

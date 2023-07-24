@@ -1,8 +1,8 @@
 package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.model.AdoptedCat;
-import com.animalshelter.animalshelterbot.service.AdoptedCatService;
-import com.animalshelter.animalshelterbot.service.ValidateAdoptedCatService;
+import com.animalshelter.animalshelterbot.service.impl.AdoptedCatService;
+import com.animalshelter.animalshelterbot.service.impl.ValidateAdoptedCatService;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -71,7 +71,7 @@ class AdminCatControllerTest {
     @Test
     void handleCreateCat() {
         SendMessage expected = new SendMessage(1L, adoptedCat.toString());
-        when(validateAdoptedCatService.validateAddCat(message)).thenReturn(adoptedCat.toString());
+        when(validateAdoptedCatService.validateAddPet(message)).thenReturn(adoptedCat.toString());
         SendMessage actual = out.handleCreateCat(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(expected.getParameters().get("text"));
@@ -80,7 +80,7 @@ class AdminCatControllerTest {
     @Test
     void handleDeleteCat() {
         SendMessage expected = new SendMessage(1L, adoptedCat.toString());
-        when(validateAdoptedCatService.validateDeleteCat(any())).thenReturn(adoptedCat.toString());
+        when(validateAdoptedCatService.validateDeletePet(any())).thenReturn(adoptedCat.toString());
 
         SendMessage actual = out.handleDeleteCat(message);
 
@@ -91,7 +91,7 @@ class AdminCatControllerTest {
     @Test
     void handleGetCat() {
         SendMessage expected = new SendMessage(1L, adoptedCat.toString());
-        when(validateAdoptedCatService.validateGetCat(any())).thenReturn(adoptedCat.toString());
+        when(validateAdoptedCatService.validateGetPet(any())).thenReturn(adoptedCat.toString());
 
         SendMessage actual = out.handleGetCat(message);
 
@@ -103,7 +103,7 @@ class AdminCatControllerTest {
     @Test
     void handleEditCat() {
         SendMessage expected = new SendMessage(1L, adoptedCat.toString());
-        when(validateAdoptedCatService.validateEditCat(any())).thenReturn(adoptedCat.toString());
+        when(validateAdoptedCatService.validateEditPet(any())).thenReturn(adoptedCat.toString());
 
         SendMessage actual = out.handleEditCat(message);
 
@@ -117,7 +117,7 @@ class AdminCatControllerTest {
         AdoptedCat cat3 = new AdoptedCat("Test3");
         AdoptedCat cat4 = new AdoptedCat("Test4");
         List<AdoptedCat> cats = List.of(adoptedCat, cat2, cat3, cat4);
-        when(adoptedCatService.getAllCat()).thenReturn(cats);
+        when(adoptedCatService.getAllPet()).thenReturn(cats);
 
         List<SendMessage> expected = List.of(
                 new SendMessage(1L, adoptedCat.toString()),
@@ -140,7 +140,7 @@ class AdminCatControllerTest {
         AdoptedCat cat3 = new AdoptedCat("Test3");
         AdoptedCat cat4 = new AdoptedCat("Test4");
         List<AdoptedCat> cats = List.of(adoptedCat, cat2, cat3, cat4);
-        when(adoptedCatService.getAllFreeCat()).thenReturn(cats);
+        when(adoptedCatService.getAllFreePet()).thenReturn(cats);
 
         List<SendMessage> expected = List.of(
                 new SendMessage(1L, adoptedCat.toString()),
@@ -162,7 +162,7 @@ class AdminCatControllerTest {
         AdoptedCat cat3 = new AdoptedCat("Test3");
         AdoptedCat cat4 = new AdoptedCat("Test4");
         List<AdoptedCat> cats = List.of(adoptedCat, cat2, cat3, cat4);
-        when(adoptedCatService.getAllBusyCat()).thenReturn(cats);
+        when(adoptedCatService.getAllBusyPet()).thenReturn(cats);
 
         List<SendMessage> expected = List.of(
                 new SendMessage(1L, adoptedCat.toString()),
@@ -184,7 +184,7 @@ class AdminCatControllerTest {
         AdoptedCat cat3 = new AdoptedCat("Test3");
         AdoptedCat cat4 = new AdoptedCat("Test4");
         List<AdoptedCat> cats = List.of(adoptedCat, cat2, cat3, cat4);
-        when(adoptedCatService.getAllCatWithEndPeriod()).thenReturn(cats);
+        when(adoptedCatService.getAllPetWithEndPeriod()).thenReturn(cats);
 
         List<SendMessage> expected = List.of(
                 new SendMessage(1L, adoptedCat.toString()),
@@ -203,7 +203,7 @@ class AdminCatControllerTest {
     @Test
     void handleTakeCat() {
         SendMessage expected = new SendMessage(1L, adoptedCat.toString());
-        when(validateAdoptedCatService.validateTakeCat(any())).thenReturn(adoptedCat.toString());
+        when(validateAdoptedCatService.validateTakePet(any())).thenReturn(adoptedCat.toString());
 
         SendMessage actual = out.handleTakeCat(message);
 
@@ -214,7 +214,7 @@ class AdminCatControllerTest {
     @Test
     void handleReturnCat() {
         SendMessage expected = new SendMessage(1L, adoptedCat.toString());
-        when(validateAdoptedCatService.validateReturnCat(any())).thenReturn(adoptedCat.toString());
+        when(validateAdoptedCatService.validateReturnPet(any())).thenReturn(adoptedCat.toString());
 
         SendMessage actual = out.handleReturnCat(message);
 
@@ -225,7 +225,7 @@ class AdminCatControllerTest {
     @Test
     void handleExtendCat() {
         SendMessage expected = new SendMessage(1L, adoptedCat.toString());
-        when(validateAdoptedCatService.validateExtendCat(any())).thenReturn(adoptedCat.toString());
+        when(validateAdoptedCatService.validateExtendPet(any())).thenReturn(adoptedCat.toString());
 
         SendMessage actual = out.handleExtendCat(message);
 

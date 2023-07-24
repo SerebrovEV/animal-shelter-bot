@@ -1,8 +1,8 @@
 package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.model.AdoptedDog;
-import com.animalshelter.animalshelterbot.service.AdoptedDogService;
-import com.animalshelter.animalshelterbot.service.ValidateAdoptedDogService;
+import com.animalshelter.animalshelterbot.service.impl.AdoptedDogService;
+import com.animalshelter.animalshelterbot.service.impl.ValidateAdoptedDogService;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -64,7 +64,7 @@ class AdminDogControllerTest {
     @Test
     void handleCreateDog() {
         SendMessage expected = new SendMessage(1L, adoptedDog.toString());
-        when(validateAdoptedDogService.validateAddDog(message)).thenReturn(adoptedDog.toString());
+        when(validateAdoptedDogService.validateAddPet(message)).thenReturn(adoptedDog.toString());
         SendMessage actual = adminDogController.handleCreateDog(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(adoptedDog.toString());
@@ -73,7 +73,7 @@ class AdminDogControllerTest {
     @Test
     void handleDeleteDog() {
         SendMessage expected = new SendMessage(1L, adoptedDog.toString());
-        when(validateAdoptedDogService.validateDeleteDog(any())).thenReturn(adoptedDog.toString());
+        when(validateAdoptedDogService.validateDeletePet(any())).thenReturn(adoptedDog.toString());
         SendMessage actual = adminDogController.handleDeleteDog(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(adoptedDog.toString());
@@ -82,7 +82,7 @@ class AdminDogControllerTest {
     @Test
     void handleGetDog() {
         SendMessage expected = new SendMessage(1L, adoptedDog.toString());
-        when(validateAdoptedDogService.validateGetDog(any())).thenReturn(adoptedDog.toString());
+        when(validateAdoptedDogService.validateGetPet(any())).thenReturn(adoptedDog.toString());
         SendMessage actual = adminDogController.handleGetDog(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(adoptedDog.toString());
@@ -91,7 +91,7 @@ class AdminDogControllerTest {
     @Test
     void handleEditDog() {
         SendMessage expected = new SendMessage(1L, adoptedDog.toString());
-        when(validateAdoptedDogService.validateEditDog(any())).thenReturn(adoptedDog.toString());
+        when(validateAdoptedDogService.validateEditPet(any())).thenReturn(adoptedDog.toString());
         SendMessage actual = adminDogController.handleEditDog(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(adoptedDog.toString());
@@ -103,7 +103,7 @@ class AdminDogControllerTest {
         AdoptedDog dog2 = new AdoptedDog("C2");
         AdoptedDog dog3 = new AdoptedDog("C3");
         List<AdoptedDog> dogs = List.of(adoptedDog, dog1, dog2, dog3);
-        when(adoptedDogService.getAllDog()).thenReturn(dogs);
+        when(adoptedDogService.getAllPet()).thenReturn(dogs);
 
         List<SendMessage> expected = List.of(
                 new SendMessage(1L, adoptedDog.toString()),
@@ -125,7 +125,7 @@ class AdminDogControllerTest {
         AdoptedDog dog2 = new AdoptedDog("C2");
         AdoptedDog dog3 = new AdoptedDog("C3");
         List<AdoptedDog> dogs = List.of(adoptedDog, dog1, dog2, dog3);
-        when(adoptedDogService.getAllFreeDog()).thenReturn(dogs);
+        when(adoptedDogService.getAllFreePet()).thenReturn(dogs);
 
         List<SendMessage> expected = List.of(
                 new SendMessage(1L, adoptedDog.toString()),
@@ -148,7 +148,7 @@ class AdminDogControllerTest {
         AdoptedDog dog2 = new AdoptedDog("C2");
         AdoptedDog dog3 = new AdoptedDog("C3");
         List<AdoptedDog> dogs = List.of(adoptedDog, dog1, dog2, dog3);
-        when(adoptedDogService.getAllDogOnTrialPeriod()).thenReturn(dogs);
+        when(adoptedDogService.getAllBusyPet()).thenReturn(dogs);
 
         List<SendMessage> expected = List.of(
                 new SendMessage(1L, adoptedDog.toString()),
@@ -170,7 +170,7 @@ class AdminDogControllerTest {
         AdoptedDog dog2 = new AdoptedDog("C2");
         AdoptedDog dog3 = new AdoptedDog("C3");
         List<AdoptedDog> dogs = List.of(adoptedDog, dog1, dog2, dog3);
-        when(adoptedDogService.getAllDogWithEndPeriod()).thenReturn(dogs);
+        when(adoptedDogService.getAllPetWithEndPeriod()).thenReturn(dogs);
 
         List<SendMessage> expected = List.of(
                 new SendMessage(1L, adoptedDog.toString()),
@@ -190,7 +190,7 @@ class AdminDogControllerTest {
     @Test
     void handleTakeDog() {
         SendMessage expected = new SendMessage(1L, adoptedDog.toString());
-        when(validateAdoptedDogService.validateTakeDog(any())).thenReturn(adoptedDog.toString());
+        when(validateAdoptedDogService.validateTakePet(any())).thenReturn(adoptedDog.toString());
         SendMessage actual = adminDogController.handleTakeDog(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(adoptedDog.toString());
@@ -199,7 +199,7 @@ class AdminDogControllerTest {
     @Test
     void handleReturnDog() {
         SendMessage expected = new SendMessage(1L, adoptedDog.toString());
-        when(validateAdoptedDogService.validateReturnDog(any())).thenReturn(adoptedDog.toString());
+        when(validateAdoptedDogService.validateReturnPet(any())).thenReturn(adoptedDog.toString());
         SendMessage actual = adminDogController.handleReturnDog(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(adoptedDog.toString());
@@ -208,7 +208,7 @@ class AdminDogControllerTest {
     @Test
     void handleExtendCDog() {
         SendMessage expected = new SendMessage(1L, adoptedDog.toString());
-        when(validateAdoptedDogService.validateExtendDog(any())).thenReturn(adoptedDog.toString());
+        when(validateAdoptedDogService.validateExtendPet(any())).thenReturn(adoptedDog.toString());
         SendMessage actual = adminDogController.handleExtendCDog(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
         assertThat(actual.getParameters().get("text")).isEqualTo(adoptedDog.toString());

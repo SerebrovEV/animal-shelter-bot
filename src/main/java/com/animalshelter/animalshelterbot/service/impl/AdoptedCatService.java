@@ -1,11 +1,12 @@
-package com.animalshelter.animalshelterbot.service;
+package com.animalshelter.animalshelterbot.service.impl;
 
 import com.animalshelter.animalshelterbot.model.AdoptedCat;
+import com.animalshelter.animalshelterbot.model.Pet;
 import com.animalshelter.animalshelterbot.repository.AdoptedCatRepository;
+import com.animalshelter.animalshelterbot.service.PetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -21,40 +22,45 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AdoptedCatService {
+public class AdoptedCatService implements PetService {
     private final AdoptedCatRepository adoptedCatRepository;
 
-    public AdoptedCat addAdoptedCat(AdoptedCat adoptedCat) {
-        return adoptedCatRepository.save(adoptedCat);
+    @Override
+    public AdoptedCat addPet(Pet adoptedCat) {
+        return adoptedCatRepository.save((AdoptedCat) adoptedCat);
     }
 
-    public void deleteAdoptedCat(Long idAdoptedCat) {
+    @Override
+    public void deletePet(Long idAdoptedCat) {
         adoptedCatRepository.deleteById(idAdoptedCat);
     }
 
-    public Optional<AdoptedCat> getAdoptedCat(Long idAdoptedCat) {
+    @Override
+    public Optional<AdoptedCat> getPet(Long idAdoptedCat) {
         return adoptedCatRepository.findById(idAdoptedCat);
     }
 
-    public AdoptedCat editAdoptedCat(AdoptedCat adoptedCat) {
-        return adoptedCatRepository.save(adoptedCat);
+    @Override
+    public AdoptedCat editPet(Pet adoptedCat) {
+        return adoptedCatRepository.save((AdoptedCat) adoptedCat);
     }
 
-    public List<AdoptedCat> getAllCat() {
+    @Override
+    public List<AdoptedCat> getAllPet() {
         return List.copyOf(adoptedCatRepository.findAll());
     }
 
-    public List<AdoptedCat> getAllBusyCat() {
+    public List<AdoptedCat> getAllBusyPet() {
         return List.copyOf(adoptedCatRepository.findAllByCatUserNotNull());
     }
 
-    public List<AdoptedCat> getAllFreeCat() {
+    public List<AdoptedCat> getAllFreePet() {
         return List.copyOf(adoptedCatRepository.findAllByCatUserIsNull());
     }
 
-    public List<AdoptedCat> getAllCatWithEndPeriod() {
+    public List<AdoptedCat> getAllPetWithEndPeriod() {
 
-        return List.copyOf(getAllBusyCat()).stream()
+        return List.copyOf(getAllBusyPet()).stream()
                 .filter(s -> !s.getAdoptionDate().toLocalDate().plusDays(30).isAfter(LocalDate.now()))
                 .collect(Collectors.toList());
 }

@@ -3,13 +3,15 @@ package com.animalshelter.animalshelterbot.controller;
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
 import com.animalshelter.animalshelterbot.model.DogUser;
-import com.animalshelter.animalshelterbot.service.DogUserService;
-import com.animalshelter.animalshelterbot.service.ValidatorDogUserService;
+import com.animalshelter.animalshelterbot.service.UserService;
+import com.animalshelter.animalshelterbot.service.ValidateUserService;
+import com.animalshelter.animalshelterbot.service.impl.DogUserService;
+import com.animalshelter.animalshelterbot.service.impl.ValidateDogUserService;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.request.SendMessage;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,10 +24,9 @@ import java.util.List;
  * </i>
  */
 @Component
-@RequiredArgsConstructor
 public class AdminDogUserController implements CommandController {
-    private final DogUserService dogUserService;
-    private final ValidatorDogUserService validatorDogUserService;
+    private final UserService userService;
+    private final ValidateUserService validateUserService;
     private final Logger LOG = LoggerFactory.getLogger(AdminDogUserController.class);
 
 
@@ -48,6 +49,12 @@ public class AdminDogUserController implements CommandController {
     private static final String CONGRATULATION_CONTACT_PATTERN = "Поздравить СП ([\\d]+)";
     private static final String RETURN_CONTACT_PATTERN = "Неудача СП ([\\d]+)";
 
+    public AdminDogUserController(@Qualifier("dogUserService") UserService userService,
+                                  @Qualifier("validateDogUserService") ValidateUserService validateUserService) {
+        this.userService = userService;
+        this.validateUserService = validateUserService;
+    }
+
 
     /**
      * <i>Метод для получения инструкции по использованию команд администратора.
@@ -67,7 +74,7 @@ public class AdminDogUserController implements CommandController {
     /**
      * <i>Метод для записи контактных данных усыновителя в базу данных приюта для собак администратором
      * <br>
-     * Используется метод {@link ValidatorDogUserService#validateDogUserFromAdmin(Message)}</i>
+     * Используется метод {@link ValidateDogUserService#validateUserFromAdmin(Message)}</i>
      *
      * @param message
      * @return {@link SendMessage}
@@ -76,14 +83,14 @@ public class AdminDogUserController implements CommandController {
     public SendMessage handleCreateDogUser(Message message) {
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} сохраняет контакт усыновителя в базу данных приюта для собак", idAdmin);
-        String answer = validatorDogUserService.validateDogUserFromAdmin(message);
+        String answer = validateUserService.validateUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
 
     /**
      * <i>Метод для получения контактных данных усыновителя из базы данных приюта для собак администратором
      * <br>
-     * Используется метод {@link ValidatorDogUserService#validateGetDogUserFromAdmin(Message)} </i>
+     * Используется метод {@link ValidateDogUserService#validateGetUserFromAdmin(Message)} </i>
      *
      * @param message
      * @return {@link SendMessage}
@@ -92,14 +99,14 @@ public class AdminDogUserController implements CommandController {
     public SendMessage handleGetDogUser(Message message) {
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запрашивает контакт усыновителя в базе данных приюта для собак", idAdmin);
-        String answer = validatorDogUserService.validateGetDogUserFromAdmin(message);
+        String answer = validateUserService.validateGetUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
 
     /**
      * <i>Метод для удаления контактных данных усыновителя из базы данных приюта для собак администратором
      * <br>
-     * Используется метод {@link ValidatorDogUserService#validateDeleteDogUserFromAdmin(Message)} </i>
+     * Используется метод {@link ValidateDogUserService#validateDeleteUserFromAdmin(Message)} </i>
      *
      * @param message
      * @return {@link SendMessage}
@@ -108,14 +115,14 @@ public class AdminDogUserController implements CommandController {
     public SendMessage handleDeleteDogUser(Message message) {
         Long idAdmin = message.from().id();
         LOG.warn("Администратор {} запросил удаление усыновителя из базы данных приюта для собак", idAdmin);
-        String answer = validatorDogUserService.validateDeleteDogUserFromAdmin(message);
+        String answer = validateUserService.validateDeleteUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
 
     /**
      * <i>Метод для редактирования контактных данных усыновителя в базе данных приюта для собак администратором
      * <br>
-     * Используется метод {@link ValidatorDogUserService#validateEditDogUserFromAdmin(Message)} </i>
+     * Используется метод {@link ValidateDogUserService#validateEditUserFromAdmin(Message)} </i>
      *
      * @param message
      * @return {@link SendMessage}
@@ -124,14 +131,14 @@ public class AdminDogUserController implements CommandController {
     public SendMessage handleEditDogUser(Message message) {
         Long idAdmin = message.from().id();
         LOG.warn("Администратор {} изменяет контакт усыновителя в базе данных приюта для собак", idAdmin);
-        String answer = validatorDogUserService.validateEditDogUserFromAdmin(message);
+        String answer = validateUserService.validateEditUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
 
     /**
      * <i>Метод для получения контактных данных всех усыновителей из базы данных приюта для собак администратором
      * <br>
-     * Используется метод {@link DogUserService#getAllDogUser()} </i>
+     * Используется метод {@link DogUserService#getAllUser()} </i>
      *
      * @param message
      * @return {@link SendMessage}
@@ -140,13 +147,14 @@ public class AdminDogUserController implements CommandController {
     public SendMessage handleGetAllDogUser(Message message) {
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запросил всех пользователей из базы данных приюта для собак", idAdmin);
-        List<DogUser> allUsers = dogUserService.getAllDogUser();
+        List<DogUser> allUsers = userService.getAllUser();
         return new SendMessage(idAdmin, allUsers.toString());
     }
+
     /**
      * <i>Метод для отправки поздравления усыновителю из базы данных приюта для собак администратором
      * <br>
-     * Используется метод {@link ValidatorDogUserService#validateCongratulationDogUserFromAdmin(Message)} </i>
+     * Используется метод {@link ValidateDogUserService#validateCongratulationUserFromAdmin(Message)} </i>
      *
      * @param message
      * @return {@link SendMessage}
@@ -155,13 +163,14 @@ public class AdminDogUserController implements CommandController {
     public SendMessage handleCongratulationDogUser(Message message) {
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} направил поздравление усыновителю из базы данных приюта для собак", idAdmin);
-        String answer = validatorDogUserService.validateCongratulationDogUserFromAdmin(message);
+        String answer = validateUserService.validateCongratulationUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
+
     /**
      * <i>Метод для отправки данных усыновителю о неуспешном испытательном сроке из базы данных приюта для собак администратором
      * <br>
-     * Используется метод {@link ValidatorDogUserService#validateReturnDogUserFromAdmin(Message)} </i>
+     * Используется метод {@link ValidateDogUserService#validateReturnUserFromAdmin(Message)} </i>
      *
      * @param message
      * @return {@link SendMessage}
@@ -170,7 +179,7 @@ public class AdminDogUserController implements CommandController {
     public SendMessage handleReturnDogUser(Message message) {
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} направил уведомление на возврат животного усыновителю из базы данных приюта для собак", idAdmin);
-        String answer = validatorDogUserService.validateReturnDogUserFromAdmin(message);
+        String answer = validateUserService.validateReturnUserFromAdmin(message);
         return new SendMessage(idAdmin, answer);
     }
 

@@ -3,13 +3,14 @@ package com.animalshelter.animalshelterbot.controller;
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
 import com.animalshelter.animalshelterbot.model.AdoptedDog;
-import com.animalshelter.animalshelterbot.service.AdoptedDogService;
-import com.animalshelter.animalshelterbot.service.ValidateAdoptedDogService;
+import com.animalshelter.animalshelterbot.service.PetService;
+import com.animalshelter.animalshelterbot.service.ValidatePetService;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -24,11 +25,10 @@ import java.util.stream.Collectors;
  *  */
 
 @Component
-@RequiredArgsConstructor
 public class AdminDogController implements CommandController {
 
-    private final ValidateAdoptedDogService validateAdoptedDogService;
-    private final AdoptedDogService adoptedDogService;
+    private final ValidatePetService validatePetService;
+    private final PetService petService;
     private final Logger LOG = LoggerFactory.getLogger(AdminDogController.class);
     private final String ADMIN_COMMAND = "Правила по работе с БД приюта для собак: \n" +
             "/infoAboutAdminDog - команды для использования;\n" +
@@ -51,6 +51,12 @@ public class AdminDogController implements CommandController {
     private static final String TAKE_DOG_PATTERN = "Усыновить ([\\d]+) с ([\\d]+)";
     private static final String RETURN_DOG_PATTERN = "Вернуть с ([\\d]+)";
     private static final String EXTEND_DOG_PATTERN = "Продлить с ([\\d]+) на ([\\d]+)";
+
+    public AdminDogController(@Qualifier("validateAdoptedDogService") ValidatePetService validatePetService,
+                              @Qualifier("adoptedCatService") PetService petService) {
+        this.validatePetService = validatePetService;
+        this.petService = petService;
+    }
 
     /**
      * <i>Метод для получения инструкции по использованию команд администратора.
@@ -77,7 +83,7 @@ public class AdminDogController implements CommandController {
     public SendMessage handleCreateDog(Message message) {
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} сохраняет собаку в базу данных приюта для собак", idAdmin);
-        String answer = validateAdoptedDogService.validateAddDog(message);
+        String answer = validatePetService.validateAddPet(message);
         return new SendMessage(idAdmin, answer);
     }
     /**
@@ -92,7 +98,7 @@ public class AdminDogController implements CommandController {
 
         Long idAdmin = message.from().id();
         LOG.warn("Администратор {} удаляет собаку из базы данных приюта для собак", idAdmin);
-        String answer = validateAdoptedDogService.validateDeleteDog(message);
+        String answer = validatePetService.validateDeletePet(message);
         return new SendMessage(idAdmin, answer);
     }
     /**
@@ -107,7 +113,7 @@ public class AdminDogController implements CommandController {
 
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} выполняет поиск собаки в базе данных приюта для собак", idAdmin);
-        String answer = validateAdoptedDogService.validateGetDog(message);
+        String answer = validatePetService.validateGetPet(message);
         return new SendMessage(idAdmin, answer);
     }
 
@@ -123,7 +129,7 @@ public class AdminDogController implements CommandController {
 
         Long idAdmin = message.from().id();
         LOG.warn("Администратор {} выполняет изменение собаки в базе данных приюта для собак", idAdmin);
-        String answer = validateAdoptedDogService.validateEditDog(message);
+        String answer = validatePetService.validateEditPet(message);
         return new SendMessage(idAdmin, answer);
     }
     /**
@@ -138,7 +144,7 @@ public class AdminDogController implements CommandController {
 
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запросил всех собак в базе данных приюта для собак", idAdmin);
-        List<AdoptedDog> answer = adoptedDogService.getAllDog();
+        List<AdoptedDog> answer = petService.getAllPet();
         return answer.stream()
                 .map(s -> new SendMessage(idAdmin, s.toString()))
                 .collect(Collectors.toList());
@@ -156,7 +162,7 @@ public class AdminDogController implements CommandController {
 
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запросил всех свободных собак в базе данных приюта для собак", idAdmin);
-        List<AdoptedDog> answer = adoptedDogService.getAllFreeDog();
+        List<AdoptedDog> answer = petService.getAllFreePet();
         return answer.stream()
                 .map(s -> new SendMessage(idAdmin, s.toString()))
                 .collect(Collectors.toList());
@@ -174,7 +180,7 @@ public class AdminDogController implements CommandController {
 
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запросил всех усыновленных собак в базе данных приюта для собак", idAdmin);
-        List<AdoptedDog> answer = adoptedDogService.getAllDogOnTrialPeriod();
+        List<AdoptedDog> answer = petService.getAllBusyPet();
         return answer.stream()
                 .map(s -> new SendMessage(idAdmin, s.toString()))
                 .collect(Collectors.toList());
@@ -191,7 +197,7 @@ public class AdminDogController implements CommandController {
 
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} запросил всех усыновленных собак с окончанием испытательного срока в базе данных приюта для собак", idAdmin);
-        List<AdoptedDog> answer = adoptedDogService.getAllDogWithEndPeriod();
+        List<AdoptedDog> answer = petService.getAllPetWithEndPeriod();
         return answer.stream()
                 .map(s -> new SendMessage(idAdmin, s.toString()))
                 .collect(Collectors.toList());
@@ -208,7 +214,7 @@ public class AdminDogController implements CommandController {
 
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} добавляет усыновителя у собаки в базе данных приюта для собак", idAdmin);
-        String answer = validateAdoptedDogService.validateTakeDog(message);
+        String answer = validatePetService.validateTakePet(message);
         return new SendMessage(idAdmin, answer);
     }
     /**
@@ -223,7 +229,7 @@ public class AdminDogController implements CommandController {
 
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} удаляет усыновителя у собаки в базе данных приюта для собак", idAdmin);
-        String answer = validateAdoptedDogService.validateReturnDog(message);
+        String answer = validatePetService.validateReturnPet(message);
         return new SendMessage(idAdmin, answer);
     }
     /**
@@ -238,7 +244,7 @@ public class AdminDogController implements CommandController {
 
         Long idAdmin = message.from().id();
         LOG.info("Администратор {} продлевает испытательный срок для усыновителя в базе данных приюта для собак", idAdmin);
-        String answer = validateAdoptedDogService.validateExtendDog(message);
+        String answer = validatePetService.validateExtendPet(message);
         return new SendMessage(idAdmin, answer);
     }
 

@@ -3,12 +3,12 @@ package com.animalshelter.animalshelterbot.controller;
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
 import com.animalshelter.animalshelterbot.organisation.Callbacks;
-import com.animalshelter.animalshelterbot.service.CatReportService;
+import com.animalshelter.animalshelterbot.service.ReportService;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,10 +17,9 @@ import java.util.List;
  * Контроллер для работы с отчетами приюта для кошек.
  */
 @Component
-@RequiredArgsConstructor
 public class CatReportController implements CommandController {
 
-    private final CatReportService catReportService;
+    private final ReportService reportService;
 
     private final String photoPattern = "(?U)(\\w+)(\\.)(.+)";
 
@@ -39,6 +38,10 @@ public class CatReportController implements CommandController {
             "*/getCatBadUsers 2023-01-12* - выводит список кошек, у которых нет записи в БД на дату\n" +
             "*/sendCatWarning 1* - отправляет предупреждение владельцу по id кошки(adopted_cat)\n";
 
+    public CatReportController(@Qualifier("catReportService") ReportService reportService) {
+        this.reportService = reportService;
+    }
+
 
     @Command(name = getHelp)
     public SendMessage getHelp(Message message) {
@@ -52,7 +55,7 @@ public class CatReportController implements CommandController {
      */
     @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.CAT_REPORT)
     public SendMessage addReportCatCallback(CallbackQuery callback) {
-        return catReportService.addInquiryCatReport(callback);
+        return reportService.addInquiryReport(callback);
     }
 
     /**
@@ -62,7 +65,7 @@ public class CatReportController implements CommandController {
      */
     @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.CAT_ADD_REPORT_NO)
     public SendMessage deleteUserFromTempReport(CallbackQuery callback) {
-        return catReportService.closeInquiryCatReport(callback);
+        return reportService.closeInquiryReport(callback);
     }
 
     /**
@@ -72,7 +75,7 @@ public class CatReportController implements CommandController {
      */
     @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.CAT_ADD_REPORT_YES)
     public SendMessage createReport(CallbackQuery callback) {
-        return catReportService.addReport(callback);
+        return reportService.addReport(callback);
     }
 
     /**
@@ -82,7 +85,7 @@ public class CatReportController implements CommandController {
      */
     @Command(pattern = photoPattern)
     public SendMessage cacheReport(Message message) {
-        return catReportService.validateReport(message);
+        return reportService.validateReport(message);
     }
 
     /**
@@ -92,7 +95,7 @@ public class CatReportController implements CommandController {
      */
     @Command(name = getAllCatReports)
     public SendMessage getReportByToday(Message message) {
-        return catReportService.getAllCatReports(message);
+        return reportService.getAllReports(message);
     }
 
     /**
@@ -102,7 +105,7 @@ public class CatReportController implements CommandController {
      */
     @Command(pattern = getCatDateReport)
     public SendMessage getReportByDay(Message message) {
-        return catReportService.getCatReportByDay(message);
+        return reportService.getReportByDay(message);
     }
 
     /**
@@ -112,7 +115,7 @@ public class CatReportController implements CommandController {
      */
     @Command(pattern = deleteCatFromReportByCatId)
     public SendMessage deleteCatsFromReportById(Message message) {
-        return catReportService.deleteCatsFromReportByCatId(message);
+        return reportService.deletePetsFromReportByPetId(message);
     }
 
     /**
@@ -122,7 +125,7 @@ public class CatReportController implements CommandController {
      */
     @Command(pattern = deleteCatFromReportById)
     public SendMessage deleteCatReport(Message message) {
-        return catReportService.deleteCatReport(message);
+        return reportService.deleteReport(message);
     }
 
     /**
@@ -132,7 +135,7 @@ public class CatReportController implements CommandController {
      */
     @Command(pattern = getCatsFromBadUsers)
     public List<SendMessage> getCatsWithoutReport(Message message) {
-        return catReportService.getMissingReports(message);
+        return reportService.getMissingReports(message);
     }
 
     /**
@@ -143,6 +146,6 @@ public class CatReportController implements CommandController {
      */
     @Command(pattern = sendWarningToUser)
     public List<SendMessage> sendWarningToUser(Message message) {
-        return catReportService.sendWarning(message);
+        return reportService.sendWarning(message);
     }
 }

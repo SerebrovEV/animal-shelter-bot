@@ -1,6 +1,6 @@
 package com.animalshelter.animalshelterbot.controller;
 
-import com.animalshelter.animalshelterbot.service.CatReportService;
+import com.animalshelter.animalshelterbot.service.impl.CatReportService;
 import com.pengrad.telegrambot.BotUtils;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
@@ -51,7 +51,7 @@ class CatReportControllerTest {
     void addReportCatCallback() throws URISyntaxException, IOException {
         String json = Files.readString(Paths.get(CatReportController.class.getResource("dog_dating_rules.json").toURI()));
         CallbackQuery callbackQuery = getCallback(json);
-        when(catReportService.addInquiryCatReport(callbackQuery)).thenReturn(createSendMessage(callbackQuery.from().id()));
+        when(catReportService.addInquiryReport(callbackQuery)).thenReturn(createSendMessage(callbackQuery.from().id()));
 
         SendMessage actual = catReportController.addReportCatCallback(callbackQuery);
 
@@ -63,7 +63,7 @@ class CatReportControllerTest {
     void deleteUserFromTempReport() throws URISyntaxException, IOException {
         String json = Files.readString(Paths.get(CatReportController.class.getResource("dog_dating_rules.json").toURI()));
         CallbackQuery callbackQuery = getCallback(json);
-        when(catReportService.closeInquiryCatReport(callbackQuery)).thenReturn(createSendMessage(callbackQuery.from().id()));
+        when(catReportService.closeInquiryReport(callbackQuery)).thenReturn(createSendMessage(callbackQuery.from().id()));
 
         SendMessage actual = catReportController.deleteUserFromTempReport(callbackQuery);
 
@@ -98,7 +98,7 @@ class CatReportControllerTest {
     void getReportByToday() throws URISyntaxException, IOException {
         String json = Files.readString(Paths.get(CatReportController.class.getResource("dog_dating_rules.json").toURI()));
         Message message = getMessage(json);
-        when(catReportService.getAllCatReports(message)).thenReturn(createSendMessage(message.from().id()));
+        when(catReportService.getAllReports(message)).thenReturn(createSendMessage(message.from().id()));
         SendMessage actual = catReportController.getReportByToday(message);
 
         assertThat(actual.getParameters().get("chat_id")).isEqualTo(message.from().id());
@@ -109,7 +109,7 @@ class CatReportControllerTest {
     void getReportByDay() throws URISyntaxException, IOException {
         String json = Files.readString(Paths.get(CatReportController.class.getResource("dog_dating_rules.json").toURI()));
         Message message = getMessage(json);
-        when(catReportService.getCatReportByDay(message)).thenReturn(createSendMessage(message.from().id()));
+        when(catReportService.getReportByDay(message)).thenReturn(createSendMessage(message.from().id()));
         SendMessage actual = catReportController.getReportByDay(message);
 
         assertThat(actual.getParameters().get("chat_id")).isEqualTo(message.from().id());
@@ -120,7 +120,7 @@ class CatReportControllerTest {
     void deleteCatsFromReportById() throws URISyntaxException, IOException {
         String json = Files.readString(Paths.get(CatReportController.class.getResource("dog_dating_rules.json").toURI()));
         Message message = getMessage(json);
-        when(catReportService.deleteCatsFromReportByCatId(message)).thenReturn(createSendMessage(message.from().id()));
+        when(catReportService.deletePetsFromReportByPetId(message)).thenReturn(createSendMessage(message.from().id()));
         SendMessage actual = catReportController.deleteCatsFromReportById(message);
 
         assertThat(actual.getParameters().get("chat_id")).isEqualTo(message.from().id());
@@ -131,7 +131,7 @@ class CatReportControllerTest {
     void deleteCatReport() throws URISyntaxException, IOException {
         String json = Files.readString(Paths.get(CatReportController.class.getResource("dog_dating_rules.json").toURI()));
         Message message = getMessage(json);
-        when(catReportService.deleteCatReport(message)).thenReturn(createSendMessage(message.from().id()));
+        when(catReportService.deleteReport(message)).thenReturn(createSendMessage(message.from().id()));
         SendMessage actual = catReportController.deleteCatReport(message);
 
         assertThat(actual.getParameters().get("chat_id")).isEqualTo(message.from().id());

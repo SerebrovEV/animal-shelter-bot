@@ -1,4 +1,4 @@
-package com.animalshelter.animalshelterbot.service;
+package com.animalshelter.animalshelterbot.service.impl;
 
 import com.animalshelter.animalshelterbot.model.AdoptedDog;
 import com.animalshelter.animalshelterbot.model.DogReport;
@@ -7,6 +7,8 @@ import com.animalshelter.animalshelterbot.repository.AdoptedDogRepository;
 import com.animalshelter.animalshelterbot.repository.DogReportRepository;
 import com.animalshelter.animalshelterbot.repository.DogUserRepository;
 import com.animalshelter.animalshelterbot.sender.TelegramBotSender;
+import com.animalshelter.animalshelterbot.service.ReportService;
+import com.animalshelter.animalshelterbot.service.ValidatorReportService;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
@@ -27,7 +29,7 @@ import java.util.*;
  */
 @Service
 @RequiredArgsConstructor
-public class DogReportService {
+public class DogReportService implements ReportService {
 
     private final AdoptedDogRepository adoptedDogRepository;
 
@@ -66,6 +68,7 @@ public class DogReportService {
      * Записывает в БД отчет о животном. Если за сегодняшний день, несколько отчетов по одному и тому же животному, то
      * запись перезаписывается.
      */
+    @Override
     public SendMessage addReport(CallbackQuery callback) {
         Message message = reportTemp.get(callback.from().id());
         String name = message.caption().split("\\.")[0];
@@ -95,7 +98,8 @@ public class DogReportService {
     /**
      * Выводит спиок всех отчетов по собакам
      */
-    public SendMessage getAllDogReports(Message message) {
+    @Override
+    public SendMessage getAllReports(Message message) {
         Collection<DogReport> dogReports = dogReportRepository.findAll();
         sendReports(dogReports, message.from().id());
         return new SendMessage(message.from().id(), "");
@@ -104,7 +108,8 @@ public class DogReportService {
     /**
      * Выводит список отчетов за указанный день день
      */
-    public SendMessage getDogReportByDay(Message message) {
+    @Override
+    public SendMessage getReportByDay(Message message) {
         Date date = validatorReportService.getDateFromMessage(message);
         Collection<DogReport> dogReports = dogReportRepository.findDogReportByDate(date);
         sendReports(dogReports, message.from().id());
@@ -114,7 +119,8 @@ public class DogReportService {
     /**
      * Удаляет отчет по идентификатору БД
      */
-    public SendMessage deleteDogReport(Message message) {
+    @Override
+    public SendMessage deleteReport(Message message) {
         Long id = validatorReportService.getIdFromMessage(message);
         if (id == null) {
             return new SendMessage(message.from().id(), "Неверный запрос");
@@ -143,7 +149,8 @@ public class DogReportService {
     /**
      * Удаляет из БД всех собак с идентификатором усыновленного питомца
      */
-    public SendMessage deleteDogsFromReportByDogId(Message message) {
+    @Override
+    public SendMessage deletePetsFromReportByPetId(Message message) {
         Long id = validatorReportService.getIdFromMessage(message);
         if (id == null) {
             return new SendMessage(message.from().id(), "Неверный запрос");
@@ -156,6 +163,7 @@ public class DogReportService {
     /**
      * Выводит списки питомцев, для которых на указанную дату отстутствуют отчеты
      */
+    @Override
     public List<SendMessage> getMissingReports(Message message) {
         Date date = validatorReportService.getDateFromMessage(message);
         List<SendMessage> sendMessageList = new ArrayList<>();
@@ -174,6 +182,7 @@ public class DogReportService {
      *
      * @return Предупредительное сообщение
      */
+    @Override
     public List<SendMessage> sendWarning(Message message) {
         Long id = validatorReportService.getIdFromMessage(message);
         List<SendMessage> sendMessageList = new ArrayList<>();
@@ -196,6 +205,7 @@ public class DogReportService {
      *
      * @return {@link SendMessage}
      */
+    @Override
     public SendMessage validateReport(Message message) {
         if (message.photo() != null & reportTemp.containsKey(message.from().id())) {
 
@@ -231,7 +241,8 @@ public class DogReportService {
      *
      * @return {@link SendMessage}
      */
-    public SendMessage addInquiryDogReport(CallbackQuery callback) {
+    @Override
+    public SendMessage addInquiryReport(CallbackQuery callback) {
         reportTemp.put(callback.from().id(), null);
         telegramBotSender.telegramSendPhoto(examplePhoto(photoFile, callback.from().id()));
         return new SendMessage(callback.from().id(), exampleText)
@@ -252,7 +263,8 @@ public class DogReportService {
                         "выучил команду \"дай лапу\". Перестал грызть мебель.");
     }
 
-    public SendMessage closeInquiryDogReport(CallbackQuery callback) {
+    @Override
+    public SendMessage closeInquiryReport(CallbackQuery callback) {
         reportTemp.remove(callback.from().id());
         return new SendMessage(callback.from().id(), "Ваш отчет не был отправлен.")
                 .replyMarkup(new InlineKeyboardMarkup(

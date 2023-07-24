@@ -1,7 +1,7 @@
 package com.animalshelter.animalshelterbot.controller;
 
 import com.animalshelter.animalshelterbot.model.CatUser;
-import com.animalshelter.animalshelterbot.service.ValidatorCatUserService;
+import com.animalshelter.animalshelterbot.service.impl.ValidateCatUserService;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
@@ -33,7 +33,7 @@ class CatUserControllerTest {
     User user;
 
     @Mock
-    private ValidatorCatUserService validatorCatUserService;
+    private ValidateCatUserService validateCatUserService;
 
     private final String ADD_MESSAGE = "Для того, чтобы оставить контактные данные для обратной " +
             "связи отправьте сообщение в форме:\n Возьму кота 89871234567 Иван \n и мы вам перезвоним.";
@@ -55,7 +55,7 @@ class CatUserControllerTest {
         when(message.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
 
-        when(validatorCatUserService.validateCatUser(any())).thenReturn(catUser.toStringUser());
+        when(validateCatUserService.validateUser(any())).thenReturn(catUser.toStringUser());
 
         SendMessage actual = out.handleAddCatUser(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));
@@ -69,7 +69,7 @@ class CatUserControllerTest {
         when(message.from()).thenReturn(user);
         when(user.id()).thenReturn(1L);
 
-        when(validatorCatUserService.validateCatUserIdChat(any())).thenReturn(catUser.toStringUser());
+        when(validateCatUserService.validateUserIdChat(any())).thenReturn(catUser.toStringUser());
 
         SendMessage actual = out.handleAddCatUserIDChat(message);
         assertThat(actual.getParameters().get("idUser")).isEqualTo(expected.getParameters().get("idUser"));

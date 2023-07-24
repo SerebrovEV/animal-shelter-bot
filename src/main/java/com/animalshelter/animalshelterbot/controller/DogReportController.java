@@ -3,21 +3,20 @@ package com.animalshelter.animalshelterbot.controller;
 import com.animalshelter.animalshelterbot.handler.Command;
 import com.animalshelter.animalshelterbot.handler.CommandController;
 import com.animalshelter.animalshelterbot.organisation.Callbacks;
-import com.animalshelter.animalshelterbot.service.DogReportService;
+import com.animalshelter.animalshelterbot.service.ReportService;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-@RequiredArgsConstructor
 public class DogReportController implements CommandController {
 
-    private final DogReportService dogReportService;
+    private final ReportService reportService;
 
     private final String photoPattern = "(?U)(\\w+)(\\.)(.+)";
 
@@ -36,6 +35,10 @@ public class DogReportController implements CommandController {
             "*/getDogBadUsers 2023-01-12* - выводит список собак, у которых нет записи в БД на дату\n" +
             "*/sendDogWarning 1* - отправляет предупреждение владельцу по id собаки(adopted_dog)\n";
 
+    public DogReportController(@Qualifier("dogReportService") ReportService reportService) {
+        this.reportService = reportService;
+    }
+
 
     @Command(name = getHelp)
     public SendMessage getHelp(Message message) {
@@ -49,7 +52,7 @@ public class DogReportController implements CommandController {
      */
     @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.DOG_REPORT)
     public SendMessage addReportDogCallback(CallbackQuery callback) {
-        return dogReportService.addInquiryDogReport(callback);
+        return reportService.addInquiryReport(callback);
     }
 
     /**
@@ -59,7 +62,7 @@ public class DogReportController implements CommandController {
      */
     @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.DOG_ADD_REPORT_NO)
     public SendMessage deleteUserFromTempReport(CallbackQuery callback) {
-        return dogReportService.closeInquiryDogReport(callback);
+        return reportService.closeInquiryReport(callback);
     }
 
     /**
@@ -69,7 +72,7 @@ public class DogReportController implements CommandController {
      */
     @com.animalshelter.animalshelterbot.handler.Callback(name = Callbacks.DOG_ADD_REPORT_YES)
     public SendMessage createReport(CallbackQuery callback) {
-        return dogReportService.addReport(callback);
+        return reportService.addReport(callback);
     }
 
     /**
@@ -79,7 +82,7 @@ public class DogReportController implements CommandController {
      */
     @Command(pattern = photoPattern)
     public SendMessage cacheReport(Message message) {
-        return dogReportService.validateReport(message);
+        return reportService.validateReport(message);
     }
 
     /**
@@ -89,7 +92,7 @@ public class DogReportController implements CommandController {
      */
     @Command(name = getAllDogReports)
     public SendMessage getReportByToday(Message message) {
-        return dogReportService.getAllDogReports(message);
+        return reportService.getAllReports(message);
     }
 
     /**
@@ -99,7 +102,7 @@ public class DogReportController implements CommandController {
      */
     @Command(pattern = getDogDateReport)
     public SendMessage getReportByDay(Message message) {
-        return dogReportService.getDogReportByDay(message);
+        return reportService.getReportByDay(message);
     }
 
     /**
@@ -109,7 +112,7 @@ public class DogReportController implements CommandController {
      */
     @Command(pattern = deleteDogFromReportByDogId)
     public SendMessage deleteDogsFromReportById(Message message) {
-        return dogReportService.deleteDogsFromReportByDogId(message);
+        return reportService.deletePetsFromReportByPetId(message);
     }
 
     /**
@@ -119,7 +122,7 @@ public class DogReportController implements CommandController {
      */
     @Command(pattern = deleteDogFromReportById)
     public SendMessage deleteDogReport(Message message) {
-        return dogReportService.deleteDogReport(message);
+        return reportService.deleteReport(message);
     }
 
     /**
@@ -129,7 +132,7 @@ public class DogReportController implements CommandController {
      */
     @Command(pattern = getDogsFromBadUsers)
     public List<SendMessage> getDogsWithoutReport(Message message) {
-        return dogReportService.getMissingReports(message);
+        return reportService.getMissingReports(message);
     }
 
     /**
@@ -140,6 +143,6 @@ public class DogReportController implements CommandController {
      */
     @Command(pattern = sendWarningToUser)
     public List<SendMessage> sendWarningToUser(Message message) {
-        return dogReportService.sendWarning(message);
+        return reportService.sendWarning(message);
     }
 }

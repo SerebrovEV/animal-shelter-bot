@@ -2,6 +2,9 @@ package com.animalshelter.animalshelterbot.service;
 
 import com.animalshelter.animalshelterbot.model.AdoptedCat;
 import com.animalshelter.animalshelterbot.model.CatUser;
+import com.animalshelter.animalshelterbot.service.impl.AdoptedCatService;
+import com.animalshelter.animalshelterbot.service.impl.CatUserService;
+import com.animalshelter.animalshelterbot.service.impl.ValidateAdoptedCatService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Message;
 import org.junit.jupiter.api.Test;
@@ -43,10 +46,10 @@ class ValidateAdoptedCatServiceTest {
         AdoptedCat adoptedCat = new AdoptedCat("Тест");
 
         when(message.text()).thenReturn("Сохранить к Тест");
-        when(adoptedCatService.addAdoptedCat(any())).thenReturn(adoptedCat);
+        when(adoptedCatService.addPet(any())).thenReturn(adoptedCat);
 
         String expected = "Добавлена запись кота в базу данных приюта для кошек: " + adoptedCat.getCatName();
-        String actual = out.validateAddCat(message);
+        String actual = out.validateAddPet(message);
         assertThat(actual).isEqualTo(expected);
 
     }
@@ -56,7 +59,7 @@ class ValidateAdoptedCatServiceTest {
 
         when(message.text()).thenReturn("Сохранить к");
         String expected = "Некорректный запрос";
-        String actual = out.validateAddCat(message);
+        String actual = out.validateAddPet(message);
         assertThat(actual).isEqualTo(expected);
 
     }
@@ -66,10 +69,10 @@ class ValidateAdoptedCatServiceTest {
         AdoptedCat adoptedCat = new AdoptedCat("Тест");
 
         when(message.text()).thenReturn("Удалить к 1");
-        when(adoptedCatService.getAdoptedCat(anyLong())).thenReturn(Optional.of(adoptedCat));
+        when(adoptedCatService.getPet(anyLong())).thenReturn(Optional.of(adoptedCat));
 
         String expected = adoptedCat + " удалена из базы данных приюта для кошек.";
-        String actual = out.validateDeleteCat(message);
+        String actual = out.validateDeletePet(message);
         assertThat(actual).isEqualTo(expected);
 
     }
@@ -78,10 +81,10 @@ class ValidateAdoptedCatServiceTest {
     void validateDeleteCatNotFound() {
 
         when(message.text()).thenReturn("Удалить к 1");
-        when(adoptedCatService.getAdoptedCat(anyLong())).thenReturn(Optional.empty());
+        when(adoptedCatService.getPet(anyLong())).thenReturn(Optional.empty());
 
         String expected = "Кошка не найдена в базе данных приюта для кошек, проверьте правильность введения id.";
-        String actual = out.validateDeleteCat(message);
+        String actual = out.validateDeletePet(message);
         assertThat(actual).isEqualTo(expected);
 
     }
@@ -91,7 +94,7 @@ class ValidateAdoptedCatServiceTest {
 
         when(message.text()).thenReturn("Удалить к");
         String expected = "Некорректный запрос";
-        String actual = out.validateDeleteCat(message);
+        String actual = out.validateDeletePet(message);
         assertThat(actual).isEqualTo(expected);
 
     }
@@ -102,10 +105,10 @@ class ValidateAdoptedCatServiceTest {
         AdoptedCat adoptedCat = new AdoptedCat("Тест");
 
         when(message.text()).thenReturn("Найти к 1");
-        when(adoptedCatService.getAdoptedCat(anyLong())).thenReturn(Optional.of(adoptedCat));
+        when(adoptedCatService.getPet(anyLong())).thenReturn(Optional.of(adoptedCat));
 
         String expected = adoptedCat + " из базы данных приюта для кошек.";
-        String actual = out.validateGetCat(message);
+        String actual = out.validateGetPet(message);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -113,10 +116,10 @@ class ValidateAdoptedCatServiceTest {
     void validateGetCatNotFound() {
 
         when(message.text()).thenReturn("Найти к 1");
-        when(adoptedCatService.getAdoptedCat(anyLong())).thenReturn(Optional.empty());
+        when(adoptedCatService.getPet(anyLong())).thenReturn(Optional.empty());
 
         String expected = "Кошка не найдена в базе данных приюта для кошек, проверьте правильность введения id.";
-        String actual = out.validateGetCat(message);
+        String actual = out.validateGetPet(message);
         assertThat(actual).isEqualTo(expected);
 
     }
@@ -126,7 +129,7 @@ class ValidateAdoptedCatServiceTest {
 
         when(message.text()).thenReturn("Удалить к");
         String expected = "Некорректный запрос";
-        String actual = out.validateGetCat(message);
+        String actual = out.validateGetPet(message);
         assertThat(actual).isEqualTo(expected);
 
     }
@@ -137,10 +140,10 @@ class ValidateAdoptedCatServiceTest {
         adoptedCat.setId(1L);
 
         when(message.text()).thenReturn("Изменить к 1 Тест2");
-        when(adoptedCatService.getAdoptedCat(anyLong())).thenReturn(Optional.of(adoptedCat));
+        when(adoptedCatService.getPet(anyLong())).thenReturn(Optional.of(adoptedCat));
 
         String expected = adoptedCat + " изменен в базе данных приюта для кошек.";
-        String actual = out.validateEditCat(message);
+        String actual = out.validateEditPet(message);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -148,10 +151,10 @@ class ValidateAdoptedCatServiceTest {
     void validateEditCatNotFound() {
 
         when(message.text()).thenReturn("Изменить к 1 Тест2");
-        when(adoptedCatService.getAdoptedCat(anyLong())).thenReturn(Optional.empty());
+        when(adoptedCatService.getPet(anyLong())).thenReturn(Optional.empty());
 
         String expected = "Кошка не найдена в базе данных приюта для кошек, проверьте правильность введения id.";
-        String actual = out.validateEditCat(message);
+        String actual = out.validateEditPet(message);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -162,7 +165,7 @@ class ValidateAdoptedCatServiceTest {
 
         String expected = "Некорректный запрос";
         ;
-        String actual = out.validateEditCat(message);
+        String actual = out.validateEditPet(message);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -179,11 +182,11 @@ class ValidateAdoptedCatServiceTest {
 
 
         when(message.text()).thenReturn("Усыновить 11 к 10");
-        when(adoptedCatService.getAdoptedCat(anyLong())).thenReturn(Optional.of(adoptedCat));
-        when(catUserService.getCatUser(anyLong())).thenReturn(Optional.of(catUser));
+        when(adoptedCatService.getPet(anyLong())).thenReturn(Optional.of(adoptedCat));
+        when(catUserService.getUser(anyLong())).thenReturn(Optional.of(catUser));
 
         String expected = adoptedCat.toString();
-        String actual = out.validateTakeCat(message);
+        String actual = out.validateTakePet(message);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -191,17 +194,17 @@ class ValidateAdoptedCatServiceTest {
     void validateTakeCatIncorrectText() {
         when(message.text()).thenReturn("Изменить к");
         String expected = "Некорректный запрос";
-        String actual = out.validateTakeCat(message);
+        String actual = out.validateTakePet(message);
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void validateTakeCatNotFound() {
         when(message.text()).thenReturn("Усыновить 11 к 10");
-        when(adoptedCatService.getAdoptedCat(anyLong())).thenReturn(Optional.empty());
+        when(adoptedCatService.getPet(anyLong())).thenReturn(Optional.empty());
 
         String expected = "Кошка не найдена в базе данных приюта для кошек, проверьте правильность введения id.";
-        String actual = out.validateTakeCat(message);
+        String actual = out.validateTakePet(message);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -209,11 +212,11 @@ class ValidateAdoptedCatServiceTest {
     void validateTakeCatNotFoundUser() {
         AdoptedCat adoptedCat = new AdoptedCat("Тест");
         when(message.text()).thenReturn("Усыновить 11 к 10");
-        when(adoptedCatService.getAdoptedCat(anyLong())).thenReturn(Optional.of(adoptedCat));
-        when(catUserService.getCatUser(anyLong())).thenReturn(Optional.empty());
+        when(adoptedCatService.getPet(anyLong())).thenReturn(Optional.of(adoptedCat));
+        when(catUserService.getUser(anyLong())).thenReturn(Optional.empty());
 
         String expected = "Усыновитель не найден в базе данных приюта для кошек, проверьте правильность введения id.";
-        String actual = out.validateTakeCat(message);
+        String actual = out.validateTakePet(message);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -223,20 +226,20 @@ class ValidateAdoptedCatServiceTest {
         adoptedCat.setTrialPeriod(30);
 
         when(message.text()).thenReturn("Вернуть к 10");
-        when(adoptedCatService.getAdoptedCat(10L)).thenReturn(Optional.of(adoptedCat));
+        when(adoptedCatService.getPet(10L)).thenReturn(Optional.of(adoptedCat));
 
         String expected = adoptedCat + " изменен в базе данных приюта для кошек.";
-        String actual = out.validateReturnCat(message);
+        String actual = out.validateReturnPet(message);
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void validateReturnCatNotFound() {
         when(message.text()).thenReturn("Вернуть к 10");
-        when(adoptedCatService.getAdoptedCat(anyLong())).thenReturn(Optional.empty());
+        when(adoptedCatService.getPet(anyLong())).thenReturn(Optional.empty());
 
         String expected = "Кошка не найдена в базе данных приюта для кошек, проверьте правильность введения id.";
-        String actual = out.validateReturnCat(message);
+        String actual = out.validateReturnPet(message);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -244,7 +247,7 @@ class ValidateAdoptedCatServiceTest {
     void validateReturnCatIncorrectText() {
         when(message.text()).thenReturn("Изменить к");
         String expected = "Некорректный запрос";
-        String actual = out.validateReturnCat(message);
+        String actual = out.validateReturnPet(message);
         assertThat(actual).isEqualTo(expected);
     }
     @Test
@@ -257,10 +260,10 @@ class ValidateAdoptedCatServiceTest {
         adoptedCat2.setCatUser(new CatUser("Тест", 10L, 1L));
 
         when(message.text()).thenReturn("Продлить к 2 на 14");
-        when(adoptedCatService.getAdoptedCat(anyLong())).thenReturn(Optional.of(adoptedCat));
+        when(adoptedCatService.getPet(anyLong())).thenReturn(Optional.of(adoptedCat));
 
         String expected = adoptedCat2 + " изменен в базе данных приюта для кошек.";
-        String actual = out.validateExtendCat(message);
+        String actual = out.validateExtendPet(message);
         assertThat(actual).isEqualTo(expected);
 
         when(message.text()).thenReturn("Продлить к 2 на 30");
@@ -268,7 +271,7 @@ class ValidateAdoptedCatServiceTest {
         expected = adoptedCat2 + " изменен в базе данных приюта для кошек.";
         adoptedCat.setTrialPeriod(30);
 
-        actual = out.validateExtendCat(message);
+        actual = out.validateExtendPet(message);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -278,10 +281,10 @@ class ValidateAdoptedCatServiceTest {
         adoptedCat.setCatUser(new CatUser("Тест", 10L, 1L));
 
         when(message.text()).thenReturn("Продлить к 2 на 25");
-        when(adoptedCatService.getAdoptedCat(anyLong())).thenReturn(Optional.of(adoptedCat));
+        when(adoptedCatService.getPet(anyLong())).thenReturn(Optional.of(adoptedCat));
 
         String expected = "Некорректный запрос на добавление дней к периоду адаптации, можно добавить либо 14, либо 30 дней.";
-        String actual = out.validateExtendCat(message);
+        String actual = out.validateExtendPet(message);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -291,19 +294,19 @@ class ValidateAdoptedCatServiceTest {
         adoptedCat.setCatUser(new CatUser("Тест", 10L));
 
         when(message.text()).thenReturn("Продлить к 2 на 25");
-        when(adoptedCatService.getAdoptedCat(anyLong())).thenReturn(Optional.of(adoptedCat));
+        when(adoptedCatService.getPet(anyLong())).thenReturn(Optional.of(adoptedCat));
 
         String expected = "Продление не выполнено! Для корректной работы необходимо попросить усыновителя добавить" +
                 " контактные данные через телеграм-бота прописав сообщение:\n Взял кота 89817885244 Иван";
-        String actual = out.validateExtendCat(message);
+        String actual = out.validateExtendPet(message);
         assertThat(actual).isEqualTo(expected);
     }
     @Test
     void validateExtendCatNotFound() {
         when(message.text()).thenReturn("Продлить к 2 на 14");
-        when(adoptedCatService.getAdoptedCat(anyLong())).thenReturn(Optional.empty());
+        when(adoptedCatService.getPet(anyLong())).thenReturn(Optional.empty());
         String expected = "Кошка не найдена в базе данных приюта для кошек, проверьте правильность введения id.";
-        String actual = out.validateExtendCat(message);
+        String actual = out.validateExtendPet(message);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -311,7 +314,7 @@ class ValidateAdoptedCatServiceTest {
     void validateExtendCatIncorrectText() {
         when(message.text()).thenReturn("Изменить к");
         String expected = "Некорректный запрос";
-        String actual = out.validateExtendCat(message);
+        String actual = out.validateExtendPet(message);
         assertThat(actual).isEqualTo(expected);
     }
 }

@@ -1,4 +1,4 @@
-package com.animalshelter.animalshelterbot.service;
+package com.animalshelter.animalshelterbot.service.impl;
 
 import com.animalshelter.animalshelterbot.model.AdoptedCat;
 import com.animalshelter.animalshelterbot.model.CatReport;
@@ -7,6 +7,8 @@ import com.animalshelter.animalshelterbot.repository.AdoptedCatRepository;
 import com.animalshelter.animalshelterbot.repository.CatReportRepository;
 import com.animalshelter.animalshelterbot.repository.CatUserRepository;
 import com.animalshelter.animalshelterbot.sender.TelegramBotSender;
+import com.animalshelter.animalshelterbot.service.ReportService;
+import com.animalshelter.animalshelterbot.service.ValidatorReportService;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
@@ -27,7 +29,7 @@ import java.util.*;
  */
 @Service
 @RequiredArgsConstructor
-public class CatReportService {
+public class CatReportService implements ReportService {
 
     private final AdoptedCatRepository adoptedCatRepository;
 
@@ -65,6 +67,7 @@ public class CatReportService {
      * Записывает в БД отчет о животном. Если за сегодняшний день, несколько отчетов по одному и тому же животному, то
      * запись перезаписывается.
      */
+    @Override
     public SendMessage addReport(CallbackQuery callback) {
         Message message = reportTemp.get(callback.from().id());
         String name = message.caption().split("\\.")[0];
@@ -94,7 +97,8 @@ public class CatReportService {
     /**
      * Выводит спиок всех отчетов по кошкам
      */
-    public SendMessage getAllCatReports(Message message) {
+    @Override
+    public SendMessage getAllReports(Message message) {
         Collection<CatReport> catReports = catReportRepository.findAll();
         sendReports(catReports, message.from().id());
         return new SendMessage(message.from().id(), "");
@@ -103,7 +107,8 @@ public class CatReportService {
     /**
      * Выводит список отчетов за указанный день день
      */
-    public SendMessage getCatReportByDay(Message message) {
+    @Override
+    public SendMessage getReportByDay(Message message) {
         Date date = validatorReportService.getDateFromMessage(message);
         Collection<CatReport> catReports = catReportRepository.findCatReportByDate(date);
         sendReports(catReports, message.from().id());
@@ -113,7 +118,8 @@ public class CatReportService {
     /**
      * Удаляет отчет по идентификатору БД
      */
-    public SendMessage deleteCatReport(Message message) {
+    @Override
+    public SendMessage deleteReport(Message message) {
         Long id = validatorReportService.getIdFromMessage(message);
         if (id == null) {
             return new SendMessage(message.from().id(), "Неверный запрос");
@@ -142,7 +148,8 @@ public class CatReportService {
     /**
      * Удаляет из БД всех кошек с идентификатором усыновленного питомца
      */
-    public SendMessage deleteCatsFromReportByCatId(Message message) {
+    @Override
+    public SendMessage deletePetsFromReportByPetId(Message message) {
         Long id = validatorReportService.getIdFromMessage(message);
         if (id == null) {
             return new SendMessage(message.from().id(), "Неверный запрос");
@@ -155,6 +162,7 @@ public class CatReportService {
     /**
      * Выводит списки питомцев, для которых на указанную дату отстутствуют отчеты
      */
+    @Override
     public List<SendMessage> getMissingReports(Message message) {
         Date date = validatorReportService.getDateFromMessage(message);
         List<SendMessage> sendMessageList = new ArrayList<>();
@@ -173,6 +181,7 @@ public class CatReportService {
      *
      * @return Предупредительное сообщение
      */
+    @Override
     public List<SendMessage> sendWarning(Message message) {
         Long id = validatorReportService.getIdFromMessage(message);
         List<SendMessage> sendMessageList = new ArrayList<>();
@@ -195,6 +204,7 @@ public class CatReportService {
      *
      * @return {@link SendMessage}
      */
+    @Override
     public SendMessage validateReport(Message message) {
         if (message.photo() != null & reportTemp.containsKey(message.from().id())) {
 
@@ -230,7 +240,8 @@ public class CatReportService {
      *
      * @return {@link SendMessage}
      */
-    public SendMessage addInquiryCatReport(CallbackQuery callback) {
+    @Override
+    public SendMessage addInquiryReport(CallbackQuery callback) {
         reportTemp.put(callback.from().id(), null);
         telegramBotSender.telegramSendPhoto(examplePhoto(photoFile, callback.from().id()));
         return new SendMessage(callback.from().id(), exampleText)
@@ -250,7 +261,8 @@ public class CatReportService {
                 .caption("Маруся. В рацион кошки входит сухое питание Hills Premium. Чувствует себя более уверенно, стала играть игрушками и выходить в другие комнаты.");
     }
 
-    public SendMessage closeInquiryCatReport(CallbackQuery callback) {
+    @Override
+    public SendMessage closeInquiryReport(CallbackQuery callback) {
         reportTemp.remove(callback.from().id());
         return new SendMessage(callback.from().id(), "Ваш отчет не был отправлен.")
                 .replyMarkup(new InlineKeyboardMarkup(

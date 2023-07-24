@@ -3,6 +3,7 @@ package com.animalshelter.animalshelterbot.service;
 import com.animalshelter.animalshelterbot.model.AdoptedCat;
 import com.animalshelter.animalshelterbot.model.CatUser;
 import com.animalshelter.animalshelterbot.repository.AdoptedCatRepository;
+import com.animalshelter.animalshelterbot.service.impl.AdoptedCatService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,9 +51,9 @@ class AdoptedCatServiceTest {
         AdoptedCat expected2 = new AdoptedCat("Test2");
         AdoptedCat expected3 = new AdoptedCat("Test3");
 
-        AdoptedCat actual = out.addAdoptedCat(cat);
-        AdoptedCat actual2 = out.addAdoptedCat(cat2);
-        AdoptedCat actual3 = out.addAdoptedCat(cat3);
+        AdoptedCat actual = out.addPet(cat);
+        AdoptedCat actual2 = out.addPet(cat2);
+        AdoptedCat actual3 = out.addPet(cat3);
 
         assertThat(actual.toString()).isEqualTo(expected.toString());
         assertThat(actual2.toString()).isEqualTo(expected2.toString());
@@ -66,7 +67,7 @@ class AdoptedCatServiceTest {
     @Test
     void deleteAdoptedCat() {
         Long catId1 = 1L;
-        out.deleteAdoptedCat(catId1);
+        out.deletePet(catId1);
         verify(adoptedCatRepository, times(1)).deleteById(catId1);
     }
 
@@ -85,9 +86,9 @@ class AdoptedCatServiceTest {
         AdoptedCat expected2 = new AdoptedCat("Test2");
         AdoptedCat expected3 = new AdoptedCat("Test3");
 
-        AdoptedCat actual = out.getAdoptedCat(catId1).get();
-        AdoptedCat actual2 = out.getAdoptedCat(catId2).get();
-        AdoptedCat actual3 = out.getAdoptedCat(catId3).get();
+        AdoptedCat actual = out.getPet(catId1).get();
+        AdoptedCat actual2 = out.getPet(catId2).get();
+        AdoptedCat actual3 = out.getPet(catId3).get();
 
         verify(adoptedCatRepository, times(1)).findById(catId1);
         verify(adoptedCatRepository, times(1)).findById(catId2);
@@ -106,7 +107,7 @@ class AdoptedCatServiceTest {
     void editAdoptedCat() {
         when(adoptedCatRepository.save(cat)).thenReturn(cat);
         AdoptedCat expected = new AdoptedCat("Test");
-        AdoptedCat actual = out.editAdoptedCat(cat);
+        AdoptedCat actual = out.editPet(cat);
         assertThat(actual.toString()).isEqualTo(expected.toString());
         assertThat(actual).isEqualTo(expected);
     }
@@ -121,7 +122,7 @@ class AdoptedCatServiceTest {
                 new AdoptedCat("Test"),
                 new AdoptedCat("Test2"),
                 new AdoptedCat("Test3")));
-        List<AdoptedCat> actual = out.getAllCat();
+        List<AdoptedCat> actual = out.getAllPet();
 
         assertThat(actual).isEqualTo(expected);
     }
@@ -136,7 +137,7 @@ class AdoptedCatServiceTest {
                 new AdoptedCat("Test"),
                 new AdoptedCat("Test2"),
                 new AdoptedCat("Test3")));
-        List<AdoptedCat> actual = out.getAllBusyCat();
+        List<AdoptedCat> actual = out.getAllBusyPet();
 
         assertThat(actual).isEqualTo(expected);
     }
@@ -151,7 +152,7 @@ class AdoptedCatServiceTest {
                 new AdoptedCat("Test"),
                 new AdoptedCat("Test2"),
                 new AdoptedCat("Test3")));
-        List<AdoptedCat> actual = out.getAllFreeCat();
+        List<AdoptedCat> actual = out.getAllFreePet();
 
         assertThat(actual).isEqualTo(expected);
     }
@@ -184,7 +185,7 @@ class AdoptedCatServiceTest {
                 cat2,
                 cat3));
 
-        List<AdoptedCat> actual = out.getAllCatWithEndPeriod();
+        List<AdoptedCat> actual = out.getAllPetWithEndPeriod();
 
         assertThat(actual).isEqualTo(expected);
     }

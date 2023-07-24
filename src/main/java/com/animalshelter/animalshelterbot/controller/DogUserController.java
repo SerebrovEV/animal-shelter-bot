@@ -4,7 +4,7 @@ import com.animalshelter.animalshelterbot.handler.Command;
 import com.pengrad.telegrambot.model.Update;
 import com.animalshelter.animalshelterbot.handler.CommandController;
 import com.animalshelter.animalshelterbot.organisation.Callbacks;
-import com.animalshelter.animalshelterbot.service.ValidatorDogUserService;
+import com.animalshelter.animalshelterbot.service.impl.ValidateDogUserService;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 public class DogUserController implements CommandController {
 
     private final Logger logger = LoggerFactory.getLogger(DogUserController.class);
-    private final ValidatorDogUserService validatorDogUserService;
+    private final ValidateDogUserService validateDogUserService;
     private static final String ADD_CONTACT_PATTERN = "Возьму собаку ([\\d]{11})(\\s)([\\W]+)";
     private static final String ADD_ID_CHAT_PATTERN = "Взял кота ([\\d]{11})(\\s)([\\W]+)";
     private static final String BACK_BUTTON_TEXT = "Назад";
@@ -46,7 +46,7 @@ public class DogUserController implements CommandController {
     /**
      * <i> Метод для записи контактных данных усыновителя в базу данных приюта для собак
      * <br>
-     * Используется метод {@link ValidatorDogUserService#validateDogUser(Message)}</i>
+     * Используется метод {@link ValidateDogUserService#validateUser(Message)}</i>
      *
      * @param message
      * @return {@link SendMessage}
@@ -55,7 +55,7 @@ public class DogUserController implements CommandController {
     public SendMessage handleAddDogUser(Message message) {
         long idUser = message.from().id();
         logger.info("Пользователь {} производит запись контактных данных в базу данных приюта для собак", idUser);
-        return new SendMessage(idUser, validatorDogUserService.validateDogUser(message))
+        return new SendMessage(idUser, validateDogUserService.validateUser(message))
                 .replyMarkup(new InlineKeyboardMarkup().addRow(
                         new InlineKeyboardButton(BACK_BUTTON_TEXT).callbackData(Callbacks.DOG_MENU.name())
                 ));
@@ -63,7 +63,7 @@ public class DogUserController implements CommandController {
     /**
      * <i> Метод для записи chatId усыновителя в базу данных приюта для собак
      * <br>
-     * Используется метод {@link ValidatorDogUserService#validateDogUserIdChat(Message)}</i>
+     * Используется метод {@link ValidateDogUserService#validateUserIdChat(Message)}</i>
      *
      * @param message
      * @return {@link SendMessage}
@@ -72,7 +72,7 @@ public class DogUserController implements CommandController {
     public SendMessage handleAddDogUserIDChat(Message message) {
         long idUser = message.from().id();
         logger.info("Пользователь {} производит запись контактных данных в базу данных приюта для собак", idUser);
-        return new SendMessage(idUser, validatorDogUserService.validateDogUserIdChat(message))
+        return new SendMessage(idUser, validateDogUserService.validateUserIdChat(message))
                 .replyMarkup(new InlineKeyboardMarkup().addRow(
                         new InlineKeyboardButton(BACK_BUTTON_TEXT).callbackData(Callbacks.CAT_MENU.name())
                 ));
